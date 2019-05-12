@@ -65,12 +65,11 @@
 
   <div class="master-info">
     <ul class="hs">
-      {% for item in servers %}
+      {% for item in pynotes %}
       <div class="item">
         <h4>ID: {{ item.id }}</h4>
         <h4>Name: {{ item.server_name }}</h4>
-        <h4>Port: {{ item.port }}</h4>
-        <a style="text-decoration: none; color: white;" href="{{ item.pynotelink }}">{{ item.pynotelink }}</a>
+        <a style="text-decoration: none; color: white;" href="{{ item.pynotelink }}">link: {{ item.pynotelink }}</a>
       </div>
       {% endfor %}
   </ul>
@@ -95,7 +94,8 @@
         <input type="password" name="password"  onfocus="this.value=''" placeholder="Please enter the password" required>
 
         <input  type="submit" onsubmit="loadingFunc()"  value="Create PyNote Platform" >
-        <h1 style="display:none;" id="myDiv" class="animate-bottom"> Has been created pynote.</h1>
+        <center> <h3 > {{ pynoteCreated }}</h3>
+        <h3 style="color: red;"> {{ errorMessage }} </h3></center>
       </form>
     </div>
   </div>
