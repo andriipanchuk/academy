@@ -20,4 +20,11 @@ resource "helm_release" "webplatform_services_ingress" {
     value = "${kubernetes_service.webplatform_service.spec.0.port.0.port}"
   }
 
+  set {
+    name = "email"
+    value = "${var.lets_encrypt_email}"
+  }
+
+
+
 }

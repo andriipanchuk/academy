@@ -4,7 +4,7 @@ metadata:
   name: ingress-webplaform
   annotations:
     kubernetes.io/ingress.class: nginx
-    certmanager.k8s.io/cluster-issuer: issuer-webplatform
+    certmanager.k8s.io/cluster-issuer: letsencrypt-issuer-webplatform-prod
 spec:
   rules:
   - host: {{ .Values.dns_endpoint }}
@@ -13,3 +13,7 @@ spec:
       - backend:
           serviceName: {{ .Values.webplatform_service }}
           servicePort: {{ .Values.webplatform_port }}
+  tls:
+  - hosts:
+    - {{ .Values.dns_endpoint }}
+    secretName: letsencrypt-sec-webplatform-prod

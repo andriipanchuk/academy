@@ -5,10 +5,10 @@ variable "webplatform_namespace" {}
 
 
 variable "webplatform_service_account" {
-  default = "default"
+  default = "fuchicorp-api"
 }
 variable "webplatform_image" {
-  default = "docker.fuchicorp.com/webplatform:latest"
+  default = "docker.fuchicorp.com/webplatform-dev:0.2"
 }
 variable "dns_endpoint_webplatform" {
   default = "academy.fuchicorp.com"

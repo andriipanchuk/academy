@@ -29,7 +29,7 @@ resource "kubernetes_deployment" "webplatform_mysql_deployment" {
 
           env_from {
             secret_ref {
-              name = "fuchicorp-secret"
+              name = "${kubernetes_secret.webplatform_secret.metadata.0.name}"
             }
           }
         }
