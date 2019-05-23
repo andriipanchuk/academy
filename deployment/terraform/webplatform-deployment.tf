@@ -20,7 +20,7 @@ resource "kubernetes_deployment" "webplatform-deployment" {
 
       spec {
         image_pull_secrets = [ { name = "nexus-creds" } ]
-
+        service_account_name = "${var.webplatform_service_account}"
         container {
           image = "${var.webplatform_image}"
           name  = "webplatform-container"

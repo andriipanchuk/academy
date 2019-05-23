@@ -1,4 +1,4 @@
-resource "kubernetes_deployment" "webplatform-mysql-deployment" {
+resource "kubernetes_deployment" "webplatform_mysql_deployment" {
 
 
   metadata {

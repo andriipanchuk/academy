@@ -1,4 +1,4 @@
-resource "kubernetes_service" "mysql-host" {
+resource "kubernetes_service" "mysql_host" {
 
   metadata {
     name = "${var.mysql_host}"

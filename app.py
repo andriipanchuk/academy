@@ -21,10 +21,10 @@ import time
 app = Flask(__name__)
 
 ## To different enviroments enable this
-# app.config.from_pyfile('config.cfg')
+app.config.from_pyfile('config.cfg')
 
 ## To testing I create my own config
-app.config.from_pyfile('/Users/fsadykov/backup/databases/config.cfg')
+# app.config.from_pyfile('/Users/fsadykov/backup/databases/config.cfg')
 
 bootstrap = Bootstrap(app)
 db = SQLAlchemy(app)
