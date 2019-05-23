@@ -6,6 +6,9 @@ MAINTAINER Farkhod Sadykov
 WORKDIR /app
 COPY . /app
 
+ARG branch_name
+ENV ARG
+
 ## Create kube folder insied root Copy KuberConfig to the docker images
 RUN mkdir /root/.kube
 # COPY config /root/.kube/
