@@ -25,6 +25,4 @@ resource "helm_release" "webplatform_services_ingress" {
     value = "${var.lets_encrypt_email}"
   }
 
-
-
 }
