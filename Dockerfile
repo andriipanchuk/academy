@@ -7,7 +7,7 @@ WORKDIR /app
 COPY . /app
 
 ARG branch_name
-ENV ARG
+ENV BRANCHNAME=$branch_name
 
 ## Create kube folder insied root Copy KuberConfig to the docker images
 RUN mkdir /root/.kube
