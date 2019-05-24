@@ -6,8 +6,13 @@ resource "helm_release" "webplatform_services_ingress" {
 
 
   set {
+    name = "issuer"
+    value = "${lookup(var.issuer_name, "${var.environment}")}"
+  }
+
+  set {
     name = "dns_endpoint"
-    value = "${var.dns_endpoint_webplatform}"
+    value = "${lookup(var.dns_endpoint_webplatform, "${var.environment}")}"
   }
 
   set {
