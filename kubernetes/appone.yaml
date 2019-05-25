@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: appone
+  labels:
+    app: appone
+spec:
+  containers:
+  - name: appone-container
+    image: fsadykov/docker-testing
+    command: ["python"]
+    args: ["/app/app.py", "--name", "appone"]

@@ -17,6 +17,6 @@ pusher==2.0.1
 uuid
 jwt
 Flask-JWT
-kubernetes==8.0.0
+kubernetes==9.0.0
 pyyaml
 mysqlclient

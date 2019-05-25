@@ -1,0 +1,13 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+  name: env-pynote-ingress
+  namespace: env-students
+spec:
+  rules:
+  - host: dev.fuchicorp.com
+    http:
+      paths: []

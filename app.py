@@ -19,14 +19,21 @@ import yaml
 import time
 
 app = Flask(__name__)
+
+## To different enviroments enable this
 app.config.from_pyfile('config.cfg')
+
+## To testing I create my own config
+# app.config.from_pyfile('/Users/fsadykov/backup/databases/config.cfg')
 
 bootstrap = Bootstrap(app)
 db = SQLAlchemy(app)
-config.load_kube_config()
+
+## Loading the Kubernetes configuration
+# config.load_kube_config()
+config.load_incluster_config()
 kube = client.ExtensionsV1beta1Api()
 api = core_v1_api.CoreV1Api()
-
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -69,6 +76,8 @@ class Pynote(db.Model):
     password = db.Column(db.String(50))
     pynotelink = db.Column(db.String(50), unique=True)
     port = db.Column(db.Integer, unique=True)
+    def __repr__(self):
+        return '<User %r>' % self.username
 
 
 class myModelView(ModelView):
@@ -119,12 +128,144 @@ def getExternalIp(name):
                 break
 
 
+def availablePort():
+    while True:
+        randomPort = random.choice(list(range(7000, 7100)))
+        if not Pynote.query.filter_by(port=randomPort).first():
+            return randomPort
+            break
+
+def generateTemplates(username, password, enviroment):
+    templates = {}
+    templatePort = availablePort()
+    host         = f'{enviroment}.fuchicorp.com'
+    ingressName  = f'{enviroment}-pynote-ingress'
+    namespace    = f'{enviroment}-students'
+    templates['pynotelink'] = f'{enviroment}.fuchicorp.com/pynote/{username}'
+    templates['path'] = {'path': f'/pynote/{username}', 'backend': {'serviceName': username, 'servicePort': templatePort}}
+    templates['port'] = templatePort
+    with open('kubernetes/pynote-pod.yaml' ) as file:
+        pod = yaml.load(file, Loader=yaml.FullLoader)
+        pod['metadata']['name'] = username
+        pod['metadata']['labels']['run'] = username
+        pod['spec']['containers'][0]['name'] = username
+        pod['spec']['containers'][0]['args'] = [ f"--username={username}", f"--password={password}"]
+        templates['pod'] = pod
+    with open('kubernetes/pynote-service.yaml') as file:
+        service = yaml.load(file, Loader=yaml.FullLoader)
+        service['metadata']['labels']['run'] = username
+        service['spec']['ports'][0]['port'] = templatePort
+        service['spec']['selector']['run'] = username
+        service['metadata']['name'] = username
+        templates['service'] = service
+    with open('kubernetes/pynote-ingress.yaml') as file:
+        ingress = yaml.load(file, Loader=yaml.FullLoader)
+        ingress['spec']['rules'][0]['host'] = host
+        ingress['spec']['rules'][0]['http']['paths'].append(templates['path'])
+        ingress['metadata']['name'] = ingressName
+        ingress['metadata']['namespace'] = namespace
+        templates['ingress'] = ingress
+    return templates
+
+def existingIngess(ingerssname, namespace):
+    total = []
+    ingressList = kube.list_namespaced_ingress(namespace).items
+    for item in ingressList:
+        if item.metadata.name == ingerssname:
+            return item
+    else:
+        return False
+
+def createPynote(username, password):
+    ## Loading the kubernetes objects
+    config.load_kube_config()
+    kube          = client.ExtensionsV1beta1Api()
+    api           = core_v1_api.CoreV1Api()
+    pynoteName    = username.lower()
+    pynotePass    = password
+    enviroment    = f'{subprocess.getoutput("git rev-parse --abbrev-ref HEAD")}'
+    ingressName   = f'{enviroment}-pynote-ingress'
+    namespace     = f'{enviroment}-students'
+    deployment    = generateTemplates(pynoteName, pynotePass, enviroment)
+    pod           = api.create_namespaced_pod(body=deployment['pod'], namespace=namespace)
+    service       = api.create_namespaced_service(body=deployment['service'], namespace=namespace)
+    existIngress  = existingIngess(ingressName, namespace)
+    if existIngress:
+        existIngress.spec.rules[0].http.paths.append(deployment['path'])
+        kube.replace_namespaced_ingress(existIngress.metadata.name, namespace, body=existIngress)
+    else:
+        kube.create_namespaced_ingress(namespace, body=deployment['ingress'])
+    return deployment
+
+
+
+def deletePynote(username):
+    ## Loading the kubernetes objects
+    config.load_kube_config()
+    kube          = client.ExtensionsV1beta1Api()
+    api           = core_v1_api.CoreV1Api()
+    pynoteName    = username.lower()
+    enviroment    = f'{subprocess.getoutput("git rev-parse --abbrev-ref HEAD")}'
+    ingressName   = f'{enviroment}-pynote-ingress'
+    namespace     = f'{enviroment}-students'
+    # needs to add deletion for pod and service
+    existIngress  = existingIngess(ingressName, namespace)
+    try:
+        api.delete_namespaced_pod(pynoteName, namespace)
+        print(f'Deleted a pod {pynoteName}')
+        api.delete_namespaced_service(pynoteName, namespace)
+        print(f'Deleted a service {pynoteName}')
+    except:
+        print('Trying to delete service and pod was not success')
+    if existIngress:
+        if 1 < len(existIngress.spec.rules[0].http.paths):
+            for i in existIngress.spec.rules[0].http.paths:
+                if username in i.path:
+                    existIngress.spec.rules[0].http.paths.remove(i)
+            existIngress.metadata.resource_version = ''
+            kube.patch_namespaced_ingress(existIngress.metadata.name, namespace, body=existIngress)
+        else:
+            kube.delete_namespaced_ingress(ingressName, namespace)
+
+
+# FuchiCorp Pynote system
+@app.route('/pynote', methods=['GET', 'POST'])
+@login_required
+def pynote():
+
+    ## Loading the kubernetes objects
+    config.load_kube_config()
+    kube = client.ExtensionsV1beta1Api()
+    api = core_v1_api.CoreV1Api()
+
+    pynotes = Pynote.query.all()
+    if request.form:
+        server_name = request.form.get('server-name')
+        password = request.form.get('password')
+
+        if Pynote.query.filter_by(username=current_user.username).first():
+            message = "Sorry you already requested a PyNote."
+            return render_template('pynote.html', name=current_user.username, errorMessage=message, pynotes=pynotes)
+        pynote = createPynote(current_user.username, password)
+        message =  "The pynote has been requested."
+        new_pynote = Pynote(pynotelink=pynote['pynotelink'], password=password, username=current_user.username)
+        db.session.add(new_pynote)
+        db.session.commit()
+        return render_template('pynote.html', name=current_user.username, pynoteCreated=message, pynotes=pynotes)
+
+    return render_template('pynote.html', name=current_user.username, pynotes=pynotes)
+
+
+
 #Menu for chat
 @app.route('/chat', methods=['GET', 'POST'])
 @login_required
 def chat():
     messages = Message.query.all()
     return render_template('chat.html', messages=messages, fname=current_user.firstname, lname=current_user.lastname)
+
+
+
 
 @app.route('/message', methods=['POST'])
 def message():
@@ -142,54 +283,11 @@ def message():
         return jsonify({'result' : 'failure'})
 
 
-# pynote
-@app.route('/pynote', methods=['GET', 'POST'])
-@login_required
-def pynote():
-    servers  = Pynote.query.all()
-    if request.form:
-        server_name = request.form.get('server-name')
-        password = request.form.get('password')
-
-        if Pynote.query.filter_by(username=current_user.username).first():
-            return "<h1>Sorry you already requested a server.</h1>"
-
-        with open('kubernetes/pynote-pod.yaml' ) as file:
-            deployment = yaml.load(file)
-
-            ## Rename by username
-            deployment['metadata']['name'] = current_user.username
-            deployment['metadata']['labels']['run'] = current_user.username
-            deployment['spec']['containers'][0]['name'] = current_user.username
-
-            ## Set the password for Jupyter pynote
-            deployment['spec']['containers'][0]['args'] = [ "/jupyter-runner.py", f"--username={current_user.username}", f"--password={password}"]
-
-            ## Create Pod on Cluster
-            pod = api.create_namespaced_pod(body=deployment, namespace="students")
-
-        ## Create a Service
-        with open('kubernetes/pynote-service.yaml') as file:
-            service = yaml.load(file)
-            service['metadata']['labels']['run'] = current_user.username
-            service['spec']['selector']['run'] = current_user.username
-            service['metadata']['name'] = current_user.username
-
-            object = api.create_namespaced_service(body=service, namespace="students")
-            pynotelink = f'http://{getExternalIp(current_user.username)}'
-
-        ## Store request to the DataBase
-        new_user = Pynote(username=current_user.username, password=password, server_name=server_name,  pynotelink=pynotelink, port=service['spec']['ports'][0]['port'])
-        db.session.add(new_user)
-        db.session.commit()
-        return redirect(pynotelink)
-
-    return render_template('pynote.html', name=current_user.username, servers=servers)
-
 # Welcome Page
 @app.route('/')
 def index():
     return render_template('index.html')
+
 
 #Menu for Videos
 @app.route('/videos', methods=['GET', 'POST'])
@@ -197,11 +295,13 @@ def index():
 def videos():
     return render_template('videos.html', name=current_user.username)
 
+
 # Vidoe classes
 @app.route('/linux', methods=['GET', 'POST'])
 @login_required
 def linux():
     return render_template('linux.html', name=current_user.username)
+
 
 # Docker classes
 @app.route('/docker', methods=['GET', 'POST'])
@@ -209,11 +309,15 @@ def linux():
 def docker():
     return render_template('docker.html', name=current_user.username)
 
+
+
 # Scripting classes
 @app.route('/script', methods=['GET', 'POST'])
 @login_required
 def script():
     return render_template('script.html', name=current_user.username)
+
+
 
 # Raiting of the user
 @app.route('/raiting', methods=['GET', 'POST'])
@@ -221,16 +325,14 @@ def script():
 def raiting():
     return render_template('raiting.html', name=current_user.username)
 
-@app.route('/work', methods=['GET', 'POST'])
-@login_required
-def work():
-    return render_template('work.html', name=current_user.username)
 
 @app.route('/dashboard', methods=['GET', 'POST'])
 @login_required
 def dashboard():
     users = User.query.all()
     return render_template('dashboard.html', fname=current_user.firstname, lname=current_user.lastname, users=users )
+
+
 
 @app.route('/contact', methods=['GET', 'POST'])
 def contact():
@@ -243,13 +345,15 @@ def contact():
         return "<h1>Your QUESTION is submited</h1>"
     return render_template('contact.html')
 
+
+
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     form = RegisterForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
         hashed_password = generate_password_hash(form.password.data, method='sha256')
-        new_user = User(username=form.username.data, firstname=form.firstname.data, lastname=form.lastname.data,  email=form.email.data, password=hashed_password, status='False')
+        new_user = User(username=form.username.data.lower(), firstname=form.firstname.data, lastname=form.lastname.data,  email=form.email.data, password=hashed_password, status='False')
         if user:
             if user.username == form.username.data:
                 return '<h1>This user name is exist</h1>'
@@ -257,6 +361,7 @@ def signup():
         db.session.commit()
         return redirect(url_for('login'))
     return render_template('signup.html', form=form)
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -272,6 +377,9 @@ def login():
                 return render_template('disabled-user.html')
         return '<h1>Invalid username or password</h1>'
     return render_template('login.html', form=form)
+
+
+
 
 @app.route('/disabled-user')
 def disabled_user():
@@ -306,4 +414,5 @@ admin = Admin(app, index_view=MyAdminIndex())
 admin.add_view(myModelView(User, db.session))
 
 if __name__ == '__main__':
+    db.create_all()
     app.run(debug=True, port=5000, host='0.0.0.0')

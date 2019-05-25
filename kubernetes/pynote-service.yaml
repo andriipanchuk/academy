@@ -6,9 +6,9 @@ metadata:
   name: farkhodsadykov
 spec:
   ports:
-  - port: 80
+  - port: 7000
     protocol: TCP
     targetPort: 8888
   selector:
     run: farkhodsadykov
-  type: LoadBalancer
+  type: NodePort
