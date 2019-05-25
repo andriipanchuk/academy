@@ -14,7 +14,12 @@ done
 pwd -P )"
 
 
-BRANCH_NAME="$(git branch | grep \* | cut -d ' ' -f2)"
+if [[ $1 -eq 0 ]] ; then
+    BRANCH_NAME="$1"
+else
+  BRANCH_NAME="$(git branch | grep \* | cut -d ' ' -f2)"
+fi
+
 
 if [ "$0" = "$BASH_SOURCE" ]
 then
