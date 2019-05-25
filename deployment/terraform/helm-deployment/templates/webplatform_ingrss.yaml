@@ -4,7 +4,7 @@ metadata:
   name: ingress-webplaform
   annotations:
     kubernetes.io/ingress.class: nginx
-    certmanager.k8s.io/cluster-issuer: letsencrypt-issuer-webplatform-prod
+    certmanager.k8s.io/cluster-issuer: {{ .Values.issuer }}
 spec:
   rules:
   - host: {{ .Values.dns_endpoint }}
