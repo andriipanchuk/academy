@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+HEAD
 @Library('CommonLib@fsadykov') _
 =======
 @Library('CommonLib@noor') _
