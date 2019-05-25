@@ -15,6 +15,15 @@ variable "issuer_name" {
   }
 }
 
+variable "bucket_name" {
+  type = "map"
+  default = {
+    dev  = "webplatform_dev"
+    qa   = "webplatform_qa"
+    prod = "webplatform_prod"
+  }
+}
+
 variable "dns_endpoint_webplatform" {
   type = "map"
   default = {
