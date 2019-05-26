@@ -21,17 +21,23 @@ import time
 app = Flask(__name__)
 
 ## To different enviroments enable this
-app.config.from_pyfile('config.cfg')
+# app.config.from_pyfile('config.cfg')
 
 ## To testing I create my own config
-# app.config.from_pyfile('/Users/fsadykov/backup/databases/config.cfg')
+app.config.from_pyfile('/Users/fsadykov/backup/databases/config.cfg')
 
 bootstrap = Bootstrap(app)
 db = SQLAlchemy(app)
 
+env = app.config.get('BRANCH_NAME')
+if env == 'master':
+    enviroment = 'prod'
+else:
+    enviroment = env
+
 ## Loading the Kubernetes configuration
 # config.load_kube_config()
-config.load_incluster_config()
+config.load_kube_config()
 kube = client.ExtensionsV1beta1Api()
 api = core_v1_api.CoreV1Api()
 
@@ -138,10 +144,13 @@ def availablePort():
 def generateTemplates(username, password, enviroment):
     templates = {}
     templatePort = availablePort()
-    host         = f'{enviroment}.fuchicorp.com'
+    if enviroment == 'master':
+        host = 'academy.fuchicorp.com'
+    else:
+        host = f'{enviroment}.academy.fuchicorp.com'
     ingressName  = f'{enviroment}-pynote-ingress'
     namespace    = f'{enviroment}-students'
-    templates['pynotelink'] = f'{enviroment}.fuchicorp.com/pynote/{username}'
+    templates['pynotelink'] = f'{enviroment}.academy.fuchicorp.com/pynote/{username}'
     templates['path'] = {'path': f'/pynote/{username}', 'backend': {'serviceName': username, 'servicePort': templatePort}}
     templates['port'] = templatePort
     with open('kubernetes/pynote-pod.yaml' ) as file:
@@ -183,7 +192,6 @@ def createPynote(username, password):
     api           = core_v1_api.CoreV1Api()
     pynoteName    = username.lower()
     pynotePass    = password
-    enviroment    = f'{subprocess.getoutput("git rev-parse --abbrev-ref HEAD")}'
     ingressName   = f'{enviroment}-pynote-ingress'
     namespace     = f'{enviroment}-students'
     deployment    = generateTemplates(pynoteName, pynotePass, enviroment)
@@ -205,7 +213,6 @@ def deletePynote(username):
     kube          = client.ExtensionsV1beta1Api()
     api           = core_v1_api.CoreV1Api()
     pynoteName    = username.lower()
-    enviroment    = f'{subprocess.getoutput("git rev-parse --abbrev-ref HEAD")}'
     ingressName   = f'{enviroment}-pynote-ingress'
     namespace     = f'{enviroment}-students'
     # needs to add deletion for pod and service
