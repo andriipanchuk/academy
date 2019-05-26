@@ -29,7 +29,8 @@ EXPOSE 5000
 RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.13.0/bin/linux/amd64/kubectl
 RUN chmod +x ./kubectl
 RUN mv ./kubectl /usr/local/bin/kubectl
-RUN kubectl version
+RUN kubectl versio 2>/dev/null
+
 #WORKDIR /root/
 ## To run this docker image need commmand
 # CMD ['python', '/app/app.py']
