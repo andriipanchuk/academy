@@ -16,12 +16,12 @@ resource "kubernetes_secret" "webplatform-service-account-secret" {
   }
 }
 
-resource "kubernetes_cluster_role_binding" "tiller-cluster-rule" {
+resource "kubernetes_cluster_role_binding" "webplatform-cluster-rule" {
     depends_on = [
       "kubernetes_secret.webplatform-service-account-secret"
     ]
     metadata {
-        name = "webplatform-cluster-rule"
+        name = "webplatform-cluster-rule-${var.environment}"
     }
     role_ref {
         api_group = "rbac.authorization.k8s.io"
