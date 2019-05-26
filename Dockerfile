@@ -7,13 +7,11 @@ WORKDIR /app
 COPY . /app
 
 ARG branch_name
-ENV BRANCHNAME=$branch_name
+ENV BRANCH_NAME=$branch_name
 
 ## Create kube folder insied root Copy KuberConfig to the docker images
 RUN mkdir /root/.kube
-# COPY config /root/.kube/
-# COPY flask-kube.json /root/.kube/
-#
+
 # ## Set credentials for google cluster
 # ENV GOOGLE_APPLICATION_CREDENTIALS=/root/.kube/flask-kube.json
 
@@ -26,6 +24,11 @@ RUN python -m pip install -r requirements.txt
 
 ## Expose the port 5000
 EXPOSE 5000
+
+## Install kubectl
+RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.13.0/bin/linux/amd64/kubectl
+RUN chmod +x ./kubectl
+RUN mv ./kubectl /usr/local/bin/kubectl
 
 #WORKDIR /root/
 ## To run this docker image need commmand
