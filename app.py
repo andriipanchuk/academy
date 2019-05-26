@@ -153,7 +153,7 @@ def generateTemplates(username, password, enviroment):
         host = f'{enviroment}.academy.fuchicorp.com'
     ingressName  = f'{enviroment}-pynote-ingress'
     namespace    = f'{enviroment}-students'
-    templates['pynotelink'] = f'{enviroment}.academy.fuchicorp.com/pynote/{username}'
+    templates['pynotelink'] = f'/pynote/{username}'
     templates['path'] = {'path': f'/pynote/{username}', 'backend': {'serviceName': username, 'servicePort': templatePort}}
     templates['port'] = templatePort
     with open('kubernetes/pynote-pod.yaml' ) as file:

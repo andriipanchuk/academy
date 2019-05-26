@@ -28,9 +28,10 @@ resource "kubernetes_deployment" "webplatform-deployment" {
         service_account_name = "${kubernetes_service_account.webplatform_service_account.metadata.0.name}"
 
         container {
-          image = "${var.webplatform_image}"
-          name  = "webplatform-container"
-          command = [ "python", "/app/app.py" ]
+          image             = "${var.webplatform_image}"
+          name              = "webplatform-container"
+          command           = [ "python", "/app/app.py" ]
+          image_pull_policy = "Always" 
 
           env { name = "MYSQL_USER"     value = "${var.mysql_user}" }
           env { name = "MYSQL_DATABASE" value = "${var.mysql_database}" }
