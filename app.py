@@ -147,7 +147,7 @@ def availablePort():
 def generateTemplates(username, password, enviroment):
     templates = {}
     templatePort = availablePort()
-    if enviroment == 'master':
+    if env == 'master':
         host = 'academy.fuchicorp.com'
     else:
         host = f'{enviroment}.academy.fuchicorp.com'
