@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="/static/dashboard/dashboard.css" type="text/css">
 <link rel="stylesheet" href="/static/main/footler.css" type="text/css">
 <link rel="stylesheet" href="/static/main/menu.css" type="text/css">
+<link rel="stylesheet" href="/static/scrollist.css">
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <div class="topnav">
@@ -27,28 +28,19 @@
   </center>
 
 <body>
-    <table>
-    <tr>
-      <th>First Name</th>
+  <div class="master-info">
+    <ul class="hs">
       {% for user in users %}
-          <th>{{ user.firstname }}</th>
+      <div class="item">
+        <h4>First Name: {{ user.firstname }}</h4>
+        <h4>Last Name: {{ user.lastname }}</h4>
+        <h4>Username: {{ user.username }}</h4>
+        <h4>Role: {{ user.role }}</h4>
+      </div>
       {% endfor %}
-    </tr>
+  </ul>
+  </div>
 
-    <tr>
-       <th>Last Name</th>
-      {% for user in users %}
-          <th>{{ user.lastname }}</th>
-      {% endfor %}
-    </tr>
-
-    <tr>
-      <th>Username</th>
-      {% for user in users %}
-          <th>{{ user.username }}</th>
-      {% endfor %}
-    </tr>
-  </table>
 </head>
 <body>
 
