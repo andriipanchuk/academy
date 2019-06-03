@@ -24,9 +24,10 @@ app = Flask(__name__)
 
 ## To different enviroments enable this
 app.config.from_pyfile('config.cfg')
-
 os.system('sh bash/bin/getServiceAccountConfig.sh')
-## To testing I create my own config
+
+
+## To testing I create my own config make sure you have configured ~/.kube/config
 # app.config.from_pyfile('/Users/fsadykov/backup/databases/config.cfg')
 
 bootstrap = Bootstrap(app)
@@ -375,6 +376,8 @@ def signup():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('dashboard'))
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
