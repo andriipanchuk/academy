@@ -1,7 +1,7 @@
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from wtforms import StringField, PasswordField, BooleanField, TextField
-from flask import Flask, render_template, redirect, url_for, request, jsonify, json
+from flask import Flask, render_template, redirect, url_for, request, jsonify, json, session
 from wtforms.validators import InputRequired, Email, Length
 from flask_wtf import FlaskForm, RecaptchaField
 from flask_admin.contrib.sqla import ModelView
@@ -12,6 +12,7 @@ from kubernetes  import client, config
 from flask_bootstrap import Bootstrap
 from os import path
 import subprocess
+import argparse
 import smtplib
 import pusher
 import random
@@ -21,15 +22,30 @@ import os
 
 
 app = Flask(__name__)
+parser = argparse.ArgumentParser(description="FuchiCorp Webplarform Application.")
+parser.add_argument("--debug", action='store_true',
+                        help="Run Application on developer mode.")
 
-## To different enviroments enable this
-app.config.from_pyfile('config.cfg')
-os.system('sh bash/bin/getServiceAccountConfig.sh')
+args = parser.parse_args()
+def app_set_up():
+    """
+        If parse --debug argument to the application.
+        Applicaion will run on debug mode and local mode.
+        It's useful when you are developing application on localhost 
+
+        config-file: /Users/fsadykov/backup/databases/config.cfg
+
+    """
+    if args.debug:
+        ## To testing I create my own config make sure you have configured ~/.kube/config
+        app.config.from_pyfile('/Users/fsadykov/backup/databases/config.cfg')
+    else:
+        ## To different enviroments enable this
+        app.config.from_pyfile('config.cfg')
+        os.system('sh bash/bin/getServiceAccountConfig.sh')
 
 
-## To testing I create my own config make sure you have configured ~/.kube/config
-# app.config.from_pyfile('/Users/fsadykov/backup/databases/config.cfg')
-
+app_set_up()
 bootstrap = Bootstrap(app)
 db = SQLAlchemy(app)
 
@@ -376,6 +392,7 @@ def signup():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    session.permanent = True
     if current_user.is_authenticated:
         return redirect(url_for('dashboard'))
     form = LoginForm()
@@ -428,4 +445,4 @@ admin.add_view(myModelView(User, db.session))
 
 if __name__ == '__main__':
     db.create_all()
-    app.run(debug=True, port=5000, host='0.0.0.0')
+    app.run(port=5000, host='0.0.0.0')

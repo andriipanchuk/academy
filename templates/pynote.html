@@ -31,32 +31,6 @@
     <a href="{{ url_for('pynote') }}">PyNote</a>
   </div>
 
-  <script>
-  function openNav() {
-      document.getElementById("mySidenav").style.width = "250px";
-      document.getElementById("main").style.marginLeft = "250px";
-  }
-
-  function closeNav() {
-      document.getElementById("mySidenav").style.width = "0";
-      document.getElementById("main").style.marginLeft= "0";
-  }
-
-
-  var myVar;
-
-  function loadingFunc() {
-    document.getElementById("notLoading").id = 'loader'
-    document.getElementById("requestPynote").style.display = 'none'
-    myVar = setTimeout(showPage, 200000);
-  }
-
-  function showPage() {
-    document.getElementById("loader").id = "notLoading";
-  }
-
-  </script>
-
 </head>
 <body>
   <div id="notLoading" ></div>
@@ -70,34 +44,105 @@
         <a style="text-decoration: none; color: white;" href="{{ item.pynotelink }}">link: {{ item.pynotelink }}</a>
       </div>
       {% endfor %}
+      <button id="myBtn">Create PyNote</button>
   </ul>
-  </div>
+ </div>
 
 
 
-  <div class="request-form" style='display:block' id="requestPynote">
-    <div class="background-PyNote-form">
-      <form method="POST" onsubmit="loadingFunc()">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <div class="top-text">
-          <h2>Request a PyNote from Kuber Cluster</h2>
+
+
+<!-- The Modal -->
+<div id="myModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <div class="modal-header">
+      <span class="close">&times;</span>
+      <div class="request-form" style='display:block' id="requestPynote">
+        <div class="background-PyNote-form">
+          <form method="POST" onsubmit="loadingFunc()">
+
+            <div class="top-text">
+              <h2>Request a PyNote from Kuber Cluster</h2>
+            </div>
+
+            <h4>Please enter informations for PyNote</h4>
+            <br>
+            <h5>Server Name</h5>
+            <input type="text" name="server-name"  onfocus="this.value=''" placeholder="Enter server name" required>
+
+            <h5>Password for Notebook</h5>
+            <input type="password" name="password"  onfocus="this.value=''" placeholder="Please enter the password" required>
+
+            <input  type="submit" onsubmit="loadingFunc()"  value="Create PyNote Platform" >
+            <center> <h3 > {{ pynoteCreated }}</h3>
+            <h3 style="color: red;"> {{ errorMessage }} </h3></center>
+          </form>
         </div>
-
-        <h4>Please enter informations for PyNote</h4>
-        <br>
-        <h5>Server Name</h5>
-        <input type="text" name="server-name"  onfocus="this.value=''" placeholder="Enter server name" required>
-
-        <h5>Password for Notebook</h5>
-        <input type="password" name="password"  onfocus="this.value=''" placeholder="Please enter the password" required>
-
-        <input  type="submit" onsubmit="loadingFunc()"  value="Create PyNote Platform" >
-        <center> <h3 > {{ pynoteCreated }}</h3>
-        <h3 style="color: red;"> {{ errorMessage }} </h3></center>
-      </form>
+      </div>
     </div>
   </div>
 
+</div>
+
+<script>
+
+
+var myVar;
+
+// Get the modal
+var modal = document.getElementById("myModal");
+
+// Get the button that opens the modal
+var btn = document.getElementById("myBtn");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+
+function openNav() {
+    document.getElementById("mySidenav").style.width = "250px";
+    document.getElementById("main").style.marginLeft = "250px";
+}
+
+function closeNav() {
+    document.getElementById("mySidenav").style.width = "0";
+    document.getElementById("main").style.marginLeft= "0";
+}
+
+
+function loadingFunc() {
+  document.getElementById("notLoading").id = 'loader'
+  document.getElementById("requestPynote").style.display = 'none'
+  myVar = setTimeout(showPage, 200000);
+}
+
+function showPage() {
+  document.getElementById("loader").id = "notLoading";
+}
+
+
+// When the user clicks the button, open the modal
+btn.onclick = function() {
+  modal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+  modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+
+</script>
   <div class="ready-pynote">
     <a href="https://www.linkedin.com/in/abdugofir-sharif-5394a516a?trk=author_mini-profile_image">Can't access to Servers?</a>
   </div>
