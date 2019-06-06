@@ -7,6 +7,7 @@ metadata:
 spec:
   containers:
   - name: username
-    image: fsadykov/pynote:0.2
+    image: fsadykov/pynote:latest
+    imagePullPolicy: Always
     args: ["--username=farkhodsadykov", "--password=redhat"]
   restartPolicy: OnFailure
