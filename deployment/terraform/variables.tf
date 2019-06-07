@@ -7,16 +7,6 @@ variable "environment" {
   default = "dev"
 }
 
-variable "issuer_name" {
-  type = "map"
-
-  default = {
-    dev  = "letsencrypt-issuer-dev-webplatform-prod"
-    qa   = "letsencrypt-issuer-qa-webplatform-prod"
-    prod = "letsencrypt-issuer-prod-webplatform-prod"
-  }
-}
-
 variable "dns_endpoint_webplatform" {
   type = "map"
 
