@@ -4,12 +4,6 @@ resource "helm_release" "webplatform_services_ingress" {
   namespace = "${var.webplatform_namespace}"
   chart = "./helm-deployment"
 
-
-  set {
-    name = "issuer"
-    value = "${lookup(var.issuer_name, "${var.environment}")}"
-  }
-
   set {
     name = "dns_endpoint"
     value = "${lookup(var.dns_endpoint_webplatform, "${var.environment}")}"
