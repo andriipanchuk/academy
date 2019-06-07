@@ -15,10 +15,6 @@
   margin: auto;
 }
 
-.ready-pynote a {
-  text-decoration: none;
-  color: #5087e0;
-}
 
 input, select, textarea{
     width: 100%;
