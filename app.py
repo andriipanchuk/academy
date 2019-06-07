@@ -169,14 +169,6 @@ class QuestionForm(FlaskForm):
     phone = StringField('phone', validators=[InputRequired(), Length(min=8, max=80)])
 
 
-def getExternalIp(name):
-    while True:
-        services = api.list_namespaced_service('students')
-        for service in services.items:
-            if service.status.load_balancer.ingress:
-                return service.status.load_balancer.ingress[0].ip
-                break
-
 def available_port():
     while True:
         randomPort = random.choice(list(range(7000, 7100)))
@@ -219,7 +211,7 @@ def generate_templates(username, password, enviroment):
         templates['ingress'] = ingress
     return templates
 
-def existingIngess(ingerssname, namespace):
+def existing_ingess(ingerssname, namespace):
     total = []
     ingressList = kube.list_namespaced_ingress(namespace).items
     for item in ingressList:
@@ -228,7 +220,7 @@ def existingIngess(ingerssname, namespace):
     else:
         return False
 
-def createPynote(username, password):
+def create_pynote(username, password):
     ## Loading the kubernetes objects
     config.load_kube_config()
     kube           = client.ExtensionsV1beta1Api()
@@ -240,7 +232,7 @@ def createPynote(username, password):
     deployment     = generate_templates(pynote_name, pynote_pass, enviroment)
     pod            = api.create_namespaced_pod(body=deployment['pod'], namespace=namespace)
     service        = api.create_namespaced_service(body=deployment['service'], namespace=namespace)
-    exist_ingress  = existingIngess(ingress_name, namespace)
+    exist_ingress  = existing_ingess(ingress_name, namespace)
     if exist_ingress:
         exist_ingress.spec.rules[0].http.paths.append(deployment['path'])
         kube.replace_namespaced_ingress(exist_ingress.metadata.name, namespace, body=exist_ingress)
@@ -257,7 +249,7 @@ def delete_pynote(username):
     ingress_name   = f'{enviroment}-pynote-ingress'
     namespace     = f'{enviroment}-students'
     # needs to add deletion for pod and service
-    exist_ingress  = existingIngess(ingress_name, namespace)
+    exist_ingress  = existing_ingess(ingress_name, namespace)
     try:
         api.delete_namespaced_pod(pynote_name, namespace)
         print(f'Deleted a pod {pynote_name}')
@@ -298,7 +290,7 @@ def pynote():
             message = "Sorry you already requested a PyNote."
             return render_template('pynote.html', name=current_user.username, errorMessage=message, pynotes=pynotes)
 
-        pynote = createPynote(current_user.username, password)
+        pynote = create_pynote(current_user.username, password)
         message =  "The pynote has been requested."
         new_pynote = Pynote(pynotelink=pynote['pynotelink'], password=password, server_name=server_name, username=current_user.username)
 
