@@ -7,3 +7,4 @@
 *.DS_Store*
 *state*
 *.terraform*
+*fuchicorp-service-account*
