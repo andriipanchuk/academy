@@ -31,6 +31,7 @@ parser.add_argument("--debug", action='store_true',
 args = parser.parse_args()
 def app_set_up():
     """
+
         If parse --debug argument to the application.
         Applicaion will run on debug mode and local mode.
         It's useful when you are developing application on localhost
@@ -39,9 +40,12 @@ def app_set_up():
 
     """
     if args.debug:
+
         ## To testing I create my own config make sure you have configured ~/.kube/config
         app.config.from_pyfile('/Users/fsadykov/backup/databases/config.cfg')
+
     else:
+
         ## To different enviroments enable this
         app.config.from_pyfile('config.cfg')
         os.system('sh bash/bin/getServiceAccountConfig.sh')

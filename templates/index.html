@@ -8,35 +8,54 @@
      <link href="static/new_style.css" rel="stylesheet">
     <link href="https://getbootstrap.com/docs/3.3/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
     <link rel="stylesheet" href="/static/animation/animation.css">
+    <link rel="stylesheet" href="/static/index/index.css">
   </head>
 
   <style media="screen">
-    body {
-      background-color: #15443a;
-    }
-    .marketing {
-      color: white;
-    }
+
   </style>
 
   <body>
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+      <a class="navbar-brand" href="https://fuchicorp.com">FuchiCorp</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-    <div class="container">
-      <div class="header">
-        <nav>
-          <ul class="nav nav-pills pull-right">
-            <div class="topnav">
-              <a class="btn btn-lg btn-success" href="login">Sign in</a>
-            </div>
-          </ul>
-        </nav>
 
+      <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="/">Home<span class="sr-only"></span></a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="dashboard">Dashboard<span class="sr-only"></span></a>
+
+          </li>
+          <li class="nav-item active">
+            <form class="form-inline my-2 my-lg-0">
+              <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+              <button class="btn btn-outline-success my-4 my-sm-1" type="submit">Search</button>
+            </form>
+          </li>
+
+        </ul>
+
+        <a class="btn  btn-outline-success" href="login">Sign in</a>
       </div>
+
+    </nav>
+
+      <div class="header">
+
         <div class="jumbotron">
-          <h1 class="animated jackInTheBox">FuchiCorp</h1>
-          <p class="lead"></p>
-          <p><a class="btn btn-lg btn-success" href="signup" role="button">Sign up today</a></p>
+          <div class="container">
+            <h1 class="display-5">Welcome FuchiCorp Academy!</h1>
+            <p>FuChiCorp Academy is platform where you can start learning Python and other programming languages</p>
+            <p><a class="btn btn-lg btn-success" href="signup" role="button">Sign up today</a></p>
+          </div>
         </div>
+      </div>
 
       <div class="row marketing">
         <div class="col-lg-6">
@@ -62,12 +81,10 @@
 
         </div>
       </div>
-      <h5><a href="https://www.linkedin.com/in/farkhod-sadykov/">Find me</a></h5>
       <footer class="footer">
 
         <p>&copy; FuchiCorp 2019</p>
       </footer>
 
-    </div>
   </body>
 </html>
