@@ -62,7 +62,6 @@ else:
     enviroment = env
 
 ## Loading the Kubernetes configuration
-# config.load_kube_config()
 config.load_kube_config()
 kube = client.ExtensionsV1beta1Api()
 api = core_v1_api.CoreV1Api()
@@ -130,8 +129,7 @@ class pynoteDeleteView(BaseView):
                 return self.render('admin/delete_pynote.html', message=message, form=form)
         return self.render('admin/delete_pynote.html', form=form)
 
-
-class myModelView(ModelView):
+class MyModelView(ModelView):
     def is_accessible(self):
         if current_user.role == "Admin":
             return True
@@ -139,7 +137,6 @@ class myModelView(ModelView):
             return False
     def inaccessible_callback(self, name, **kwargs):
         return "<h2>Sorry you do not have permission for this page <h2>"
-
 
 class MyAdminIndex(AdminIndexView):
     def is_accessible(self):
@@ -151,40 +148,40 @@ class MyAdminIndex(AdminIndexView):
         return "<h2 style='color: red;'>Sorry you do not have permission for this page<h2>"
 
 class PyNoteDelete(FlaskForm):
-    username = StringField('User Name', validators=[InputRequired(), Length(min=4, max=30)])
-    pynote = StringField('PyNote Name', validators=[InputRequired(), Length(min=4, max=15)])
+    username    = StringField('User Name', validators=[InputRequired(), Length(min=4, max=30)])
+    pynote_name = StringField('PyNote Name', validators=[InputRequired(), Length(min=4, max=15)])
 
 class LoginForm(FlaskForm):
-    username = StringField('username', validators=[InputRequired(), Length(min=4, max=30)])
-    password = PasswordField('password', validators=[InputRequired(), Length(min=8, max=80)])
-    remember = BooleanField('remember me')
-    recaptcha = RecaptchaField()
+    username    = StringField('username', validators=[InputRequired(), Length(min=4, max=30)])
+    password    = PasswordField('password', validators=[InputRequired(), Length(min=8, max=80)])
+    remember    = BooleanField('remember me')
+    recaptcha   = RecaptchaField()
 
 class RegisterForm(FlaskForm):
-    firstname = StringField('Firstname', validators=[InputRequired(), Length(min=4, max=15)])
-    lastname = StringField('Lastname', validators=[InputRequired(), Length(min=4, max=15)])
-    email = StringField('email', validators=[InputRequired(), Email(message='Invalid email'), Length(max=50)])
-    username = StringField('username', validators=[InputRequired(), Length(min=4, max=30)])
-    password = PasswordField('password', validators=[InputRequired(), Length(min=8, max=80)])
+    firstname   = StringField('Firstname', validators=[InputRequired(), Length(min=4, max=15)])
+    lastname    = StringField('Lastname', validators=[InputRequired(), Length(min=4, max=15)])
+    email       = StringField('email', validators=[InputRequired(), Email(message='Invalid email'), Length(max=50)])
+    username    = StringField('username', validators=[InputRequired(), Length(min=4, max=30)])
+    password    = PasswordField('password', validators=[InputRequired(), Length(min=8, max=80)])
 
 class QuestionForm(FlaskForm):
-    first = StringField('firstname', validators=[InputRequired(),  Length(max=15)])
-    last = StringField('lastname', validators=[InputRequired(), Length(min=4, max=15)])
-    phone = StringField('phone', validators=[InputRequired(), Length(min=8, max=80)])
+    first       = StringField('firstname', validators=[InputRequired(),  Length(max=15)])
+    last        = StringField('lastname', validators=[InputRequired(), Length(min=4, max=15)])
+    phone       = StringField('phone', validators=[InputRequired(), Length(min=8, max=80)])
 
 class EditProfile(FlaskForm):
-    firstname = StringField('First Name', validators=[InputRequired(), Length(min=4, max=50)])
-    lastname = StringField('Last Name',  validators=[InputRequired(), Length(min=4, max=15)])
-    username = StringField('Username', validators=[InputRequired(), Length(min=8, max=80)])
-    email = StringField('Email', validators=[InputRequired(), Length(min=8, max=80)])
-
+    firstname   = StringField('First Name', validators=[InputRequired(), Length(min=4, max=50)])
+    lastname    = StringField('Last Name',  validators=[InputRequired(), Length(min=4, max=15)])
+    username    = StringField('Username', validators=[InputRequired(), Length(min=8, max=80)])
+    email       = StringField('Email', validators=[InputRequired(), Length(min=8, max=80)])
 
 class ChangePassword(FlaskForm):
-    current = PasswordField('Current Password')
-    password = PasswordField('New Password', [
+    current     = PasswordField('Current Password')
+    password    = PasswordField('New Password', [
         validators.DataRequired(),
         validators.EqualTo('confirm', message='Passwords must match')])
-    confirm = PasswordField('Confirm Password')
+    confirm     = PasswordField('Confirm Password')
+
 
 def available_port():
     while True:
@@ -201,31 +198,33 @@ def generate_templates(username, password, enviroment):
     else:
         host = f'{enviroment}.academy.fuchicorp.com'
     ingress_name  = f'{enviroment}-pynote-ingress'
-    namespace    = f'{enviroment}-students'
+    namespace     = f'{enviroment}-students'
     templates['pynotelink'] = f'/pynote/{username}'
     templates['path'] = {'path': f'/pynote/{username}', 'backend': {'serviceName': username, 'servicePort': template_port}}
     templates['port'] = template_port
     with open('kubernetes/pynote-pod.yaml' ) as file:
         pod = yaml.load(file, Loader=yaml.FullLoader)
-        pod['metadata']['name'] = username
-        pod['metadata']['labels']['run'] = username
+        pod['metadata']['name']              = username
+        pod['metadata']['labels']['run']     = username
         pod['spec']['containers'][0]['name'] = username
         pod['spec']['containers'][0]['args'] = [ f"--username={username}", f"--password={password}"]
         templates['pod'] = pod
+
     with open('kubernetes/pynote-service.yaml') as file:
         service = yaml.load(file, Loader=yaml.FullLoader)
         service['metadata']['labels']['run'] = username
-        service['spec']['ports'][0]['port'] = template_port
-        service['spec']['selector']['run'] = username
-        service['metadata']['name'] = username
-        templates['service'] = service
+        service['spec']['ports'][0]['port']  = template_port
+        service['spec']['selector']['run']   = username
+        service['metadata']['name']          = username
+        templates['service']                 = service
+
     with open('kubernetes/pynote-ingress.yaml') as file:
         ingress = yaml.load(file, Loader=yaml.FullLoader)
-        ingress['spec']['rules'][0]['host'] = host
+        ingress['spec']['rules'][0]['host']  = host
         ingress['spec']['rules'][0]['http']['paths'].append(templates['path'])
-        ingress['metadata']['name'] = ingress_name
-        ingress['metadata']['namespace'] = namespace
-        templates['ingress'] = ingress
+        ingress['metadata']['name']          = ingress_name
+        ingress['metadata']['namespace']     = namespace
+        templates['ingress']                 = ingress
     return templates
 
 def existing_ingess(ingerssname, namespace):
@@ -317,14 +316,12 @@ def pynote():
 
     return render_template('pynote.html', name=current_user.username, pynotes=pynotes)
 
-
 #Menu for chat
 @app.route('/chat', methods=['GET', 'POST'])
 @login_required
 def chat():
     messages = Message.query.all()
     return render_template('chat.html', messages=messages, fname=current_user.firstname, lname=current_user.lastname)
-
 
 @app.route('/message', methods=['POST'])
 def message():
@@ -341,12 +338,10 @@ def message():
     except:
         return jsonify({'result' : 'failure'})
 
-
 # Welcome Page
 @app.route('/')
 def index():
     return render_template('index.html')
-
 
 #Menu for Videos
 @app.route('/videos', methods=['GET', 'POST'])
@@ -354,13 +349,11 @@ def index():
 def videos():
     return render_template('videos.html', name=current_user.username)
 
-
 # Vidoe classes
 @app.route('/linux', methods=['GET', 'POST'])
 @login_required
 def linux():
     return render_template('linux.html', name=current_user.username)
-
 
 # Docker classes
 @app.route('/docker', methods=['GET', 'POST'])
@@ -368,36 +361,31 @@ def linux():
 def docker():
     return render_template('docker.html', name=current_user.username)
 
-
-
 # Scripting classes
 @app.route('/script', methods=['GET', 'POST'])
 @login_required
 def script():
     return render_template('script.html', name=current_user.username)
 
-
-
 # Raiting of the user
-@app.route('/raiting', methods=['GET', 'POST'])
+@app.route('/raiting')
 @login_required
 def raiting():
     return render_template('raiting.html', name=current_user.username)
-
 
 @app.route('/profile/<username>')
 @login_required
 def user(username):
     user_data = User.query.filter_by(username=username).first()
-    return render_template('profile.html', user_data=user_data)
-
+    return render_template('profile.html', fname=current_user.firstname, lname=current_user.lastname, user_data=user_data)
 
 @app.route('/settings/<username>', methods=['GET', 'POST'])
 @login_required
 def settings(username):
-    formProfile = EditProfile(prefix="EditProfile")
+    formProfile  = EditProfile(prefix="EditProfile")
     formPassword = ChangePassword(prefix="ChangePassword")
-    user_data = User.query.filter_by(username=username).first()
+    formPynote   = PyNoteDelete(prefix="DeletePyNote")
+    user_data    = User.query.filter_by(username=username).first()
     if request.method == 'POST' and current_user.username == user_data.username:
         form_name = request.form['settingsForm']
         if form_name == 'EditProfileSubmit':
@@ -408,7 +396,7 @@ def settings(username):
             user_data.email = formProfile.email.data
             db.session.commit()
             message = 'User information has been updated.'
-            return render_template('settings.html', user_data=user_data, formProfile=formProfile, formPassword=formPassword, message=message)
+            return render_template('settings.html', user_data=user_data, fname=current_user.firstname, lname=current_user.lastname, formProfile=formProfile, formPassword=formPassword, formPynote=formPynote, message=message)
 
         elif form_name == 'ChangePassword':
             formPassword.validate()
@@ -416,12 +404,27 @@ def settings(username):
                 user_data.password = generate_password_hash(formPassword.password.data, method='sha256')
                 db.session.commit()
                 message = 'The password has been changes.'
-                return render_template('settings.html', user_data=user_data, formProfile=formProfile, formPassword=formPassword, message=message)
+                return render_template('settings.html', user_data=user_data, fname=current_user.firstname, lname=current_user.lastname, formProfile=formProfile, formPassword=formPassword, formPynote=formPynote, message=message)
             else:
                 message = 'Password does not match with current.'
-                return render_template('settings.html', user_data=user_data, formProfile=formProfile, formPassword=formPassword, message=message)
+                return render_template('settings.html', user_data=user_data, fname=current_user.firstname, lname=current_user.lastname, formProfile=formProfile, formPassword=formPassword, formPynote=formPynote, message=message)
+        elif form_name == 'DeletePyNote':
+            formPynote.validate()
+            users_pynote = Pynote.query.filter_by(username=username).first()
+            if users_pynote:
+                if formPynote.username.data == current_user.username:
+                    delete_pynote(current_user.username)
+                    message = 'The PyNote has been deleted.'
+                    return render_template('settings.html', user_data=user_data, fname=current_user.firstname, lname=current_user.lastname, formProfile=formProfile, formPassword=formPassword, formPynote=formPynote, message=message)
+                else:
+                    message = 'Error Username was invalid.'
+                    return render_template('settings.html', user_data=user_data, fname=current_user.firstname, lname=current_user.lastname, formProfile=formProfile, formPassword=formPassword, formPynote=formPynote, message=message)
+            else:
+                message = 'PyNote not found please make sure you have PyNote.'
+                return render_template('settings.html', user_data=user_data, fname=current_user.firstname, lname=current_user.lastname, formProfile=formProfile, formPassword=formPassword, formPynote=formPynote, message=message)
 
-    return render_template('settings.html', user_data=user_data, formProfile=formProfile, formPassword=formPassword)
+
+    return render_template('settings.html', user_data=user_data, fname=current_user.firstname, lname=current_user.lastname, formProfile=formProfile, formPassword=formPassword, formPynote=formPynote)
 
 @app.route('/dashboard', methods=['GET', 'POST'])
 @login_required
@@ -508,9 +511,9 @@ def api_users():
 
 ### Api Block ends from here ####
 admin = Admin(app, index_view=MyAdminIndex())
-admin.add_view(myModelView(User, db.session))
-admin.add_view(myModelView(Pynote, db.session))
-admin.add_view(myModelView(Message, db.session))
+admin.add_view(MyModelView(User, db.session))
+admin.add_view(MyModelView(Pynote, db.session))
+admin.add_view(MyModelView(Message, db.session))
 admin.add_view(pynoteDeleteView(name='Delete Pynote', endpoint='pynote-delete'))
 
 if __name__ == '__main__':

@@ -5,7 +5,7 @@
 } */
 
 .media-content .content {
-  color: white;
+  color: black;
 }
 
 html {
@@ -18,9 +18,9 @@ strong {
 }
 
 .navbar>.container {
-  background-color: #05b98f;
+  background-color: #2f3742;
 }
 
 .navbar {
-  background-color: #05b98f;
+  background-color: #2f3742;
 }
