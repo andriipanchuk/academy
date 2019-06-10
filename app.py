@@ -1,6 +1,6 @@
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
-from wtforms import StringField, PasswordField, BooleanField, TextField
+from wtforms import StringField, PasswordField, BooleanField, TextField, validators, SubmitField
 from flask import Flask, render_template, redirect, url_for, request, jsonify, json, session
 from wtforms.validators import InputRequired, Email, Length
 from flask_wtf import FlaskForm, RecaptchaField
@@ -50,7 +50,7 @@ def app_set_up():
         app.config.from_pyfile('config.cfg')
         os.system('sh bash/bin/getServiceAccountConfig.sh')
 
-
+# app.config.from_pyfile('/Users/fsadykov/backup/databases/config.cfg')
 app_set_up()
 bootstrap = Bootstrap(app)
 db = SQLAlchemy(app)
@@ -93,7 +93,7 @@ class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     firstname = db.Column(db.String(15))
     lastname = db.Column(db.String(15))
-    username = db.Column(db.String(15), unique=True)
+    username = db.Column(db.String(30), unique=True)
     email = db.Column(db.String(50), unique=True)
     password = db.Column(db.String(80))
     status = db.Column(db.String(5))
@@ -151,11 +151,11 @@ class MyAdminIndex(AdminIndexView):
         return "<h2 style='color: red;'>Sorry you do not have permission for this page<h2>"
 
 class PyNoteDelete(FlaskForm):
-    username = StringField('User Name', validators=[InputRequired(), Length(min=4, max=15)])
+    username = StringField('User Name', validators=[InputRequired(), Length(min=4, max=30)])
     pynote = StringField('PyNote Name', validators=[InputRequired(), Length(min=4, max=15)])
 
 class LoginForm(FlaskForm):
-    username = StringField('username', validators=[InputRequired(), Length(min=4, max=15)])
+    username = StringField('username', validators=[InputRequired(), Length(min=4, max=30)])
     password = PasswordField('password', validators=[InputRequired(), Length(min=8, max=80)])
     remember = BooleanField('remember me')
     recaptcha = RecaptchaField()
@@ -164,14 +164,27 @@ class RegisterForm(FlaskForm):
     firstname = StringField('Firstname', validators=[InputRequired(), Length(min=4, max=15)])
     lastname = StringField('Lastname', validators=[InputRequired(), Length(min=4, max=15)])
     email = StringField('email', validators=[InputRequired(), Email(message='Invalid email'), Length(max=50)])
-    username = StringField('username', validators=[InputRequired(), Length(min=4, max=15)])
+    username = StringField('username', validators=[InputRequired(), Length(min=4, max=30)])
     password = PasswordField('password', validators=[InputRequired(), Length(min=8, max=80)])
 
 class QuestionForm(FlaskForm):
-    first = StringField('firstname', validators=[InputRequired(),  Length(max=50)])
+    first = StringField('firstname', validators=[InputRequired(),  Length(max=15)])
     last = StringField('lastname', validators=[InputRequired(), Length(min=4, max=15)])
     phone = StringField('phone', validators=[InputRequired(), Length(min=8, max=80)])
 
+class EditProfile(FlaskForm):
+    firstname = StringField('First Name', validators=[InputRequired(), Length(min=4, max=50)])
+    lastname = StringField('Last Name',  validators=[InputRequired(), Length(min=4, max=15)])
+    username = StringField('Username', validators=[InputRequired(), Length(min=8, max=80)])
+    email = StringField('Email', validators=[InputRequired(), Length(min=8, max=80)])
+
+
+class ChangePassword(FlaskForm):
+    current = PasswordField('Current Password')
+    password = PasswordField('New Password', [
+        validators.DataRequired(),
+        validators.EqualTo('confirm', message='Passwords must match')])
+    confirm = PasswordField('Confirm Password')
 
 def available_port():
     while True:
@@ -372,13 +385,51 @@ def raiting():
     return render_template('raiting.html', name=current_user.username)
 
 
+@app.route('/profile/<username>')
+@login_required
+def user(username):
+    user_data = User.query.filter_by(username=username).first()
+    return render_template('profile.html', user_data=user_data)
+
+
+@app.route('/settings/<username>', methods=['GET', 'POST'])
+@login_required
+def settings(username):
+    formProfile = EditProfile(prefix="EditProfile")
+    formPassword = ChangePassword(prefix="ChangePassword")
+    user_data = User.query.filter_by(username=username).first()
+    if request.method == 'POST' and current_user.username == user_data.username:
+        form_name = request.form['settingsForm']
+        if form_name == 'EditProfileSubmit':
+            formProfile.validate()
+            user_data.firstname = formProfile.firstname.data
+            user_data.lastname = formProfile.lastname.data
+            user_data.username = formProfile.username.data
+            user_data.email = formProfile.email.data
+            db.session.commit()
+            message = 'User information has been updated.'
+            return render_template('settings.html', user_data=user_data, formProfile=formProfile, formPassword=formPassword, message=message)
+
+        elif form_name == 'ChangePassword':
+            formPassword.validate()
+            if check_password_hash(user_data.password, formPassword.current.data):
+                user_data.password = generate_password_hash(formPassword.password.data, method='sha256')
+                db.session.commit()
+                message = 'The password has been changes.'
+                return render_template('settings.html', user_data=user_data, formProfile=formProfile, formPassword=formPassword, message=message)
+            else:
+                message = 'Password does not match with current.'
+                return render_template('settings.html', user_data=user_data, formProfile=formProfile, formPassword=formPassword, message=message)
+
+    return render_template('settings.html', user_data=user_data, formProfile=formProfile, formPassword=formPassword)
+
 @app.route('/dashboard', methods=['GET', 'POST'])
 @login_required
 def dashboard():
     users = User.query.all()
-    return render_template('dashboard.html', fname=current_user.firstname, lname=current_user.lastname, users=users )
-
-
+    user_data = User.query.filter_by(username=current_user.username).first()
+    py_note = Pynote.query.filter_by(username=current_user.username)
+    return render_template('dashboard.html', fname=current_user.firstname, lname=current_user.lastname, users=users, pynot=py_note, user_data=user_data)
 
 @app.route('/contact', methods=['GET', 'POST'])
 def contact():
@@ -391,25 +442,22 @@ def contact():
         return "<h1>Your QUESTION is submited</h1>"
     return render_template('contact.html')
 
-
-
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     form = RegisterForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
         hashed_password = generate_password_hash(form.password.data, method='sha256')
-        new_user = User(username=form.username.data.lower(), firstname=form.firstname.data, lastname=form.lastname.data,  email=form.email.data, password=hashed_password, status='False')
+        new_user = User(username=form.username.data.lower(), firstname=form.firstname.data, lastname=form.lastname.data, email=form.email.data, password=hashed_password, status='False', role='student')
         if user:
             if user.username == form.username.data:
-                message =  'This user name is exist'
+                message = 'This user name is exist'
                 return render_template('signup.html', message=message,  form=form)
 
         db.session.add(new_user)
         db.session.commit()
         return redirect(url_for('login'))
     return render_template('signup.html', form=form)
-
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -429,17 +477,18 @@ def login():
         return render_template('login.html', message="Invalid username or password", form=form)
     return render_template('login.html', form=form)
 
-
 @app.route('/disabled-user')
 def disabled_user():
     return render_template('disabled-user.html')
-
 
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
     return redirect(url_for('index'))
+
+
+
 
 ### Api Block starts from here ####
 

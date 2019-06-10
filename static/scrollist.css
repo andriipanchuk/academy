@@ -5,9 +5,10 @@
   border-radius: 5px;
   padding: 30px;
   margin: 30px;
-  background-color: #256e59;
+  background-color: #E9ECEF;
   color: white;
 }
+
 
 .master-info .pynote-logo {
  float: right;
@@ -15,7 +16,8 @@
 
 
 .background-PyNote-form {
-  background-color: #207563;
+  /* background-color: #207563; */
+  background-color: #2f3742;
   padding: 20px;
   border-radius: 10px;
   color: white;
@@ -29,7 +31,8 @@
   display:inline-block
   text-decoration: none;
   padding: 30px;
-  background-color: #a4d0c6;
+  /* background-color: #a4d0c6; */
+  background-color: #8a8a8a;
   border-radius: 10px;
 }
 
