@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
+{% import "bootstrap/wtf.html" as wtf %}
   <title>FuchiCorp</title>
 <link rel="shortcut icon" href="https://www.evolvecyber.com/assets/images/favicon.ico" />
 <link rel="stylesheet" href="/static/main/top.css" type="text/css">
 <link rel="stylesheet" href="/static/main/footler.css" type="text/css">
 <link rel="stylesheet" href="/static/main/menu.css" type="text/css">
-<link rel="stylesheet" href="/static/dashboard/dashboard.css" type="text/css">
-<!-- <link href="https://getbootstrap.com/docs/3.3/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet"> -->
-
+<link rel="stylesheet" href="/static/settings/settings.css" type="text/css">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <div class="topnav">
   <a class="active" href="{{ url_for('logout') }}">logout</a>
@@ -21,13 +20,13 @@
 </div>
 </head>
 
+{% block body %}
 <body>
   <div id="mySidenav" class="sidenav">
     <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
     <a href="{{ url_for('dashboard') }}">Dashboard</a>
     <a href="{{ url_for('chat') }}">Chating</a>
     <a href="{{ url_for('videos') }}">Videos</a>
-
     <a href="{{ url_for('contact') }}">Contact us</a>
   </div>
 
@@ -35,7 +34,7 @@
     <div class="left-container one-line">
         <div class="left-side">
           <div class="user-info">
-            <a  href="/profile/{{ user_data.username }}"> <img src="/static/images/user-icon.png"></img></a>
+            <a  href="/profile/fsadykov"> <img src="/static/images/user-icon.png"></img></a>
             <h2>{{ fname }} {{ lname }}</h2>
           </div>
           <ul id="user-options">
@@ -48,47 +47,38 @@
     </div>
     <div class="right-container one-line">
       <div class="right-side">
-        <div class="tab">
-          <button class="tablinks" id="defaultOpen" onclick="openTab(event, 'PyNote')">PyNote</button>
-          <button class="tablinks" onclick="openTab(event, 'Jenkins')">Jenkins</button>
+        <div class="edit-profile">
+          <h1>Edit My profile</h1>
+          <form  method="POST">
+            {{ wtf.form_field(formProfile.firstname, placeholder=user_data.firstname) }}
+
+            {{ wtf.form_field(formProfile.lastname, placeholder=user_data.lastname) }}
+
+            {{ wtf.form_field(formProfile.username, placeholder=user_data.username) }}
+
+            {{ wtf.form_field(formProfile.email, placeholder=user_data.email) }}
+            <input type="hidden" name="settingsForm" value="EditProfileSubmit" >
+            <input type="submit" name="EditProfileSubmit" value="Submit">
+          </form>
         </div>
 
-        <div id="PyNote" class="tabcontent">
-          <h2>FuChiCorp Pynote</h2>
-          <p>PyNote is the an online learning platform. It's aimed at restless professionals chasing after success. Fuchicorp has made innovation very easy for those who are self driven. With PyNote you can learn, build, and deploy! Request a PyNote now as investment to your future!</p>
-
-          <table>
-
-            {% for item in pynot %}
-            <tr>
-              <th>ID</th>
-              <th>Name</th>
-              <th>Owner</th>
-              <th>Link</th>
-            </tr>
-            <tr>
-              <td>{{ item.id }}</td>
-              <td>{{ item.server_name }}</td>
-              <td>{{ item.username }}</td>
-              <a href="{{ item.pynotelink }}"><td>{{ item.pynotelink }}</td></a>
-            </tr>
-            {% endfor %}
-          </table>
+        <div class="edit-password">
+          <h1>Change the Password</h1>
+          <form method="POST">
+            {{ wtf.form_field(formPassword.current, placeholder='Current Password') }}
+            {{ wtf.form_field(formPassword.password, placeholder='New Password') }}
+            {{ wtf.form_field(formPassword.confirm, placeholder='Confirm Password') }}
+            <input type="hidden" name="settingsForm" value="ChangePassword" >
+            <input type="submit" value="Submit">
+          </form>
         </div>
 
-        <div id="Jenkins" class="tabcontent">
-          <h3>Jenkins</h3>
-          <p>Jenkins is one of the popular CI/CD tools.</p>
-        </div>
-
-        <div id="PyNote" class="tabcontent">
-          <h3>PyNote</h3>
-          <p>PyNote is the capital of Japan.</p>
+        <div class="message">
+          <h3>Message: {{ message }}</h3>
         </div>
       </div>
     </div>
   </div>
-
 </body>
 <script>
 function openNav() {
@@ -101,21 +91,6 @@ function closeNav() {
     document.getElementById("main").style.marginLeft= "0";
 }
 
-function openTab(evt, tabName) {
-  var i, tabcontent, tablinks;
-  tabcontent = document.getElementsByClassName("tabcontent");
-  for (i = 0; i < tabcontent.length; i++) {
-    tabcontent[i].style.display = "none";
-  }
-  tablinks = document.getElementsByClassName("tablinks");
-  for (i = 0; i < tablinks.length; i++) {
-    tablinks[i].className = tablinks[i].className.replace(" active", "");
-  }
-  document.getElementById(tabName).style.display = "block";
-  evt.currentTarget.className += " active";
-}
-// Get the element with id="defaultOpen" and click on it
-document.getElementById("defaultOpen").click();
 </script>
 
 </script>
@@ -129,3 +104,4 @@ document.getElementById("defaultOpen").click();
 </footer>
 
 </html>
+{% endblock %}
