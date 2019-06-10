@@ -398,7 +398,7 @@ def settings(username):
     formPassword = ChangePassword(prefix="ChangePassword")
     user_data = User.query.filter_by(username=username).first()
 
-    if request.method == 'POST':
+    if request.method == 'POST' and current_user.username == user_data.username:
         form_name = request.form['settingsForm']
         if form_name == 'EditProfileSubmit':
             formProfile.validate()
