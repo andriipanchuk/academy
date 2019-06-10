@@ -431,8 +431,6 @@ def dashboard():
     py_note = Pynote.query.filter_by(username=current_user.username)
     return render_template('dashboard.html', fname=current_user.firstname, lname=current_user.lastname, users=users, pynot=py_note, user_data=user_data)
 
-
-
 @app.route('/contact', methods=['GET', 'POST'])
 def contact():
     if 'firstname' in request.form:
@@ -443,8 +441,6 @@ def contact():
         subprocess.call(["python", "mail.py"])
         return "<h1>Your QUESTION is submited</h1>"
     return render_template('contact.html')
-
-
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
@@ -462,7 +458,6 @@ def signup():
         db.session.commit()
         return redirect(url_for('login'))
     return render_template('signup.html', form=form)
-
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -486,12 +481,14 @@ def login():
 def disabled_user():
     return render_template('disabled-user.html')
 
-
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
     return redirect(url_for('index'))
+
+
+
 
 ### Api Block starts from here ####
 

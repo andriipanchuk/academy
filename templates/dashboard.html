@@ -27,7 +27,6 @@
     <a href="{{ url_for('dashboard') }}">Dashboard</a>
     <a href="{{ url_for('chat') }}">Chating</a>
     <a href="{{ url_for('videos') }}">Videos</a>
-
     <a href="{{ url_for('contact') }}">Contact us</a>
   </div>
 
@@ -50,6 +49,7 @@
       <div class="right-side">
         <div class="tab">
           <button class="tablinks" id="defaultOpen" onclick="openTab(event, 'PyNote')">PyNote</button>
+          <button class="tablinks" onclick="openTab(event, 'Users')">Users</button>
           <button class="tablinks" onclick="openTab(event, 'Jenkins')">Jenkins</button>
         </div>
 
@@ -58,7 +58,6 @@
           <p>PyNote is the an online learning platform. It's aimed at restless professionals chasing after success. Fuchicorp has made innovation very easy for those who are self driven. With PyNote you can learn, build, and deploy! Request a PyNote now as investment to your future!</p>
 
           <table>
-
             {% for item in pynot %}
             <tr>
               <th>ID</th>
@@ -76,15 +75,33 @@
           </table>
         </div>
 
+        <div id="Users" class="tabcontent">
+          <h3>FuChiCorp Academy Members.</h3>
+          <table>
+            <tr>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Status</th>
+            </tr>
+            {% for item in users %}
+            <tr>
+              <td>{{ item.firstname }}</td>
+              <td>{{ item.lastname }}</td>
+              <td>{{ item.email }}</td>
+              <td>{{ item.role }}</td>
+              <td>{{ item.status }}</td>
+            </tr>
+            {% endfor %}
+          </table>
+        </div>
+
         <div id="Jenkins" class="tabcontent">
           <h3>Jenkins</h3>
           <p>Jenkins is one of the popular CI/CD tools.</p>
         </div>
 
-        <div id="PyNote" class="tabcontent">
-          <h3>PyNote</h3>
-          <p>PyNote is the capital of Japan.</p>
-        </div>
       </div>
     </div>
   </div>
