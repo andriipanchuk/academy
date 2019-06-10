@@ -36,6 +36,7 @@
             <h2>{{ fname }} {{ lname }}</h2>
           </div>
           <ul id="user-options">
+            <li><a href="{{ url_for('dashboard') }}">My Dashboard</a></li>
             <li><a href="/profile/{{ user_data.username }}">My Profile</a></li>
             <li><a href="/settings/{{ user_data.username }}">Settings</a></li>
             <li><a href="/issuer/{{ user_data.username }}">My Issues</a></li>

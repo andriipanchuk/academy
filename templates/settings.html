@@ -38,6 +38,7 @@
             <h2>{{ fname }} {{ lname }}</h2>
           </div>
           <ul id="user-options">
+            <li><a href="{{ url_for('dashboard') }}">My Dashboard</a></li>
             <li><a href="/profile/{{ user_data.username }}">My Profile</a></li>
             <li><a href="/settings/{{ user_data.username }}">Settings</a></li>
             <li><a href="/issuer/{{ user_data.username }}">My Issues</a></li>
@@ -47,7 +48,7 @@
     </div>
     <div class="right-container one-line">
       <div class="right-side">
-        <div class="edit-profile">
+        <div class="settings-form">
           <h1>Edit My profile</h1>
           <form  method="POST">
             {{ wtf.form_field(formProfile.firstname, placeholder=user_data.firstname) }}
@@ -62,7 +63,19 @@
           </form>
         </div>
 
-        <div class="edit-password">
+        <div class="settings-form">
+          <h1>Delete My Pynote</h1>
+          <form method="POST">
+            {{ wtf.form_field(formPynote.username, placeholder=user_data.username) }}
+            {{ wtf.form_field(formPynote.pynote_name, placeholder='PyNote Name') }}
+            <input type="hidden" name="settingsForm" value="DeletePyNote" >
+
+            <a href="/pynote"><button class="delete" type="button" name="Create PyNote">Create PyNote</button></a> 
+            <input type="submit" value="Delete">
+          </form>
+        </div>
+
+        <div class="settings-form">
           <h1>Change the Password</h1>
           <form method="POST">
             {{ wtf.form_field(formPassword.current, placeholder='Current Password') }}
