@@ -391,13 +391,13 @@ def user(username):
     user_data = User.query.filter_by(username=username).first()
     return render_template('profile.html', user_data=user_data)
 
+
 @app.route('/settings/<username>', methods=['GET', 'POST'])
 @login_required
 def settings(username):
     formProfile = EditProfile(prefix="EditProfile")
     formPassword = ChangePassword(prefix="ChangePassword")
     user_data = User.query.filter_by(username=username).first()
-
     if request.method == 'POST' and current_user.username == user_data.username:
         form_name = request.form['settingsForm']
         if form_name == 'EditProfileSubmit':
@@ -448,7 +448,7 @@ def signup():
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
         hashed_password = generate_password_hash(form.password.data, method='sha256')
-        new_user = User(username=form.username.data.lower(), firstname=form.firstname.data, lastname=form.lastname.data,  email=form.email.data, password=hashed_password, status='False')
+        new_user = User(username=form.username.data.lower(), firstname=form.firstname.data, lastname=form.lastname.data, email=form.email.data, password=hashed_password, status='False', role='student')
         if user:
             if user.username == form.username.data:
                 message = 'This user name is exist'
