@@ -96,7 +96,7 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(50), unique=True)
     password = db.Column(db.String(80))
     status = db.Column(db.String(5))
-    role = db.Column(db.String(5))
+    role = db.Column(db.String(20))
     def __repr__(self):
         return '<User %r>' % self.username
 
@@ -366,6 +366,12 @@ def docker():
 @login_required
 def script():
     return render_template('script.html', name=current_user.username)
+
+# Scripting classes
+@app.route('/coming-soon', methods=['GET', 'POST'])
+@login_required
+def coming_soon():
+    return render_template('coming_soon.html', name=current_user.username)
 
 # Raiting of the user
 @app.route('/raiting')
