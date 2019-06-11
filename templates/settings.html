@@ -34,15 +34,15 @@
     <div class="left-container one-line">
         <div class="left-side">
           <div class="user-info">
-            <a  href="/profile/fsadykov"> <img src="/static/images/user-icon.png"></img></a>
+            <a  href="/profile/{{ user_data.username }}"> <img src="/static/images/user-icon.png"></img></a>
             <h2>{{ fname }} {{ lname }}</h2>
           </div>
           <ul id="user-options">
             <li><a href="{{ url_for('dashboard') }}">My Dashboard</a></li>
             <li><a href="/profile/{{ user_data.username }}">My Profile</a></li>
             <li><a href="/settings/{{ user_data.username }}">Settings</a></li>
-            <li><a href="/issuer/{{ user_data.username }}">My Issues</a></li>
-            <li><a href="/faq/{{ user_data.username }}">FAQ</a></li>
+            <li><a href="/coming-soon">My Issues</a></li>
+            <li><a href="/coming-soon">FAQ</a></li>
           </ul>
         </div>
     </div>
