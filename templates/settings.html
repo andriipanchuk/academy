@@ -8,6 +8,8 @@
 <link rel="stylesheet" href="/static/main/footler.css" type="text/css">
 <link rel="stylesheet" href="/static/main/menu.css" type="text/css">
 <link rel="stylesheet" href="/static/settings/settings.css" type="text/css">
+<!-- <link rel="stylesheet" href="/static/main/dashboard/dashboard.css"> -->
+
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <div class="topnav">
   <a class="active" href="{{ url_for('logout') }}">logout</a>
@@ -70,7 +72,7 @@
             {{ wtf.form_field(formPynote.pynote_name, placeholder='PyNote Name') }}
             <input type="hidden" name="settingsForm" value="DeletePyNote" >
 
-            <a href="/pynote"><button class="delete" type="button" name="Create PyNote">Create PyNote</button></a> 
+            <a href="/pynote"><button class="delete" type="button" name="Create PyNote">Create PyNote</button></a>
             <input type="submit" value="Delete">
           </form>
         </div>

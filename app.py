@@ -297,6 +297,7 @@ def pynote():
     kube = client.ExtensionsV1beta1Api()
     api = core_v1_api.CoreV1Api()
     pynotes = Pynote.query.all()
+    users_pynote = Pynote.query.filter_by(username=current_user.username)
 
     if request.form:
         server_name = request.form.get('server-name')
@@ -304,17 +305,17 @@ def pynote():
 
         if Pynote.query.filter_by(username=current_user.username).first():
             message = "Sorry you already requested a PyNote."
-            return render_template('pynote.html', name=current_user.username, errorMessage=message, pynotes=pynotes)
+            return render_template('pynote.html', name=current_user.username, errorMessage=message, pynotes=pynotes, pynote=users_pynote)
 
         pynote = create_pynote(current_user.username, password)
         message =  "The pynote has been requested."
-        new_pynote = Pynote(pynotelink=pynote['pynotelink'], password=password, server_name=server_name, username=current_user.username)
+        new_pynote = Pynote(pynotelink=pynote['pynotelink'], password=password, server_name=server_name, pynote=users_pynote, username=current_user.username)
 
         db.session.add(new_pynote)
         db.session.commit()
-        return render_template('pynote.html', name=current_user.username, pynoteCreated=message, pynotes=pynotes)
+        return render_template('pynote.html', name=current_user.username, pynoteCreated=message, pynotes=pynotes, pynote=users_pynote)
 
-    return render_template('pynote.html', name=current_user.username, pynotes=pynotes)
+    return render_template('pynote.html', name=current_user.username, pynotes=pynotes, pynote=users_pynote)
 
 #Menu for chat
 @app.route('/chat', methods=['GET', 'POST'])
@@ -438,7 +439,7 @@ def dashboard():
     users = User.query.all()
     user_data = User.query.filter_by(username=current_user.username).first()
     py_note = Pynote.query.filter_by(username=current_user.username)
-    return render_template('dashboard.html', fname=current_user.firstname, lname=current_user.lastname, users=users, pynot=py_note, user_data=user_data)
+    return render_template('dashboard.html', fname=current_user.firstname, lname=current_user.lastname, users=users, pynote=py_note, user_data=user_data)
 
 @app.route('/contact', methods=['GET', 'POST'])
 def contact():

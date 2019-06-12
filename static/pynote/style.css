@@ -15,6 +15,37 @@
   margin: auto;
 }
 
+/* Style the tab content */
+.tabcontent {
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top: none;
+}
+
+table {
+  border-spacing: 0;
+  width: 100%;
+  border: 1px solid #ddd;
+}
+
+th, td {
+  text-align: left;
+  padding: 10px;
+}
+
+tabcontent, h2, p{
+  text-align: center;
+  padding: 10px;
+}
+
+tabcontent, a {
+  text-decoration: none;
+  color: black;
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2
+}
 
 input, select, textarea{
     width: 100%;
@@ -73,36 +104,35 @@ input[type=submit] {
 }
 
 
-
 :root {
 --gutter: 30px;
 }
 
 .app {
-padding: var(--gutter) 0;
-display: grid;
-grid-gap: var(--gutter) 0;
-grid-template-columns: var(--gutter) 1fr var(--gutter);
-align-content: start;
+  padding: var(--gutter) 0;
+  display: grid;
+  grid-gap: var(--gutter) 0;
+  grid-template-columns: var(--gutter) 1fr var(--gutter);
+  align-content: start;
 }
 
 .hs {
-display: grid;
-grid-gap: calc(var(--gutter) / 2);
-grid-template-columns: repeat(6, calc(25% - var(--gutter) * 2));
-grid-template-rows: minmax(30px, 1fr);
+  display: grid;
+  grid-gap: calc(var(--gutter) / 2);
+  grid-template-columns: repeat(6, calc(25% - var(--gutter) * 2));
+  grid-template-rows: minmax(30px, 1fr);
 
-overflow-x: scroll;
-scroll-snap-type: x proximity;
-padding-bottom: calc(.75 * var(--gutter));
-margin-bottom: calc(-.10 * var(--gutter));
+  overflow-x: scroll;
+  scroll-snap-type: x proximity;
+  padding-bottom: calc(.75 * var(--gutter));
+  margin-bottom: calc(-.10 * var(--gutter));
 }
 
 
 
 ul {
-list-style: none;
-padding: 0;
+  list-style: none;
+  padding: 0;
 }
 
 
@@ -114,14 +144,10 @@ padding: 0;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: #2db686;
+  background: white;
   border-radius: 8px;
-
+  color: black;
 }
-
-
-
-
 
 /* Center the loader */
 #loader {

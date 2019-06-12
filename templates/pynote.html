@@ -26,34 +26,48 @@
     <a href="{{ url_for('dashboard') }}">Dashboard</a>
     <a href="{{ url_for('chat') }}">Chating</a>
     <a href="{{ url_for('videos') }}">Videos</a>
-
     <a href="{{ url_for('contact') }}">Contact us</a>
     <a href="{{ url_for('pynote') }}">PyNote</a>
   </div>
 
 </head>
 <body>
+  <div id="PyNote" class="tabcontent">
+    <h2>FuChiCorp Pynote</h2>
+    <p>PyNote is the an online learning platform. It's aimed at restless professionals chasing after success. Fuchicorp has made innovation very easy for those who are self driven. With PyNote you can learn, build, and deploy! Request a PyNote now as investment to your future!</p>
+
+    <table>
+      {% for item in pynote %}
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Owner</th>
+        <th>Link</th>
+      </tr>
+      <tr>
+        <td>{{ item.id }}</td>
+        <td>{{ item.server_name }}</td>
+        <td>{{ item.username }}</td>
+        <td><a href="{{ item.pynotelink }}">{{ item.pynotelink }}</td></a>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+
   <div id="notLoading" ></div>
 
   <div class="master-info">
     <ul class="hs">
       {% for item in pynotes %}
       <div class="item">
-        <h4>ID: {{ item.id }}</h4>
         <h4>Name: {{ item.server_name }}</h4>
-        <h4>USER: {{ item.username }}</h4>
-        <a style="text-decoration: none; color: white;" href="{{ item.pynotelink }}">link: {{ item.pynotelink }}</a>
+        <h4>User: {{ item.username }}</h4>
+        <a style="text-decoration: none; color: black;" href="{{ item.pynotelink }}"><h4>Link: {{ item.pynotelink }}</h4></a>
       </div>
       {% endfor %}
-      <button id="myBtn">Create PyNote</button>
+      <button id="myBtn"><h4>Create PyNote</h4></button>
   </ul>
  </div>
-
-
-
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-
 
 <!-- The Modal -->
 <div id="myModal" class="modal">
@@ -85,7 +99,6 @@
       </div>
     </div>
   </div>
-
 </div>
 
 <script>
