@@ -11,18 +11,6 @@
   width: 100%;
 }
 
-.left-container {
-  float: left;
-  position: relative;
-  max-width: 20%;
-  height: 1020px;
-}
-
-.left-container img {
-  max-width:50%;
-  height:auto;
-}
-
 .one-line {
   display: inline-block;
 }
@@ -44,22 +32,6 @@
   margin-left: auto;
   margin-right: auto;
 }
-
-.right-container {
-  float: left;
-  position: relative;
-  height: 1020px;
-  width: 80%;
-}
-
-.right-side {
-  -ms-flex: 30%;
-  background-color: #d6d6d6;
-  padding: 20px;
-  height: 100%;
-}
-
-
 
 /* Style the tab */
 .tab {
@@ -138,6 +110,35 @@ tabcontent, p{
 
 #user-options li a:hover {
   background-color: #d8d8d8;
+}
+
+body, html {
+  height: 100%;
+  margin: 0;
+}
+
+.bgimg {
+  background-image: url('/w3images/forestbridge.jpg');
+  height: 100%;
+  background-position: center;
+  background-size: cover;
+  position: relative;
+  color: black;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 25px;
+}
+
+.middle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+hr {
+  margin: auto;
+  width: 40%;
 }
 
 
