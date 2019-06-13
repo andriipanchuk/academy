@@ -1,0 +1,23 @@
+name: FuchiCorp Video configuration
+items:
+ - type: Python-class
+   items:
+    - video-name: Python class 1
+      url: url
+      status: True
+      role: students
+
+    - video-name: Python class 2
+      url: url
+      status: True
+      role: students
+
+    - video-name: Python class 3
+      url: url
+      status: True
+      role: students
+
+    - video-name: Python class 4
+      url: url
+      status: True
+      role: students
