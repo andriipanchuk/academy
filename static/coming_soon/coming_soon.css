@@ -104,7 +104,7 @@ tabcontent, p{
 #user-options li a {
   padding: 12px;
   text-decoration: none;
-  color: black;
+  color: white;
   display: block
 }
 
@@ -118,12 +118,12 @@ body, html {
 }
 
 .bgimg {
-  background-image: url('/w3images/forestbridge.jpg');
+  background-image: url('/static/images/coming-soon.png');
   height: 100%;
   background-position: center;
   background-size: cover;
   position: relative;
-  color: black;
+  color: white;
   font-family: "Courier New", Courier, monospace;
   font-size: 25px;
 }
@@ -146,5 +146,5 @@ hr {
 .footer {
   position: fixed;
   bottom:0;
-  color: black;
+  color: white;
 }
