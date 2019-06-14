@@ -309,7 +309,7 @@ def pynote():
 
         pynote = create_pynote(current_user.username, password)
         message =  "The pynote has been requested."
-        new_pynote = Pynote(pynotelink=pynote['pynotelink'], password=password, server_name=server_name, pynote=users_pynote, username=current_user.username)
+        new_pynote = Pynote(pynotelink=pynote['pynotelink'], password=password, server_name=server_name, username=current_user.username)
 
         db.session.add(new_pynote)
         db.session.commit()
