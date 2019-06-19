@@ -402,7 +402,7 @@ def settings(username):
             user_data.username = formProfile.username.data
             user_data.email = formProfile.email.data
             db.session.commit()
-            message = 'User information has been updated.'
+            message = {"message" : "User information has been updated.", "status" : "error"}
             return render_template('settings.html', user_data=user_data, fname=current_user.firstname, lname=current_user.lastname, formProfile=formProfile, formPassword=formPassword, formPynote=formPynote, message=message)
 
         elif form_name == 'ChangePassword':
@@ -410,10 +410,10 @@ def settings(username):
             if check_password_hash(user_data.password, formPassword.current.data):
                 user_data.password = generate_password_hash(formPassword.password.data, method='sha256')
                 db.session.commit()
-                message = 'The password has been changes.'
+                message = {"message" : "The password has been changes.", "status" : "success"}
                 return render_template('settings.html', user_data=user_data, fname=current_user.firstname, lname=current_user.lastname, formProfile=formProfile, formPassword=formPassword, formPynote=formPynote, message=message)
             else:
-                message = 'Password does not match with current.'
+                message =  {"message" : "Password does not match with current.", "status" : "error"}
                 return render_template('settings.html', user_data=user_data, fname=current_user.firstname, lname=current_user.lastname, formProfile=formProfile, formPassword=formPassword, formPynote=formPynote, message=message)
         elif form_name == 'DeletePyNote':
             formPynote.validate()
@@ -421,17 +421,17 @@ def settings(username):
             if users_pynote:
                 if formPynote.username.data == current_user.username:
                     delete_pynote(current_user.username)
-                    message = 'The PyNote has been deleted.'
+                    message = {"message" : "The PyNote has been deleted.", "status" : "success"}
                     return render_template('settings.html', user_data=user_data, fname=current_user.firstname, lname=current_user.lastname, formProfile=formProfile, formPassword=formPassword, formPynote=formPynote, message=message)
                 else:
-                    message = 'Error Username was invalid.'
+                    message = {"message" : "Error Username was invalid.", "status" : "error"}
                     return render_template('settings.html', user_data=user_data, fname=current_user.firstname, lname=current_user.lastname, formProfile=formProfile, formPassword=formPassword, formPynote=formPynote, message=message)
             else:
-                message = 'PyNote not found please make sure you have PyNote.'
+                message = {"message" : "PyNote not found please make sure you have PyNote.", "status" : "error"}
                 return render_template('settings.html', user_data=user_data, fname=current_user.firstname, lname=current_user.lastname, formProfile=formProfile, formPassword=formPassword, formPynote=formPynote, message=message)
 
 
-    return render_template('settings.html', user_data=user_data, fname=current_user.firstname, lname=current_user.lastname, formProfile=formProfile, formPassword=formPassword, formPynote=formPynote)
+    return render_template('settings.html', user_data=user_data, fname=current_user.firstname, lname=current_user.lastname, formProfile=formProfile, formPassword=formPassword, formPynote=formPynote, message=None)
 
 @app.route('/dashboard', methods=['GET', 'POST'])
 @login_required
