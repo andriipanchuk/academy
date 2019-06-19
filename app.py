@@ -116,7 +116,7 @@ class pynoteDeleteView(BaseView):
     def index(self):
         form = PyNoteDelete()
         if is_form_submitted():
-            pynote = Pynote.query.filter_by(username=form.username.data, server_name=form.pynote.data).first()
+            pynote = Pynote.query.filter_by(username=form.username.data, server_name=form.pynote_name.data).first()
             if pynote:
                 try:
                     delete_pynote(form.username.data)
