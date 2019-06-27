@@ -15,6 +15,7 @@ from flask_bootstrap import Bootstrap
 from os import path
 import subprocess
 import argparse
+import logging.config
 import smtplib
 import pusher
 import random
@@ -22,11 +23,17 @@ import yaml
 import time
 import os
 
-
 app = Flask(__name__)
 parser = argparse.ArgumentParser(description="FuchiCorp Webplarform Application.")
 parser.add_argument("--debug", action='store_true',
                         help="Run Application on developer mode.")
+#
+# ## Loading the configuration for logging
+with open("configuration/logging/logging-config.yaml", 'r') as file:
+    logging_config = yaml.load(file, Loader=yaml.FullLoader)
+
+logging.config.dictConfig(logging_config)
+logger = logging.getLogger()
 
 args = parser.parse_args()
 def app_set_up():
@@ -259,12 +266,11 @@ def create_pynote(username, password):
 def delete_pynote(username):
     ## Loading the kubernetes objects
     config.load_kube_config()
-    kube          = client.ExtensionsV1beta1Api()
-    api           = core_v1_api.CoreV1Api()
+    kube           = client.ExtensionsV1beta1Api()
+    api            = core_v1_api.CoreV1Api()
     pynote_name    = username.lower()
     ingress_name   = f'{enviroment}-pynote-ingress'
-    namespace     = f'{enviroment}-students'
-    # needs to add deletion for pod and service
+    namespace      = f'{enviroment}-students'
     exist_ingress  = existing_ingess(ingress_name, namespace)
     try:
         api.delete_namespaced_pod(pynote_name, namespace)
@@ -346,9 +352,15 @@ def index():
 
 #Menu for Videos
 @app.route('/videos', methods=['GET', 'POST'])
-@login_required
+# @login_required
 def videos():
-    return render_template('videos.html', name=current_user.username)
+    try:
+        page_config = yaml.load(
+        requests.get('https://raw.githubusercontent.com/fuchicorp/webplatform/master/configuration/videos/config.yaml').text)
+    except:
+        page_config = {}
+    logger.warning('Some one access to videos pages')
+    return render_template('videos.html',  config=page_config)
 
 # Vidoe classes
 @app.route('/linux', methods=['GET', 'POST'])
