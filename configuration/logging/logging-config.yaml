@@ -1,0 +1,39 @@
+version: 1
+formatters:
+    simpleFormater:
+        format: '%(asctime)s - %(levelname)s: %(message)s'
+        datefmt: '%Y/%m/%d %H:%M:%S'
+    basicFormater:
+        format: '%(levelname)s: %(message)s'
+
+handlers:
+    console:
+        class: logging.StreamHandler
+        formatter: basicFormater
+        level: INFO
+        stream: ext://sys.stdout
+    file:
+        class: logging.handlers.RotatingFileHandler
+        formatter: simpleFormater
+        level: DEBUG
+        filename: default.log
+        maxBytes: 1048576
+        backupCount: 10
+    splunk:
+        class: logging.handlers.SocketHandler
+        formatter: simpleFormater
+        level: DEBUG
+        host: localhost
+        port: 2001
+
+loggers:
+    clogger:
+        level: DEBUG
+        handlers: [console]
+    flogger:
+        level: DEBUG
+        handlers: [file]
+
+root:
+    level: DEBUG
+    handlers: [console, file]

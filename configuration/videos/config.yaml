@@ -1,23 +1,40 @@
 name: FuchiCorp Video configuration
 items:
- - type: Python-class
+ - type: Python class video records.
+   path: /python/class
    items:
-    - video-name: Python class 1
-      url: url
+    - video-name: Python class 1 Data Types
+      description:  In this class we covered only data types.
+      url: https://player.vimeo.com/video/341489500
       status: True
+      width: 640
+      height: 564
+      allow: "autoplay; fullscreen"
       role: students
 
     - video-name: Python class 2
-      url: url
+      description: In this class we conevered if statements.
+      url: https://player.vimeo.com/video/342161116
       status: True
+      width: 640
+      height: 564
+      allow: "autoplay; fullscreen"
       role: students
 
     - video-name: Python class 3
-      url: url
+      description: In this class we covered Functions.
+      url: https://player.vimeo.com/video/341489500
       status: True
+      width: 640
+      height: 564
+      allow: "autoplay; fullscreen"
       role: students
 
     - video-name: Python class 4
-      url: url
+      description: Working with JSON data.
+      url: https://player.vimeo.com/video/344231710
       status: True
+      width: 640
+      height: 564
+      allow: "autoplay; fullscreen"
       role: students

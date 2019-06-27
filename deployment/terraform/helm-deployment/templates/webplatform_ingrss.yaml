@@ -13,7 +13,15 @@ spec:
       - backend:
           serviceName: {{ .Values.webplatform_service }}
           servicePort: {{ .Values.webplatform_port }}
+
+  - host: {{ .Values.api_endpoint }}
+    http:
+      paths:
+      - backend:
+          serviceName: {{ .Values.api_platform_service }}
+          servicePort: {{ .Values.api_platform_port }}
   tls:
   - hosts:
     - {{ .Values.dns_endpoint }}
+    - {{ .Values.api_endpoint }}
     secretName: letsencrypt-sec-webplatform-prod

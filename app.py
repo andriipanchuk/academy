@@ -15,6 +15,7 @@ from flask_bootstrap import Bootstrap
 from os import path
 import subprocess
 import argparse
+import logging.config
 import smtplib
 import pusher
 import random
@@ -22,11 +23,17 @@ import yaml
 import time
 import os
 
-
 app = Flask(__name__)
 parser = argparse.ArgumentParser(description="FuchiCorp Webplarform Application.")
 parser.add_argument("--debug", action='store_true',
                         help="Run Application on developer mode.")
+#
+# ## Loading the configuration for logging
+with open("configuration/logging/logging-config.yaml", 'r') as file:
+    logging_config = yaml.load(file, Loader=yaml.FullLoader)
+
+logging.config.dictConfig(logging_config)
+logger = logging.getLogger()
 
 args = parser.parse_args()
 def app_set_up():
@@ -116,7 +123,7 @@ class pynoteDeleteView(BaseView):
     def index(self):
         form = PyNoteDelete()
         if is_form_submitted():
-            pynote = Pynote.query.filter_by(username=form.username.data, server_name=form.pynote.data).first()
+            pynote = Pynote.query.filter_by(username=form.username.data, server_name=form.pynote_name.data).first()
             if pynote:
                 try:
                     delete_pynote(form.username.data)
@@ -259,12 +266,11 @@ def create_pynote(username, password):
 def delete_pynote(username):
     ## Loading the kubernetes objects
     config.load_kube_config()
-    kube          = client.ExtensionsV1beta1Api()
-    api           = core_v1_api.CoreV1Api()
+    kube           = client.ExtensionsV1beta1Api()
+    api            = core_v1_api.CoreV1Api()
     pynote_name    = username.lower()
     ingress_name   = f'{enviroment}-pynote-ingress'
-    namespace     = f'{enviroment}-students'
-    # needs to add deletion for pod and service
+    namespace      = f'{enviroment}-students'
     exist_ingress  = existing_ingess(ingress_name, namespace)
     try:
         api.delete_namespaced_pod(pynote_name, namespace)
@@ -346,9 +352,15 @@ def index():
 
 #Menu for Videos
 @app.route('/videos', methods=['GET', 'POST'])
-@login_required
+# @login_required
 def videos():
-    return render_template('videos.html', name=current_user.username)
+    try:
+        page_config = yaml.load(
+        requests.get('https://raw.githubusercontent.com/fuchicorp/webplatform/master/configuration/videos/config.yaml').text)
+    except:
+        page_config = {}
+    logger.warning('Some one access to videos pages')
+    return render_template('videos.html',  config=page_config)
 
 # Vidoe classes
 @app.route('/linux', methods=['GET', 'POST'])
@@ -402,7 +414,7 @@ def settings(username):
             user_data.username = formProfile.username.data
             user_data.email = formProfile.email.data
             db.session.commit()
-            message = 'User information has been updated.'
+            message = {"message" : "User information has been updated.", "status" : "error"}
             return render_template('settings.html', user_data=user_data, fname=current_user.firstname, lname=current_user.lastname, formProfile=formProfile, formPassword=formPassword, formPynote=formPynote, message=message)
 
         elif form_name == 'ChangePassword':
@@ -410,10 +422,10 @@ def settings(username):
             if check_password_hash(user_data.password, formPassword.current.data):
                 user_data.password = generate_password_hash(formPassword.password.data, method='sha256')
                 db.session.commit()
-                message = 'The password has been changes.'
+                message = {"message" : "The password has been changes.", "status" : "success"}
                 return render_template('settings.html', user_data=user_data, fname=current_user.firstname, lname=current_user.lastname, formProfile=formProfile, formPassword=formPassword, formPynote=formPynote, message=message)
             else:
-                message = 'Password does not match with current.'
+                message =  {"message" : "Password does not match with current.", "status" : "error"}
                 return render_template('settings.html', user_data=user_data, fname=current_user.firstname, lname=current_user.lastname, formProfile=formProfile, formPassword=formPassword, formPynote=formPynote, message=message)
         elif form_name == 'DeletePyNote':
             formPynote.validate()
@@ -421,17 +433,17 @@ def settings(username):
             if users_pynote:
                 if formPynote.username.data == current_user.username:
                     delete_pynote(current_user.username)
-                    message = 'The PyNote has been deleted.'
+                    message = {"message" : "The PyNote has been deleted.", "status" : "success"}
                     return render_template('settings.html', user_data=user_data, fname=current_user.firstname, lname=current_user.lastname, formProfile=formProfile, formPassword=formPassword, formPynote=formPynote, message=message)
                 else:
-                    message = 'Error Username was invalid.'
+                    message = {"message" : "Error Username was invalid.", "status" : "error"}
                     return render_template('settings.html', user_data=user_data, fname=current_user.firstname, lname=current_user.lastname, formProfile=formProfile, formPassword=formPassword, formPynote=formPynote, message=message)
             else:
-                message = 'PyNote not found please make sure you have PyNote.'
+                message = {"message" : "PyNote not found please make sure you have PyNote.", "status" : "error"}
                 return render_template('settings.html', user_data=user_data, fname=current_user.firstname, lname=current_user.lastname, formProfile=formProfile, formPassword=formPassword, formPynote=formPynote, message=message)
 
 
-    return render_template('settings.html', user_data=user_data, fname=current_user.firstname, lname=current_user.lastname, formProfile=formProfile, formPassword=formPassword, formPynote=formPynote)
+    return render_template('settings.html', user_data=user_data, fname=current_user.firstname, lname=current_user.lastname, formProfile=formProfile, formPassword=formPassword, formPynote=formPynote, message=None)
 
 @app.route('/dashboard', methods=['GET', 'POST'])
 @login_required
