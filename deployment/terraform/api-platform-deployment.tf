@@ -25,7 +25,7 @@ resource "kubernetes_deployment" "api_platform_deployment" {
 
       spec {
         image_pull_secrets = [ { name = "nexus-creds" } ]
-        # service_account_name = "${kubernetes_service_account.webplatform_service_account.metadata.0.name}"
+        service_account_name = "${kubernetes_service_account.webplatform_service_account.metadata.0.name}"
 
         container {
           image             = "${var.api_platform_image}"
@@ -37,7 +37,7 @@ resource "kubernetes_deployment" "api_platform_deployment" {
           env { name = "MYSQL_DATABASE" value = "${var.mysql_database}" }
           env { name = "MYSQL_HOST"     value = "${var.mysql_host}" }
 
-          # env { name = "SERVICE_CERT_FILENAME"     value = "/var/run/secrets/kubernetes.io/serviceaccount" }
+          env { name = "SERVICE_CERT_FILENAME"     value = "/var/run/secrets/kubernetes.io/serviceaccount" }
 
 
           env_from {
@@ -46,18 +46,18 @@ resource "kubernetes_deployment" "api_platform_deployment" {
             }
           }
 
-          # volume_mount {
-          #   mount_path = "/var/run/secrets/kubernetes.io/serviceaccount"
-          #   name = "${kubernetes_service_account.webplatform_service_account.default_secret_name}"
-          #   read_only = true
-          # }
+          volume_mount {
+            mount_path = "/var/run/secrets/kubernetes.io/serviceaccount"
+            name = "${kubernetes_service_account.webplatform_service_account.default_secret_name}"
+            read_only = true
+          }
         }
-        # volume {
-        #   name = "${kubernetes_service_account.webplatform_service_account.default_secret_name}"
-        #   secret {
-        #     secret_name = "${kubernetes_service_account.webplatform_service_account.default_secret_name}"
-        #   }
-        # }
+        volume {
+          name = "${kubernetes_service_account.webplatform_service_account.default_secret_name}"
+          secret {
+            secret_name = "${kubernetes_service_account.webplatform_service_account.default_secret_name}"
+          }
+        }
       }
     }
   }
