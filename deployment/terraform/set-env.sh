@@ -24,13 +24,13 @@ fi
 if [ -z "$BUCKET" ]
 then
   BUCKET='fuchicorp'
-    echo "setenv: 'bucket_name' variable not set in configuration file."
+  echo "setenv: 'bucket_name' variable not set in configuration file. Using $BUCKET"
 fi
 
 if [ -z "$PROJECT" ]
 then
   PROJECT='fuchicorp-project'
-    echo "setenv: 'project_name' variable not set in configuration file."
+    echo "setenv: 'project_name' variable not set in configuration file. Using $PROJECT"
 fi
 
 if [ -z "$CREDENTIALS" ]

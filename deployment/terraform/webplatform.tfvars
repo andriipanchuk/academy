@@ -1,6 +1,0 @@
-mysql_user               =  "webplatformuser"
-mysql_database           =  "webplatform"
-mysql_host               =  "webplatformmysql"
-webplatform_namespace    =  "dev"
-webplatform_image        =  "docker.fuchicorp.com/webplatform-dev:0.2"
-environment              =  "dev"

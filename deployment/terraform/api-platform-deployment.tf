@@ -37,14 +37,14 @@ resource "kubernetes_deployment" "api_platform_deployment" {
           env { name = "MYSQL_DATABASE" value = "${var.mysql_database}" }
           env { name = "MYSQL_HOST"     value = "${var.mysql_host}" }
 
-          env { name = "SERVICE_CERT_FILENAME"     value = "/var/run/secrets/kubernetes.io/serviceaccount" }
+          # env { name = "SERVICE_CERT_FILENAME"     value = "/var/run/secrets/kubernetes.io/serviceaccount" }
 
 
-          # env_from {
-          #   secret_ref {
-          #     name = "${kubernetes_secret.webplatform_secret.metadata.0.name}"
-          #   }
-          # }
+          env_from {
+            secret_ref {
+              name = "${kubernetes_secret.webplatform_secret.metadata.0.name}"
+            }
+          }
 
           # volume_mount {
           #   mount_path = "/var/run/secrets/kubernetes.io/serviceaccount"
