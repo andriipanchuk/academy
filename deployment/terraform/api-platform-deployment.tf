@@ -24,7 +24,7 @@ resource "kubernetes_deployment" "api_platform_deployment" {
       }
 
       spec {
-        # image_pull_secrets = [ { name = "nexus-creds" } ]
+        image_pull_secrets = [ { name = "nexus-creds" } ]
         # service_account_name = "${kubernetes_service_account.webplatform_service_account.metadata.0.name}"
 
         container {
