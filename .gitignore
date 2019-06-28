@@ -8,3 +8,4 @@
 *state*
 *.terraform*
 *fuchicorp-service-account*
+*.log*
