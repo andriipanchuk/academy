@@ -14,7 +14,7 @@ resource "kubernetes_deployment" "api_platform_deployment" {
   }
 
   spec {
-    replicas = 3
+    replicas = 1
     selector {
       match_labels { run = "api-platform" } }
 
