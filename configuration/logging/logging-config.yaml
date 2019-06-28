@@ -16,7 +16,7 @@ handlers:
         class: logging.handlers.RotatingFileHandler
         formatter: simpleFormater
         level: DEBUG
-        filename: default.log
+        filename: webplatform.log
         maxBytes: 1048576
         backupCount: 10
     splunk:

@@ -1,7 +1,7 @@
 name: FuchiCorp Video configuration
 items:
  - type: Python class video records.
-   path: /python/class
+   path: python/class
    items:
     - video-name: Python class 1 Data Types
       description:  In this class we covered only data types.
