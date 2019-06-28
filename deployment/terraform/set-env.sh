@@ -23,7 +23,7 @@ fi
 
 if [ -z "$BUCKET" ]
 then
-  BUCKET='fuchicorp'
+  BUCKET='fuchicorp-bucket'
   echo "setenv: 'bucket_name' variable not set in configuration file. Using $BUCKET"
 fi
 
