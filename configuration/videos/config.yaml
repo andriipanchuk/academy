@@ -1,9 +1,10 @@
 name: FuchiCorp Video configuration
 items:
- - type: Python class video records.
-   path: python/class
+ - path: pythonrecords
+   name: Python class video records.
    items:
-    - video-name: Python class 1 Data Types
+    - name: Python class 1 Data Types
+      uuid: a32548f
       description:  In this class we covered only data types.
       url: https://player.vimeo.com/video/341489500
       status: True
@@ -12,7 +13,8 @@ items:
       allow: "autoplay; fullscreen"
       role: students
 
-    - video-name: Python class 2
+    - name: Python class 2
+      uuid: 0bcee22
       description: In this class we conevered if statements.
       url: https://player.vimeo.com/video/342161116
       status: True
@@ -21,7 +23,8 @@ items:
       allow: "autoplay; fullscreen"
       role: students
 
-    - video-name: Python class 3
+    - name: Python class 3
+      uuid: 8bf9733
       description: In this class we covered Functions.
       url: https://player.vimeo.com/video/341489500
       status: True
@@ -30,7 +33,8 @@ items:
       allow: "autoplay; fullscreen"
       role: students
 
-    - video-name: Python class 4
+    - name: Python class 4
+      uuid: a5832a
       description: Working with JSON data.
       url: https://player.vimeo.com/video/344231710
       status: True
@@ -38,3 +42,21 @@ items:
       height: 564
       allow: "autoplay; fullscreen"
       role: students
+
+ - path: python
+   name: python short videos
+   items:
+     - name: Python introduction
+       uuid: 1111
+
+ - path: docker
+   name: Docker Classes
+   items:
+     - name: Docker introduction
+       uuid: 1111
+
+ - path: jenkins
+   name: Jenkins Class
+   items:
+     - name: Jekins introduction
+       uuid: 1111
