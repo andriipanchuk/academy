@@ -22,6 +22,7 @@ import random
 import yaml
 import time
 import os
+import uuid
 
 app = Flask(__name__)
 parser = argparse.ArgumentParser(description="FuchiCorp Webplarform Application.")
@@ -350,17 +351,35 @@ def message():
 def index():
     return render_template('index.html')
 
-#Menu for Videos
-@app.route('/videos', methods=['GET', 'POST'])
-# @login_required
+
+@app.route('/videos/', methods=['GET', 'POST'])
+@login_required
 def videos():
-    try:
-        page_config = yaml.load(
-        requests.get('https://raw.githubusercontent.com/fuchicorp/webplatform/master/configuration/videos/config.yaml').text)
-    except:
-        page_config = {}
-    logger.warning('Some one access to videos pages')
-    return render_template('videos.html',  config=page_config)
+    with open('configuration/videos/config.yaml') as file:
+        page_config = yaml.load(file, Loader=yaml.Loader)
+    return render_template('main-videos.html', videos=page_config['items'][0]['items'])
+
+# Vidoe classes
+@app.route('/videos/pythonrecords/<uuid>', methods=['GET', 'POST'])
+@login_required
+def python(uuid):
+    with open('configuration/videos/config.yaml') as file:
+        page_config = yaml.load(file, Loader=yaml.Loader)
+    for item in page_config['items'][0]['items']:
+        if uuid == item['uuid']:
+            return render_template('video-template.html', video=item)
+    else:
+        return render_template('404.html')
+
+@app.route('/testing/', methods=['GET', 'POST'])
+@login_required
+def testing():
+
+    return jsonify({"message": True})
+
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template('404.html'), 404
 
 # Vidoe classes
 @app.route('/linux', methods=['GET', 'POST'])
