@@ -2,6 +2,7 @@ name: FuchiCorp Video configuration
 items:
  - path: pythonrecords
    name: Python class video records.
+   image: /static/images/videos/Python.jpg
    items:
     - name: Python class 1 Data Types
       uuid: a32548f
@@ -46,17 +47,40 @@ items:
  - path: python
    name: python short videos
    items:
-     - name: Python introduction
-       uuid: 1111
+     - name: Python class 4
+       uuid: a5832a
+       description: Working with JSON data.
+       url: https://player.vimeo.com/video/344231710
+       status: True
+       width: 640
+       height: 564
+       allow: "autoplay; fullscreen"
+       role: students
 
  - path: docker
+   image: /static/images/videos/Docker.jpg
    name: Docker Classes
    items:
      - name: Docker introduction
        uuid: 1111
 
+ - path: ansible
+   image: /static/images/videos/Ansible.jpg
+   name: Ansible Classes
+   items:
+     - name: Ansible introduction
+       uuid: 1111
+
  - path: jenkins
+   image: /static/images/videos/DevOps.jpg
    name: Jenkins Class
+   items:
+     - name: Jekins introduction
+       uuid: 1111
+
+ - path: mysql
+   image: /static/images/videos/MYSQL.jpg
+   name: MySQL Class
    items:
      - name: Jekins introduction
        uuid: 1111
