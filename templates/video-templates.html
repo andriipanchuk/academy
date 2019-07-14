@@ -66,13 +66,16 @@ function closeNav() {
 </style>
 </head>
 <body>
-  <h1>{{ video.name }}</h1>
-  <iframe src="{{ video.url }}" width="1200" height="1300" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
-  <h2>{{ video.description }}</h2>
-  <h2>{{ video.role }}</h2>
+{% for video in videos %}
 
+<div class="vertical-menu">
+  <a href="{{ video.uuid }}">{{ video.name }}</a>
+</div>
+
+{% endfor %}
+</bod>
 <footer class="footer">
-  <p>&copy;  FuchiCorp 2019</p>
+  <p>&copy; FuchiCorp 2019</p>
 </footer>
 
 </html>

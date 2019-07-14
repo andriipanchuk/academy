@@ -90,7 +90,6 @@ pusher_client = pusher.Pusher(
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-
 class Message(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50))
@@ -352,24 +351,31 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/videos/', methods=['GET', 'POST'])
-@login_required
-def videos():
-    with open('configuration/videos/config.yaml') as file:
-        page_config = yaml.load(file, Loader=yaml.Loader)
-    return render_template('main-videos.html', videos=page_config['items'][0]['items'])
 
 # Vidoe classes
-@app.route('/videos/pythonrecords/<uuid>', methods=['GET', 'POST'])
+@app.route('/videos/', defaults={'uuid': '', 'path': ''})
+@app.route('/videos/<path>/', defaults={'uuid': ''})
+@app.route('/videos/<path>/<uuid>')
 @login_required
-def python(uuid):
+def videos(path, uuid):
     with open('configuration/videos/config.yaml') as file:
         page_config = yaml.load(file, Loader=yaml.Loader)
-    for item in page_config['items'][0]['items']:
-        if uuid == item['uuid']:
-            return render_template('video-template.html', video=item)
+
+    for items in page_config['items']:
+        
+        if path == items['path']:
+            if uuid:
+                for item in page_config['items'][0]['items']:
+                    if uuid == item['uuid']:
+                        return render_template('video-template.html', video=item)
+                else:
+                    return render_template('404.html')
+
+            return render_template('video-templates.html', videos=items['items'])
+        return render_template('videos.html')
     else:
         return render_template('404.html')
+
 
 @app.route('/testing/', methods=['GET', 'POST'])
 @login_required
@@ -377,9 +383,7 @@ def testing():
 
     return jsonify({"message": True})
 
-@app.errorhandler(404)
-def page_not_found(error):
-    return render_template('404.html'), 404
+
 
 # Vidoe classes
 @app.route('/linux', methods=['GET', 'POST'])
@@ -545,6 +549,10 @@ def api_users():
     with open('api/examples/example.json') as file:
         data = json.load(file)
     return jsonify(data)
+
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template('404.html'), 404
 
 
 ### Api Block ends from here ####
