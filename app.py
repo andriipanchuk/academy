@@ -362,7 +362,7 @@ def videos(path, uuid):
         page_config = yaml.load(file, Loader=yaml.Loader)
 
     for items in page_config['items']:
-        
+
         if path == items['path']:
             if uuid:
                 for item in page_config['items'][0]['items']:
@@ -372,10 +372,9 @@ def videos(path, uuid):
                     return render_template('404.html')
 
             return render_template('video-templates.html', videos=items['items'])
-        return render_template('videos.html')
+        return render_template('videos.html', videos=page_config['items'])
     else:
         return render_template('404.html')
-
 
 @app.route('/testing/', methods=['GET', 'POST'])
 @login_required
