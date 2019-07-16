@@ -9,7 +9,6 @@
 <link rel="stylesheet" href="/static/main/footler.css" type="text/css">
 <link rel="stylesheet" href="/static/main/menu.css" type="text/css">
 <link rel="stylesheet" href="/static/video/video.css" type="text/css">
-<link rel="stylesheet" href="/static/pynote/style.css" type="text/css">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <div class="topnav">
   <a class="active" href="{{ url_for('logout') }}">logout</a>
@@ -22,17 +21,11 @@
 <center>
   </center>
 <body>
-
-
-<div class="master-info">
-  <ul class="hs">
-    {% for video in videos %}
-    <div class="item">
-      <a href="/videos/{{ video.path }}"><img src="{{ video.image }}"></a>
+{% for video in videos %}
+      <div class="menu">
+        <a href="/videos/{{ video.path }}"><img src="{{ video.image }}"></a>
     </div>
-    {% endfor %}
-</ul>
-</div>
+{% endfor %}
 <body>
 <div id="mySidenav" class="sidenav">
   <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>

@@ -14,7 +14,7 @@ items:
       allow: "autoplay; fullscreen"
       role: students
 
-    - name: Python class 2
+    - name: Python Class If statement
       uuid: 0bcee22
       description: In this class we conevered if statements.
       url: https://player.vimeo.com/video/342161116
@@ -24,7 +24,7 @@ items:
       allow: "autoplay; fullscreen"
       role: students
 
-    - name: Python class 3
+    - name: Working with JSON and libraries
       uuid: 8bf9733
       description: In this class we covered Functions.
       url: https://player.vimeo.com/video/341489500
@@ -34,7 +34,7 @@ items:
       allow: "autoplay; fullscreen"
       role: students
 
-    - name: Python class 4
+    - name: Python Class Application Programing Interface.
       uuid: a5832a
       description: Working with JSON data.
       url: https://player.vimeo.com/video/344231710
@@ -44,13 +44,34 @@ items:
       allow: "autoplay; fullscreen"
       role: students
 
+    - name: Boto3 First Class
+      uuid: a5832a
+      description: Working with Boto3
+      url: https://player.vimeo.com/video/348292662
+      status: True
+      width: 640
+      height: 564
+      allow: "autoplay; fullscreen"
+      role: students
+
+    - name: Object Oriented Programming
+      uuid: a5832a
+      description: Object Oriented Programming
+      url: https://player.vimeo.com/video/346996941
+      status: True
+      width: 640
+      height: 564
+      allow: "autoplay; fullscreen"
+      role: students
+
+
  - path: python
    name: python short videos
    items:
-     - name: Python class 4
-       uuid: a5832a
-       description: Working with JSON data.
-       url: https://player.vimeo.com/video/344231710
+     - name: Python class 1 Data Types
+       uuid: a32548f
+       description:  In this class we covered only data types.
+       url: https://player.vimeo.com/video/341489500
        status: True
        width: 640
        height: 564
