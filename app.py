@@ -69,6 +69,9 @@ if env == 'master':
 else:
     enviroment = env
 
+with open('configuration/videos/config.yaml') as file:
+    page_config = yaml.load(file, Loader=yaml.Loader)
+
 ## Loading the Kubernetes configuration
 config.load_kube_config()
 kube = client.ExtensionsV1beta1Api()
@@ -350,29 +353,25 @@ def message():
 def index():
     return render_template('index.html')
 
-
-
 # Vidoe classes
 @app.route('/videos/', defaults={'uuid': '', 'path': ''})
 @app.route('/videos/<path>/', defaults={'uuid': ''})
 @app.route('/videos/<path>/<uuid>')
 @login_required
 def videos(path, uuid):
-    with open('configuration/videos/config.yaml') as file:
-        page_config = yaml.load(file, Loader=yaml.Loader)
+
+    if not path:
+        return render_template('videos.html', videos=page_config['items'])
 
     for items in page_config['items']:
-
         if path == items['path']:
-            if uuid:
+            if uuid and uuid != '':
                 for item in page_config['items'][0]['items']:
                     if uuid == item['uuid']:
                         return render_template('video-template.html', video=item)
                 else:
                     return render_template('404.html')
-
             return render_template('video-templates.html', videos=items['items'])
-        return render_template('videos.html', videos=page_config['items'])
     else:
         return render_template('404.html')
 
@@ -381,7 +380,6 @@ def videos(path, uuid):
 def testing():
 
     return jsonify({"message": True})
-
 
 
 # Vidoe classes
