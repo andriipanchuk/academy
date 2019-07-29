@@ -67,6 +67,7 @@ items:
 
  - path: python
    name: python short videos
+   image: /static/images/videos/Python.jpg
    items:
      - name: Python class 1 Data Types
        uuid: a32548f
