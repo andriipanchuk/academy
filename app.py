@@ -58,8 +58,8 @@ def app_set_up():
         app.config.from_pyfile('config.cfg')
         os.system('sh bash/bin/getServiceAccountConfig.sh')
 
-# app.config.from_pyfile('/Users/fsadykov/backup/databases/config.cfg')
-app_set_up()
+app.config.from_pyfile('/Users/fsadykov/backup/databases/config.cfg')
+# app_set_up()
 bootstrap = Bootstrap(app)
 db = SQLAlchemy(app)
 
@@ -533,10 +533,6 @@ def logout():
 
 
 ### Api Block starts from here ####
-
-@app.route('/api/helloword', methods=['GET', 'POST'])
-def helloworld():
-    return jsonify({"message": "Hello world"})
 
 @app.route('/api/example-users', methods=['GET', 'POST'])
 @login_required
