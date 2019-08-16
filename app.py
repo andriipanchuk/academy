@@ -534,6 +534,10 @@ def logout():
 
 ### Api Block starts from here ####
 
+@app.route('/api/helloword', methods=['GET', 'POST'])
+def helloworld():
+    return jsonify({"message": "Hello world"})
+
 @app.route('/api/example-users', methods=['GET', 'POST'])
 @login_required
 def example():
