@@ -28,8 +28,9 @@ fi
 
 if [ -z "$PROJECT" ]
 then
+    PROJECT="fuchicorp-project-88"
     echo "setenv: 'project_name' variable not set in configuration file. Using $PROJECT"
-    return 1
+    # return 1
 fi
 
 if [ -z "$CREDENTIALS" ]
