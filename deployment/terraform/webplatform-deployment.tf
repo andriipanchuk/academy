@@ -8,7 +8,7 @@ resource "kubernetes_deployment" "webplatform-deployment" {
     ]
 
   metadata {
-    namespace = "${var.webplatform_namespace}"
+    namespace = "${var.deployment_namespace}"
     name = "webplatform-deployment"
     labels { run = "webplatform" }
   }

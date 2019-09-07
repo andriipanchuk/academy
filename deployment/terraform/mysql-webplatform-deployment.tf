@@ -2,7 +2,7 @@ resource "kubernetes_deployment" "webplatform_mysql_deployment" {
 
 
   metadata {
-    namespace = "${var.webplatform_namespace}"
+    namespace = "${var.deployment_namespace}"
     name = "webplatform-mysql-deployment"
     labels { run = "webplatform-mysql" }
   }

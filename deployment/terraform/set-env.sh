@@ -3,12 +3,11 @@
 DIR=$(pwd)
 DATAFILE="$DIR/$1"
 
-ENVIRONMENT=$(sed -nr 's/^environment\s*=\s*"([^"]*)".*$/\1/p' "$DATAFILE")
+ENVIRONMENT=$(sed -nr 's/^deployment_environment\s*=\s*"([^"]*)".*$/\1/p' "$DATAFILE")
 BUCKET=$(sed -nr 's/^bucket_name\s*=\s*"([^"]*)".*$/\1/p' "$DATAFILE")
 DEPLOYMENT=$(sed -nr 's/^deployment_name\s*=\s*"([^"]*)".*$/\1/p' "$DATAFILE")
 PROJECT=$(sed -nr 's/^project\s*=\s*"([^"]*)".*$/\1/p' "$DATAFILE")
 CREDENTIALS=$(sed -nr 's/^credentials\s*=\s*"([^"]*)".*$/\1/p' "$DATAFILE")
-
 
 if [ ! -f "$DATAFILE" ]; then
     echo "setenv: Configuration file not found: $DATAFILE"
@@ -17,7 +16,7 @@ fi
 
 if [ -z "$ENVIRONMENT" ]
 then
-    echo "setenv: 'environment' variable not set in configuration file."
+    echo "setenv: 'deployment_environment' variable not set in configuration file."
     return 1
 fi
 
@@ -29,8 +28,8 @@ fi
 
 if [ -z "$PROJECT" ]
 then
-  PROJECT='fuchicorp-project-248118'
     echo "setenv: 'project_name' variable not set in configuration file. Using $PROJECT"
+    return 1
 fi
 
 if [ -z "$CREDENTIALS" ]

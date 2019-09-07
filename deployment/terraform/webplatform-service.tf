@@ -2,7 +2,7 @@ resource "kubernetes_service" "webplatform_service" {
 
   metadata {
     name = "webplatform-service"
-    namespace = "${var.webplatform_namespace}"
+    namespace = "${var.deployment_namespace}"
   }
 
   spec {
