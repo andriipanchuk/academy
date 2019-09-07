@@ -25,7 +25,7 @@ variable "webplatform_service_account" {
   default = "fuchicorp-api"
 }
 
-variable "webplatform_image" {
+variable "deployment_image" {
   default = "docker.fuchicorp.com/webplatform-dev:0.2"
 }
 
