@@ -1,6 +1,6 @@
 variable "mysql_user" {}
 variable "mysql_database" {}
-variable "mysql_host" {}
+variable "mysql_password" {}
 variable "deployment_namespace" {}
 
 variable "deployment_environment" {
@@ -17,6 +17,10 @@ variable "dns_endpoint_webplatform" {
   }
 }
 
+variable "mysql_host" {
+  default = "webplatform-mysql-service"
+}
+
 variable "webplatform_service_account" {
   default = "fuchicorp-api"
 }
@@ -29,9 +33,6 @@ variable "lets_encrypt_email" {
   default = "fuchicorpsolutions@gmail.com"
 }
 
-variable "webplatform_password" {
-  default = "Welcome2019"
-}
 
 variable "webplatform_secret" {
   default = "WELCOME2019"

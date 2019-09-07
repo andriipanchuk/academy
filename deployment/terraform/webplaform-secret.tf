@@ -5,7 +5,7 @@ resource "kubernetes_secret" "webplatform_secret" {
   }
 
   data {
-    MYSQL_PASSWORD = "${var.webplatform_password}"
+    MYSQL_PASSWORD = "${var.mysql_password}"
     SECRET_KEY     = "${var.webplatform_secret}"
    }
 
