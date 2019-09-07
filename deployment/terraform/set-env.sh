@@ -7,7 +7,7 @@ ENVIRONMENT=$(sed -nr 's/^deployment_environment\s*=\s*"([^"]*)".*$/\1/p' "$DATA
 BUCKET=$(sed -nr 's/^bucket_name\s*=\s*"([^"]*)".*$/\1/p' "$DATAFILE")
 DEPLOYMENT=$(sed -nr 's/^deployment_name\s*=\s*"([^"]*)".*$/\1/p' "$DATAFILE")
 PROJECT=$(sed -nr 's/^project\s*=\s*"([^"]*)".*$/\1/p' "$DATAFILE")
-CREDENTIALS=$(sed -nr 's/^credentials\s*=\s*"([^"]*)".*$/\1/p' "$DATAFILE")
+CREDENTIALS=$(sed -nr 's/^deployment_credentials\s*=\s*"([^"]*)".*$/\1/p' "$DATAFILE")
 
 if [ ! -f "$DATAFILE" ]; then
     echo "setenv: Configuration file not found: $DATAFILE"
