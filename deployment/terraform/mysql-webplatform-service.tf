@@ -2,7 +2,7 @@ resource "kubernetes_service" "mysql_host" {
 
   metadata {
     name = "${var.mysql_host}"
-    namespace = "${var.deployment_namespace}"
+    namespace = "${var.deployment_environment}"
   }
   spec {
 

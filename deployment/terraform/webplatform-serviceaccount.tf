@@ -1,7 +1,7 @@
 resource "kubernetes_service_account" "webplatform_service_account" {
   metadata {
     name = "webplatform-service-account"
-    namespace = "${var.deployment_namespace}"
+    namespace = "${var.deployment_environment}"
   }
   secret {
     name = "${kubernetes_secret.webplatform-service-account-secret.metadata.0.name}"
@@ -12,7 +12,7 @@ resource "kubernetes_service_account" "webplatform_service_account" {
 resource "kubernetes_secret" "webplatform-service-account-secret" {
   metadata {
     name = "webplatform-service-account-secret"
-    namespace = "${var.deployment_namespace}"
+    namespace = "${var.deployment_environment}"
   }
 }
 

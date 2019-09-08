@@ -1,7 +1,7 @@
 resource "helm_release" "webplatform_services_ingress" {
 
-  name = "webplatform-services-ingress-${var.deployment_namespace}"
-  namespace = "${var.deployment_namespace}"
+  name = "webplatform-services-ingress-${var.deployment_environment}"
+  namespace = "${var.deployment_environment}"
   chart = "./helm-deployment"
 
   set {

@@ -1,7 +1,7 @@
 resource "kubernetes_secret" "webplatform_secret" {
   metadata {
     name      = "webplatform-secret"
-    namespace = "${var.deployment_namespace}"
+    namespace = "${var.deployment_environment}"
   }
 
   data {

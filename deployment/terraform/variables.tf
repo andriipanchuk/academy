@@ -1,7 +1,6 @@
 variable "mysql_user" {}
 variable "mysql_database" {}
 variable "mysql_password" {}
-variable "deployment_namespace" {}
 
 variable "deployment_environment" {
   default = "dev"
