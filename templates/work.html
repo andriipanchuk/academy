@@ -10,7 +10,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <div class="topnav">
   <a class="active" href="{{ url_for('logout') }}">logout</a>
-    <a href="{{ url_for('raiting') }}">Raiting</a>
+  <a href="{{ url_for('raiting') }}">Raiting</a>
+  <a href="{{ url_for('pynote') }}">PyNote</a>
+  <a href="{{ url_for('admin.index') }}">Admin</a>
   <div id="main">
     <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; Menu</span>
     </div>
@@ -33,7 +35,7 @@
   <a href="{{ url_for('dashboard') }}">Dashboard</a>
   <a href="{{ url_for('chat') }}">Chat</a>
   <a href="{{ url_for('videos') }}">Videos</a>
-   
+
   <a href="{{ url_for('contact') }}">Contact us</a>
 </div>
 
