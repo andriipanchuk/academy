@@ -1,5 +1,41 @@
 name: FuchiCorp Video configuration
 items:
+
+ - path: fuchicorp
+   name: FuchiCorp Cluster Changes
+   image: /static/images/videos/Python.jpg
+   items:
+     - name: Migrate from FuchiCorp Jenkins to official Jenkins
+       uuid: '362457427'
+       description:  In this session, we migrate from FuchiCorp Jenkins to official Jenkins
+       url: https://player.vimeo.com/video/362457427
+       status: True
+       width: 640
+       height: 564
+       allow: "autoplay; fullscreen"
+       role: students
+
+     - name: FuchiCorp Helm deployment Artemis
+       uuid: '362456906'
+       description:  In this session, we talk about helm deployment and Kubernetes
+       url: https://player.vimeo.com/video/362456906
+       status: True
+       width: 640
+       height: 564
+       allow: "autoplay; fullscreen"
+       role: students
+
+
+     - name: Common Script and Terraform Deployment
+       uuid: '358836499'
+       description:  We have created common script to set up environment for terraform
+       url: https://player.vimeo.com/video/358836499
+       status: True
+       width: 640
+       height: 564
+       allow: "autoplay; fullscreen"
+       role: students
+
  - path: pythonrecords
    name: Python class video records.
    image: /static/images/videos/Python.jpg
@@ -64,7 +100,6 @@ items:
       allow: "autoplay; fullscreen"
       role: students
 
-
  - path: python
    name: python short videos
    image: /static/images/videos/Python.jpg
@@ -84,25 +119,25 @@ items:
    name: Docker Classes
    items:
      - name: Docker introduction
-       uuid: 1111
+       uuid: '1111'
 
  - path: ansible
    image: /static/images/videos/Ansible.jpg
    name: Ansible Classes
    items:
      - name: Ansible introduction
-       uuid: 1111
+       uuid: '1111'
 
  - path: jenkins
    image: /static/images/videos/DevOps.jpg
    name: Jenkins Class
    items:
      - name: Jekins introduction
-       uuid: 1111
+       uuid: '1111'
 
  - path: mysql
    image: /static/images/videos/MYSQL.jpg
    name: MySQL Class
    items:
      - name: Jekins introduction
-       uuid: 1111
+       uuid: '1111'
