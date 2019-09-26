@@ -375,30 +375,6 @@ def videos(path, uuid):
     else:
         return render_template('404.html')
 
-@app.route('/testing/', methods=['GET', 'POST'])
-@login_required
-def testing():
-
-    return jsonify({"message": True})
-
-
-# Vidoe classes
-@app.route('/linux', methods=['GET', 'POST'])
-@login_required
-def linux():
-    return render_template('linux.html', name=current_user.username)
-
-# Docker classes
-@app.route('/docker', methods=['GET', 'POST'])
-@login_required
-def docker():
-    return render_template('docker.html', name=current_user.username)
-
-# Scripting classes
-@app.route('/script', methods=['GET', 'POST'])
-@login_required
-def script():
-    return render_template('script.html', name=current_user.username)
 
 # Scripting classes
 @app.route('/coming-soon', methods=['GET', 'POST'])
@@ -530,10 +506,7 @@ def logout():
     return redirect(url_for('index'))
 
 
-
-
 ### Api Block starts from here ####
-
 @app.route('/api/example-users', methods=['GET', 'POST'])
 @login_required
 def example():

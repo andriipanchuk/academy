@@ -101,7 +101,7 @@ items:
       role: students
 
  - path: python
-   name: python short videos
+   name: Python short videos
    image: /static/images/videos/Python.jpg
    items:
      - name: Python class 1 Data Types
