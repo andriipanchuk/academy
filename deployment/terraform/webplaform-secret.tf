@@ -1,11 +1,11 @@
 resource "kubernetes_secret" "webplatform_secret" {
   metadata {
     name      = "webplatform-secret"
-    namespace = "${var.webplatform_namespace}"
+    namespace = "${var.deployment_environment}"
   }
 
   data {
-    MYSQL_PASSWORD = "${var.webplatform_password}"
+    MYSQL_PASSWORD = "${var.mysql_password}"
     SECRET_KEY     = "${var.webplatform_secret}"
    }
 

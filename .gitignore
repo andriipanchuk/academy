@@ -9,3 +9,6 @@
 *.terraform*
 *fuchicorp-service-account*
 *.log*
+*tfvars*
+*backend.tf
+*set-env
