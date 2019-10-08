@@ -36,6 +36,16 @@ items:
        allow: "autoplay; fullscreen"
        role: students
 
+     - name: FuchiCorp New Account Migration
+       uuid: '358836813'
+       description:  FuchiCorp migration to new account
+       url: https://player.vimeo.com/video/358836813
+       status: True
+       width: 640
+       height: 564
+       allow: "autoplay; fullscreen"
+       role: students
+       
  - path: pythonrecords
    name: Python class video records.
    image: /static/images/videos/Python.jpg
