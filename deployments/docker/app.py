@@ -81,11 +81,13 @@ def app_set_up():
 
         ## To testing I create my own config make sure you have configured ~/.kube/config
         app.config.from_pyfile('/Users/fsadykov/backup/databases/config.cfg')
+        print('Using config: /Users/fsadykov/backup/databases/config.cfg')
 
     else:
 
         ## To different enviroments enable this
         app.config.from_pyfile('config.cfg')
+        print("Using main config.cfg")
         os.system('sh bash/bin/getServiceAccountConfig.sh')
 
 # app.config.from_pyfile('/Users/fsadykov/backup/databases/config.cfg')

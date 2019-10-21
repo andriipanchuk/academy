@@ -42,6 +42,10 @@ variable "github_client_id" {
   default = "github_client_id"
 }
 
+variable "application_secret" {
+  default = "application_secret"
+}
+
 ## organization's auth applciation secret
 variable "github_client_secret" {
   default = "github_client_secret"

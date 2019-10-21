@@ -13,6 +13,7 @@ data "template_file" "academy_values" {
     github_token         = "${var.github_token}"
     github_client_id     = "${var.github_client_id}"
     github_client_secret = "${var.github_client_secret}"
+    application_secret   = "${var.application_secret}"
   }
 }
 
