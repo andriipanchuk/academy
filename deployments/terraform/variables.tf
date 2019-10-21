@@ -1,6 +1,14 @@
-variable "mysql_user" {}
-variable "mysql_database" {}
-variable "mysql_password" {}
+variable "mysql_user" {
+  default = "academyuser"
+}
+
+variable "mysql_database" {
+  default = "academydb"
+}
+
+variable "mysql_password" {
+  default "ZXKXYP1QN25BBkUbLjJ5V"
+}
 
 variable "deployment_environment" {
   default = "dev"
