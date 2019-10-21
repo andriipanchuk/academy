@@ -6,7 +6,7 @@ variable "deployment_environment" {
   default = "dev"
 }
 
-variable "dns_endpoint_webplatform" {
+variable "dns_endpoint_academy" {
   type = "map"
 
   default = {
@@ -17,22 +17,21 @@ variable "dns_endpoint_webplatform" {
 }
 
 variable "mysql_host" {
-  default = "webplatform-mysql-service"
+  default = "academy-mysql-service"
 }
 
-variable "webplatform_service_account" {
+variable "academy_service_account" {
   default = "fuchicorp-api"
 }
 
 variable "deployment_image" {
-  default = "docker.fuchicorp.com/webplatform-dev:0.2"
+  default = "docker.fuchicorp.com/academy-dev:0.3"
 }
 
 variable "lets_encrypt_email" {
   default = "fuchicorpsolutions@gmail.com"
 }
 
-
-variable "webplatform_secret" {
+variable "academy_secret" {
   default = "WELCOME2019"
 }

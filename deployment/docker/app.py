@@ -1,7 +1,7 @@
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from wtforms import StringField, PasswordField, BooleanField, TextField, validators, SubmitField
-from flask import Flask, render_template, redirect, url_for, request, jsonify, json, session
+from flask import Flask, render_template, redirect, url_for, request, jsonify, json, session, g
 from wtforms.validators import InputRequired, Email, Length
 from flask_wtf import FlaskForm, RecaptchaField
 from flask_admin import Admin, AdminIndexView, BaseView, expose, helpers
@@ -12,6 +12,7 @@ from kubernetes.client.apis import core_v1_api
 from flask_sqlalchemy  import SQLAlchemy
 from kubernetes  import client, config
 from flask_bootstrap import Bootstrap
+from flask_github import GitHub
 from os import path
 import subprocess
 import argparse
@@ -23,6 +24,9 @@ import yaml
 import time
 import os
 import uuid
+import requests
+
+organization = "fuchicorp"
 
 app = Flask(__name__)
 parser = argparse.ArgumentParser(description="FuchiCorp Webplarform Application.")
@@ -35,6 +39,32 @@ with open("configuration/logging/logging-config.yaml", 'r') as file:
 
 logging.config.dictConfig(logging_config)
 logger = logging.getLogger()
+
+
+
+token = os.environ.get('GIT_TOKEN')
+
+def find_team_id(team_name):
+    teams_url= f"https://api.github.com/orgs/{organization}/teams"
+    resp = requests.get(url=teams_url, headers={"Authorization": f"token {token}"})
+    if resp.status_code == 200:
+        for team in resp.json():
+            if team['name'].lower() == team_name.lower():
+                return team['id']
+        else:
+            return None
+
+def is_user_member(username):
+    team_id  = find_team_id("academy-students")
+    if team_id is not None:
+        team_url = f"https://api.github.com/teams/{team_id}/members"
+        resp = requests.get(url=team_url, headers={"Authorization": f"token {token}"})
+        if resp.status_code == 200:
+            for user in resp.json():
+                if user['login'].lower() == username.lower():
+                    return True
+            else:
+                return False
 
 args = parser.parse_args()
 def app_set_up():
@@ -58,11 +88,11 @@ def app_set_up():
         app.config.from_pyfile('config.cfg')
         os.system('sh bash/bin/getServiceAccountConfig.sh')
 
-# app.config.from_pyfile('/Users/fsadykov/backup/databases/config.cfg')
-app_set_up()
+app.config.from_pyfile('/Users/fsadykov/backup/databases/config.cfg')
+# app_set_up()
 bootstrap = Bootstrap(app)
 db = SQLAlchemy(app)
-
+github = GitHub(app)
 env = app.config.get('BRANCH_NAME')
 if env == 'master':
     enviroment = 'prod'
@@ -98,7 +128,7 @@ class Message(db.Model):
     username = db.Column(db.String(50))
     message = db.Column(db.String(500))
 
-class User(UserMixin, db.Model):
+class AcademyUser(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     firstname = db.Column(db.String(15))
     lastname = db.Column(db.String(15))
@@ -107,6 +137,23 @@ class User(UserMixin, db.Model):
     password = db.Column(db.String(80))
     status = db.Column(db.String(5))
     role = db.Column(db.String(20))
+    github_login = db.Column(db.String(255))
+    github_id = db.Column(db.Integer)
+    github_access_token = db.Column(db.String(255))
+
+    def __repr__(self):
+        return '<User %r>' % self.username
+
+class User(UserMixin, db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(30))
+    github_login = db.Column(db.String(255))
+    github_id = db.Column(db.Integer)
+    github_access_token = db.Column(db.String(255))
+
+    def __init__(self, github_access_token):
+        self.github_access_token = github_access_token
+
     def __repr__(self):
         return '<User %r>' % self.username
 
@@ -348,10 +395,113 @@ def message():
     except:
         return jsonify({'result' : 'failure'})
 
+@github.access_token_getter
+def token_getter():
+    if current_user.github_access_token:
+        return current_user.github_access_token
+    else:
+        return None
+
+
 # Welcome Page
 @app.route('/')
 def index():
     return render_template('index.html')
+
+@app.route('/dashboard', methods=['GET', 'POST'])
+# @login_required
+def dashboard():
+
+    github_user = github.get('/user')
+    user_data = AcademyUser.query.filter_by(username=github_user["login"]).first()
+
+    if request.form:
+        print(request.form)
+        user =  AcademyUser()
+        user.firstname = request.form.get('firstname')
+        user.lastname = request.form.get('lastname')
+        user.email = request.form.get('email')
+        user.password = request.form.get('password')
+        user.role = 'Student'
+
+        db.session.add(user)
+        db.session.commit()
+        login_user(user, remember=True)
+        return redirect("dashboard")
+
+    if user_data is None:
+        return render_template("create-user.html")
+
+    users = AcademyUser.query.all()
+    user_data = AcademyUser.query.filter_by(username=current_user.username).first()
+    py_note = Pynote.query.filter_by(username=current_user.username)
+    return render_template('dashboard.html', fname=current_user.firstname, lname=current_user.lastname, users=users, pynote=py_note, user_data=user_data)
+
+@app.route('/get-permissions', methods=['GET', 'POST'])
+@login_required # Work on  the dashboard and user are able to login to system
+def get_permissions():
+    github_user = github.get('/user')
+    if is_user_member(github_user["login"]):
+        return redirect("dashboard")
+    else:
+        return render_template("disabled-user.html")
+
+
+@app.route('/github-callback')
+@github.authorized_handler
+def authorized(access_token):
+    next_url = request.args.get('next') or url_for('get_permissions')
+    if access_token is None:
+        return redirect(next_url)
+
+
+    user = User.query.filter_by(github_access_token=access_token).first()
+    if user is None:
+        user = User(access_token)
+        db.session.add(user)
+
+    login_user(user, remember=False)
+
+    ## Update user information
+    github_user = github.get('/user')
+    user.github_login = github_user["login"]
+    user.github_access_token = access_token
+    db.session.commit()
+
+    session['user_id'] = user.id
+
+    return redirect(next_url)
+
+
+# Raiting of the user
+@app.route('/login-github')
+def login_github():
+    if session.get('user_id', None) is None:
+        return github.authorize()
+    else:
+        return redirect("dashboard")
+
+@app.route('/user')
+def user():
+    return jsonify(github.get('/user'))
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    session.permanent = True
+    if current_user.is_authenticated:
+        return redirect(url_for('dashboard'))
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(username=form.username.data).first()
+        if user:
+            if user.status == "True":
+                if check_password_hash(user.password, form.password.data):
+                    login_user(user, remember=form.remember.data)
+                    return redirect(url_for('dashboard'))
+            elif user.status == "False":
+                return render_template('disabled-user.html')
+        return render_template('login.html', message="Invalid username or password", form=form)
+    return render_template('login.html', form=form)
 
 # Vidoe classes
 @app.route('/videos/', defaults={'uuid': '', 'path': ''})
@@ -388,9 +538,10 @@ def coming_soon():
 def raiting():
     return render_template('raiting.html', name=current_user.username)
 
+
 @app.route('/profile/<username>')
 @login_required
-def user(username):
+def user_profile(username):
     user_data = User.query.filter_by(username=username).first()
     return render_template('profile.html', fname=current_user.firstname, lname=current_user.lastname, user_data=user_data)
 
@@ -441,13 +592,7 @@ def settings(username):
 
     return render_template('settings.html', user_data=user_data, fname=current_user.firstname, lname=current_user.lastname, formProfile=formProfile, formPassword=formPassword, formPynote=formPynote, message=None)
 
-@app.route('/dashboard', methods=['GET', 'POST'])
-@login_required
-def dashboard():
-    users = User.query.all()
-    user_data = User.query.filter_by(username=current_user.username).first()
-    py_note = Pynote.query.filter_by(username=current_user.username)
-    return render_template('dashboard.html', fname=current_user.firstname, lname=current_user.lastname, users=users, pynote=py_note, user_data=user_data)
+
 
 @app.route('/contact', methods=['GET', 'POST'])
 def contact():
@@ -477,23 +622,6 @@ def signup():
         return redirect(url_for('login'))
     return render_template('signup.html', form=form)
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    session.permanent = True
-    if current_user.is_authenticated:
-        return redirect(url_for('dashboard'))
-    form = LoginForm()
-    if form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data).first()
-        if user:
-            if user.status == "True":
-                if check_password_hash(user.password, form.password.data):
-                    login_user(user, remember=form.remember.data)
-                    return redirect(url_for('dashboard'))
-            elif user.status == "False":
-                return render_template('disabled-user.html')
-        return render_template('login.html', message="Invalid username or password", form=form)
-    return render_template('login.html', form=form)
 
 @app.route('/disabled-user')
 def disabled_user():
