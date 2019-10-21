@@ -67,9 +67,6 @@ globalEnvironments:
   - name: GITHUB_CLIENT_SECRET
     value: ${github_client_secret}
 
-  - name: GITHUB_CLIENT_SECRET
-    value: ${application_secret}
-
   - name: SECRET_KEY
     value: ${application_secret}
 
