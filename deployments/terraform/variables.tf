@@ -42,7 +42,9 @@ variable "github_client_id" {
   type = "map"
 
   default = {
-    message = "Please-change-this-value-to-correct-data"
+    dev  = "Please-change-this-value-to-correct-data"
+    qa   = "Please-change-this-value-to-correct-data"
+    prod = "Please-change-this-value-to-correct-data"
   }
 }
 
@@ -51,7 +53,9 @@ variable "github_client_secret" {
   type = "map"
 
   default = {
-    message = "Please-change-this-value-to-correct-data"
+    dev  = "Please-change-this-value-to-correct-data"
+    qa   = "Please-change-this-value-to-correct-data"
+    prod = "Please-change-this-value-to-correct-data"
   }
 }
 
