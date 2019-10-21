@@ -25,7 +25,7 @@ variable "dns_endpoint_academy" {
 }
 
 variable "mysql_host" {
-  default = "academy-mysql-service"
+  default = "Please change this value to correct data"
 }
 
 variable "academy_service_account" {
@@ -34,17 +34,22 @@ variable "academy_service_account" {
 
 ## organization github token
 variable "github_token" {
-  default = "github_token"
+  default = "Please change this value to correct data"
 }
 
 ## organization's auth applciation id
 variable "github_client_id" {
   type = "map"
+
+  default = {
+    dev = "Please change this value to correct data"
+  }
 }
 
 ## organization's auth applciation secret
 variable "github_client_secret" {
-  type = "map"
+  type    = "map"
+  default = "Please change this value to correct data"
 }
 
 variable "application_secret" {
