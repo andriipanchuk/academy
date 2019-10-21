@@ -25,7 +25,7 @@ variable "dns_endpoint_academy" {
 }
 
 variable "mysql_host" {
-  default = "Please change this value to correct data"
+  default = "Please-change-this-value-to-correct-data"
 }
 
 variable "academy_service_account" {
@@ -34,7 +34,7 @@ variable "academy_service_account" {
 
 ## organization github token
 variable "github_token" {
-  default = "Please change this value to correct data"
+  default = "Please-change-this-value-to-correct-data"
 }
 
 ## organization's auth applciation id
@@ -42,7 +42,7 @@ variable "github_client_id" {
   type = "map"
 
   default = {
-    message = "Please change this value to correct data"
+    message = "Please-change-this-value-to-correct-data"
   }
 }
 
@@ -51,7 +51,7 @@ variable "github_client_secret" {
   type = "map"
 
   default = {
-    message = "Please change this value to correct data"
+    message = "Please-change-this-value-to-correct-data"
   }
 }
 
