@@ -32,6 +32,21 @@ variable "academy_service_account" {
   default = "fuchicorp-api"
 }
 
+## organization github token
+variable "github_token" {
+  default = "github_token"
+}
+
+## organization's auth applciation id
+variable "github_client_id" {
+  default = "github_client_id"
+}
+
+## organization's auth applciation secret
+variable "github_client_secret" {
+  default = "github_client_secret"
+}
+
 variable "deployment_image" {
   default = "docker.fuchicorp.com/academy-dev:0.3"
 }

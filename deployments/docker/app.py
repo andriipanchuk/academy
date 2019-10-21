@@ -54,8 +54,8 @@ def find_team_id(team_name):
         else:
             return None
 
-def is_user_member(username):
-    team_id  = find_team_id("academy-students")
+def is_user_member(username, team_name):
+    team_id  = find_team_id(team_name)
     if team_id is not None:
         team_url = f"https://api.github.com/teams/{team_id}/members"
         resp = requests.get(url=team_url, headers={"Authorization": f"token {token}"})
@@ -147,6 +147,7 @@ class AcademyUser(UserMixin, db.Model):
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(30))
+    role = db.Column(db.String(20))
     github_login = db.Column(db.String(255))
     github_id = db.Column(db.Integer)
     github_access_token = db.Column(db.String(255))
@@ -409,19 +410,18 @@ def index():
     return render_template('index.html')
 
 @app.route('/dashboard', methods=['GET', 'POST'])
-# @login_required
+@login_required
 def dashboard():
 
     github_user = github.get('/user')
     user_data = AcademyUser.query.filter_by(username=github_user["login"]).first()
-
     if request.form:
         print(request.form)
         user =  AcademyUser()
         user.firstname = request.form.get('firstname')
         user.lastname = request.form.get('lastname')
+        user.username = github_user["login"]
         user.email = request.form.get('email')
-        user.password = request.form.get('password')
         user.role = 'Student'
 
         db.session.add(user)
@@ -429,19 +429,18 @@ def dashboard():
         login_user(user, remember=True)
         return redirect("dashboard")
 
-    if user_data is None:
-        return render_template("create-user.html")
+    if not user_data:
+        return render_template("update-user-info.html")
 
     users = AcademyUser.query.all()
-    user_data = AcademyUser.query.filter_by(username=current_user.username).first()
-    py_note = Pynote.query.filter_by(username=current_user.username)
-    return render_template('dashboard.html', fname=current_user.firstname, lname=current_user.lastname, users=users, pynote=py_note, user_data=user_data)
+    py_note = Pynote.query.filter_by(username=user_data.username)
+    return render_template('dashboard.html', fname=user_data.firstname, lname=user_data.lastname, users=users, pynote=py_note, user_data=user_data)
 
 @app.route('/get-permissions', methods=['GET', 'POST'])
 @login_required # Work on  the dashboard and user are able to login to system
 def get_permissions():
     github_user = github.get('/user')
-    if is_user_member(github_user["login"]):
+    if is_user_member(github_user["login"], "academy-students"):
         return redirect("dashboard")
     else:
         return render_template("disabled-user.html")
@@ -466,8 +465,9 @@ def authorized(access_token):
     github_user = github.get('/user')
     user.github_login = github_user["login"]
     user.github_access_token = access_token
+    if is_user_member(github_user["login"], "academy-admins"):
+        user.role = "Admin"
     db.session.commit()
-
     session['user_id'] = user.id
 
     return redirect(next_url)
@@ -476,8 +476,14 @@ def authorized(access_token):
 # Raiting of the user
 @app.route('/login-github')
 def login_github():
+    if app.config.get("APPLICATION_ENDPOINT"):
+        if app.config.get("APPLICATION_ENDPOINT") == "localhost:5000":
+            callback_url = f'http://{app.config.get("APPLICATION_ENDPOINT")}/github-callback'
+        else:
+            callback_url = f'https://{app.config.get("APPLICATION_ENDPOINT")}/github-callback'
+
     if session.get('user_id', None) is None:
-        return github.authorize()
+        return github.authorize(scope="user,repo", redirect_uri=callback_url)
     else:
         return redirect("dashboard")
 

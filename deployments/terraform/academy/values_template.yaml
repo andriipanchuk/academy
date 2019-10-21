@@ -55,6 +55,19 @@ globalEnvironments:
   - name: MYSQL_ROOT_PASSWORD
     value: ${mysql_password}
 
+  - name: APPLICATION_ENDPOINT
+    value: ${application_url}
+
+  - name: GIT_TOKEN
+    value: ${github_token}
+
+  - name: GITHUB_CLIENT_ID
+    value: ${github_client_id}
+
+  - name: GITHUB_CLIENT_SECRET
+    value: ${github_client_secret}
+
+
 imageSecret:
   enabled: true
   allSecrets:
