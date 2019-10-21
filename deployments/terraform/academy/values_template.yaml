@@ -68,7 +68,10 @@ globalEnvironments:
     value: ${github_client_secret}
 
   - name: GITHUB_CLIENT_SECRET
-    value: ${SECRET_KEY}
+    value: ${application_secret}
+
+  - name: SECRET_KEY
+    value: ${application_secret}
 
 
 imageSecret:

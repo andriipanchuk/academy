@@ -478,14 +478,8 @@ def authorized(access_token):
 # Raiting of the user
 @app.route('/login-github')
 def login_github():
-    if app.config.get("APPLICATION_ENDPOINT"):
-        if app.config.get("APPLICATION_ENDPOINT") == "localhost:5000":
-            callback_url = f'http://{app.config.get("APPLICATION_ENDPOINT")}/github-callback'
-        else:
-            callback_url = f'https://{app.config.get("APPLICATION_ENDPOINT")}/github-callback'
-
     if session.get('user_id', None) is None:
-        return github.authorize(scope="user,repo", redirect_uri=callback_url)
+        return github.authorize()
     else:
         return redirect("dashboard")
 
