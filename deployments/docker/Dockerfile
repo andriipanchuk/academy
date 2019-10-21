@@ -1,7 +1,7 @@
 # Pulling default image from DockerHub
 FROM python:latest
 
-MAINTAINER Farkhod Sadykov sadykovfarkhod@gmail.com
+MAINTAINER Fuchi Corp fuchicorpsolutins@gmail.com
 
 ## Copy everything to image folder root
 WORKDIR /app
