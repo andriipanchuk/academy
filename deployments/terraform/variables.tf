@@ -42,14 +42,17 @@ variable "github_client_id" {
   type = "map"
 
   default = {
-    dev = "Please change this value to correct data"
+    message = "Please change this value to correct data"
   }
 }
 
 ## organization's auth applciation secret
 variable "github_client_secret" {
-  type    = "map"
-  default = "Please change this value to correct data"
+  type = "map"
+
+  default = {
+    message = "Please change this value to correct data"
+  }
 }
 
 variable "application_secret" {
