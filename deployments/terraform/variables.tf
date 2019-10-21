@@ -39,16 +39,16 @@ variable "github_token" {
 
 ## organization's auth applciation id
 variable "github_client_id" {
-  default = "github_client_id"
-}
-
-variable "application_secret" {
-  default = "application_secret"
+  type = "map"
 }
 
 ## organization's auth applciation secret
 variable "github_client_secret" {
-  default = "github_client_secret"
+  type = "map"
+}
+
+variable "application_secret" {
+  default = "application_secret"
 }
 
 variable "deployment_image" {
