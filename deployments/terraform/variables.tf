@@ -7,7 +7,7 @@ variable "mysql_database" {
 }
 
 variable "mysql_password" {
-  default "ZXKXYP1QN25BBkUbLjJ5V"
+  default = "ZXKXYP1QN25BBkUbLjJ5V"
 }
 
 variable "deployment_environment" {
