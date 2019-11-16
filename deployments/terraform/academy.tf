@@ -23,7 +23,7 @@ resource "local_file" "academy_values_local_file" {
 }
 
 resource "helm_release" "academy" {
-  name      = "academy"
+  name      = "academy-${var.deployment_environment}"
   namespace = "${var.deployment_environment}"
   chart     = "./academy"
 
