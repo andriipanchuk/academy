@@ -35,7 +35,7 @@ ingress:
   hosts:
     - ${deployment_endpoint}
   tls:
-   - secretName: chart-example-tls
+   - secretName: academy-chart-tls
      hosts:
        - ${deployment_endpoint}
 
