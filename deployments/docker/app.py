@@ -171,7 +171,7 @@ class Pynote(db.Model):
         return '<User %r>' % self.username
 
 
-class pynoteDeleteView(BaseView):
+class pynote_delete_view(BaseView):
     @expose('/', methods=('GET', 'POST'))
     def index(self):
         form = PyNoteDelete()
@@ -245,10 +245,9 @@ class ChangePassword(FlaskForm):
 
 def available_port():
     while True:
-        randomPort = random.choice(list(range(7000, 7100)))
-        if not Pynote.query.filter_by(port=randomPort).first():
-            return randomPort
-            break
+        random_port = random.choice(list(range(7000, 7100)))
+        if not Pynote.query.filter_by(port=random_port).first():
+            return random_port
 
 def generate_templates(username, password, enviroment):
     templates = {}
@@ -288,9 +287,8 @@ def generate_templates(username, password, enviroment):
     return templates
 
 def existing_ingess(ingerssname, namespace):
-    total = []
-    ingressList = kube.list_namespaced_ingress(namespace).items
-    for item in ingressList:
+    list_ingress = kube.list_namespaced_ingress(namespace).items
+    for item in list_ingress:
         if item.metadata.name == ingerssname:
             return item
     else:
@@ -306,8 +304,8 @@ def create_pynote(username, password):
     ingress_name   = f'{enviroment}-pynote-ingress'
     namespace      = f'{enviroment}-students'
     deployment     = generate_templates(pynote_name, pynote_pass, enviroment)
-    pod            = api.create_namespaced_pod(body=deployment['pod'], namespace=namespace)
-    service        = api.create_namespaced_service(body=deployment['service'], namespace=namespace)
+    api.create_namespaced_pod(body=deployment['pod'], namespace=namespace)
+    api.create_namespaced_service(body=deployment['service'], namespace=namespace)
     exist_ingress  = existing_ingess(ingress_name, namespace)
     if exist_ingress:
         exist_ingress.spec.rules[0].http.paths.append(deployment['path'])
@@ -350,11 +348,10 @@ def delete_pynote(username):
 @app.route('/pynote', methods=['GET', 'POST'])
 @login_required
 def pynote():
+    github_user = github.get('/user')["login"].lower()
 
     ## Loading the kubernetes objects
     config.load_kube_config()
-    kube = client.ExtensionsV1beta1Api()
-    api = core_v1_api.CoreV1Api()
     pynotes = Pynote.query.all()
     users_pynote = Pynote.query.filter_by(username=current_user.username)
 
@@ -366,7 +363,8 @@ def pynote():
             message = "Sorry you already requested a PyNote."
             return render_template('pynote.html', name=current_user.username, errorMessage=message, pynotes=pynotes, pynote=users_pynote)
 
-        pynote = create_pynote(current_user.username, password)
+        print(f"Trying to create pynote for {github_user}")
+        pynote = create_pynote(github_user, password)
         message =  "The pynote has been requested."
         new_pynote = Pynote(pynotelink=pynote['pynotelink'], password=password, server_name=server_name, username=current_user.username)
 
@@ -550,49 +548,49 @@ def user_profile(username):
 @app.route('/settings/<username>', methods=['GET', 'POST'])
 @login_required
 def settings(username):
-    formProfile  = EditProfile(prefix="EditProfile")
-    formPassword = ChangePassword(prefix="ChangePassword")
-    formPynote   = PyNoteDelete(prefix="DeletePyNote")
+    form_profile  = EditProfile(prefix="EditProfile")
+    form_password = ChangePassword(prefix="ChangePassword")
+    form_pynote   = PyNoteDelete(prefix="DeletePyNote")
     user_data    = User.query.filter_by(username=username).first()
     if request.method == 'POST' and current_user.username == user_data.username:
         form_name = request.form['settingsForm']
         if form_name == 'EditProfileSubmit':
-            formProfile.validate()
-            user_data.firstname = formProfile.firstname.data
-            user_data.lastname = formProfile.lastname.data
-            user_data.username = formProfile.username.data
-            user_data.email = formProfile.email.data
+            form_profile.validate()
+            user_data.firstname = form_profile.firstname.data
+            user_data.lastname = form_profile.lastname.data
+            user_data.username = form_profile.username.data
+            user_data.email = form_profile.email.data
             db.session.commit()
             message = {"message" : "User information has been updated.", "status" : "error"}
-            return render_template('settings.html', user_data=user_data, fname=current_user.firstname, lname=current_user.lastname, formProfile=formProfile, formPassword=formPassword, formPynote=formPynote, message=message)
+            return render_template('settings.html', user_data=user_data, fname=current_user.firstname, lname=current_user.lastname, form_profile=form_profile, form_password=form_password, form_pynote=form_pynote, message=message)
 
         elif form_name == 'ChangePassword':
-            formPassword.validate()
-            if check_password_hash(user_data.password, formPassword.current.data):
-                user_data.password = generate_password_hash(formPassword.password.data, method='sha256')
+            form_password.validate()
+            if check_password_hash(user_data.password, form_password.current.data):
+                user_data.password = generate_password_hash(form_password.password.data, method='sha256')
                 db.session.commit()
                 message = {"message" : "The password has been changes.", "status" : "success"}
-                return render_template('settings.html', user_data=user_data, fname=current_user.firstname, lname=current_user.lastname, formProfile=formProfile, formPassword=formPassword, formPynote=formPynote, message=message)
+                return render_template('settings.html', user_data=user_data, fname=current_user.firstname, lname=current_user.lastname, form_profile=form_profile, form_password=form_password, form_pynote=form_pynote, message=message)
             else:
                 message =  {"message" : "Password does not match with current.", "status" : "error"}
-                return render_template('settings.html', user_data=user_data, fname=current_user.firstname, lname=current_user.lastname, formProfile=formProfile, formPassword=formPassword, formPynote=formPynote, message=message)
+                return render_template('settings.html', user_data=user_data, fname=current_user.firstname, lname=current_user.lastname, form_profile=form_profile, form_password=form_password, form_pynote=form_pynote, message=message)
         elif form_name == 'DeletePyNote':
-            formPynote.validate()
+            form_pynote.validate()
             users_pynote = Pynote.query.filter_by(username=username).first()
             if users_pynote:
-                if formPynote.username.data == current_user.username:
+                if form_pynote.username.data == current_user.username:
                     delete_pynote(current_user.username)
                     message = {"message" : "The PyNote has been deleted.", "status" : "success"}
-                    return render_template('settings.html', user_data=user_data, fname=current_user.firstname, lname=current_user.lastname, formProfile=formProfile, formPassword=formPassword, formPynote=formPynote, message=message)
+                    return render_template('settings.html', user_data=user_data, fname=current_user.firstname, lname=current_user.lastname, form_profile=form_profile, form_password=form_password, form_pynote=form_pynote, message=message)
                 else:
                     message = {"message" : "Error Username was invalid.", "status" : "error"}
-                    return render_template('settings.html', user_data=user_data, fname=current_user.firstname, lname=current_user.lastname, formProfile=formProfile, formPassword=formPassword, formPynote=formPynote, message=message)
+                    return render_template('settings.html', user_data=user_data, fname=current_user.firstname, lname=current_user.lastname, form_profile=form_profile, form_password=form_password, form_pynote=form_pynote, message=message)
             else:
                 message = {"message" : "PyNote not found please make sure you have PyNote.", "status" : "error"}
-                return render_template('settings.html', user_data=user_data, fname=current_user.firstname, lname=current_user.lastname, formProfile=formProfile, formPassword=formPassword, formPynote=formPynote, message=message)
+                return render_template('settings.html', user_data=user_data, fname=current_user.firstname, lname=current_user.lastname, form_profile=form_profile, form_password=form_password, form_pynote=form_pynote, message=message)
 
 
-    return render_template('settings.html', user_data=user_data, fname=current_user.firstname, lname=current_user.lastname, formProfile=formProfile, formPassword=formPassword, formPynote=formPynote, message=None)
+    return render_template('settings.html', user_data=user_data, fname=current_user.firstname, lname=current_user.lastname, form_profile=form_profile, form_password=form_password, form_pynote=form_pynote, message=None)
 
 
 
@@ -600,7 +598,6 @@ def settings(username):
 def contact():
     if 'firstname' in request.form:
         question = request.form['question']
-        phone = request.form['phone']
         with open('question.txt', 'w') as the_file:
             the_file.write(question + '\n' + "This is test")
         subprocess.call(["python", "mail.py"])
@@ -614,10 +611,9 @@ def signup():
         user = User.query.filter_by(username=form.username.data).first()
         hashed_password = generate_password_hash(form.password.data, method='sha256')
         new_user = User(username=form.username.data.lower(), firstname=form.firstname.data, lastname=form.lastname.data, email=form.email.data, password=hashed_password, status='False', role='student')
-        if user:
-            if user.username == form.username.data:
-                message = 'This user name is exist'
-                return render_template('signup.html', message=message,  form=form)
+        if user and user.username == form.username.data:
+            message = 'This user name is exist'
+            return render_template('signup.html', message=message,  form=form)
 
         db.session.add(new_user)
         db.session.commit()
@@ -660,7 +656,7 @@ admin = Admin(app, index_view=MyAdminIndex())
 admin.add_view(MyModelView(User, db.session))
 admin.add_view(MyModelView(Pynote, db.session))
 admin.add_view(MyModelView(Message, db.session))
-admin.add_view(pynoteDeleteView(name='Delete Pynote', endpoint='pynote-delete'))
+admin.add_view(pynote_delete_view(name='Delete Pynote', endpoint='pynote-delete'))
 
 if __name__ == '__main__':
     db.create_all()
