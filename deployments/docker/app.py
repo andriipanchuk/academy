@@ -171,7 +171,7 @@ class Pynote(db.Model):
         return '<User %r>' % self.username
 
 
-class pynote_delete_view(BaseView):
+class PythonDeleteView(BaseView):
     @expose('/', methods=('GET', 'POST'))
     def index(self):
         form = PyNoteDelete()
@@ -656,7 +656,7 @@ admin = Admin(app, index_view=MyAdminIndex())
 admin.add_view(MyModelView(User, db.session))
 admin.add_view(MyModelView(Pynote, db.session))
 admin.add_view(MyModelView(Message, db.session))
-admin.add_view(pynote_delete_view(name='Delete Pynote', endpoint='pynote-delete'))
+admin.add_view(PythonDeleteView(name='Delete Pynote', endpoint='pynote-delete'))
 
 if __name__ == '__main__':
     db.create_all()
