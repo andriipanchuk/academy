@@ -41,8 +41,12 @@ logging.config.dictConfig(logging_config)
 logger = logging.getLogger()
 
 
+if os.environ.get('GIT_TOKEN'):
+    token = os.environ.get('GIT_TOKEN')
+else:
+    print('env <GIT_TOKEN> is not found')
+    exit()
 
-token = os.environ.get('GIT_TOKEN')
 
 def find_team_id(team_name):
     teams_url= f"https://api.github.com/orgs/{organization}/teams"
@@ -608,9 +612,9 @@ def contact():
 def signup():
     form = RegisterForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data).first()
+        user = AcademyUser.query.filter_by(username=form.username.data).first()
         hashed_password = generate_password_hash(form.password.data, method='sha256')
-        new_user = User(username=form.username.data.lower(), firstname=form.firstname.data, lastname=form.lastname.data, email=form.email.data, password=hashed_password, status='False', role='student')
+        new_user = AcademyUser(username=form.username.data.lower(), firstname=form.firstname.data, lastname=form.lastname.data, email=form.email.data, password=hashed_password, status='False', role='student')
         if user and user.username == form.username.data:
             message = 'This user name is exist'
             return render_template('signup.html', message=message,  form=form)
