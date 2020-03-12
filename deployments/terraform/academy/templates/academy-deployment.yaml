@@ -37,10 +37,10 @@ spec:
         - name: MYSQL_HOST
           value: {{ .Values.mysql.service.serviceName }}
 {{- end }}
-          ports:
-            - name: http
-              containerPort: 5000
-              protocol: TCP
+        ports:
+          - name: http
+            containerPort: 5000
+            protocol: TCP
           # livenessProbe:
           #   httpGet:
           #     path: /
