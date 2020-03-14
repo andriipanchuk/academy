@@ -30,7 +30,7 @@ ingress:
   enabled: true
   annotations:
     kubernetes.io/ingress.class: nginx
-    cert-manager.io/cluster-issuer: letsencrypt-fuchicorp-prod
+    cert-manager.io/cluster-issuer: letsencrypt-prod
   path: /
   hosts:
     - ${deployment_endpoint}
