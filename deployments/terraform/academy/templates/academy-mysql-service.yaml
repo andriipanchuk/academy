@@ -10,10 +10,10 @@ metadata:
 spec:
   type: {{ .Values.mysql.service.type }}
   ports:
-    - port: {{ .Values.mysql.service.port }}
-      targetPort: 3306
-      protocol: TCP
-      name: mysql
+  - port: {{ .Values.mysql.service.port }}
+    targetPort: 3306
+    protocol: TCP
+    name: mysql
   selector:
     app.kubernetes.io/name: {{ include "academy.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
