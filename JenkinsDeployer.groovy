@@ -1,3 +1,3 @@
-@Library('CommonLib@feature/docker') _
+@Library('CommonLib@master') _
 def common = new com.lib.JenkinsCommonDeployPipeline()
 common.runPipeline()
