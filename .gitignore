@@ -16,3 +16,4 @@ templates/test*
 .vscode
 *test*
 *.cache*
+*.idea*
