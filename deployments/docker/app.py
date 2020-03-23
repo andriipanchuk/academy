@@ -220,11 +220,16 @@ class LoginForm(FlaskForm):
     recaptcha   = RecaptchaField()
 
 class RegisterForm(FlaskForm):
-    firstname   = StringField('Firstname', validators=[InputRequired(), Length(min=4, max=15)])
-    lastname    = StringField('Lastname', validators=[InputRequired(), Length(min=4, max=15)])
-    email       = StringField('email', validators=[InputRequired(), Email(message='Invalid email'), Length(max=50)])
-    username    = StringField('username', validators=[InputRequired(), Length(min=4, max=30)])
-    password    = PasswordField('password', validators=[InputRequired(), Length(min=8, max=80)])
+    firstname   = StringField('First Name', validators=[InputRequired(), Length(min=4, max=15)])
+    lastname    = StringField('Last Name', validators=[InputRequired(), Length(min=4, max=15)])
+    email       = StringField('Your email', validators=[InputRequired(), Email(message='Invalid email'), Length(max=50)])
+    username    = StringField('Enter your username', validators=[InputRequired(), Length(min=4, max=30)])
+    password = PasswordField('Please enter password', validators=[
+        Length(min=8, max=80),
+        validators.DataRequired(),
+        validators.EqualTo('confirm', message='Passwords must match')
+    ])
+    confirm = PasswordField('Repeat Password')
 
 class QuestionForm(FlaskForm):
     first       = StringField('firstname', validators=[InputRequired(),  Length(max=15)])
