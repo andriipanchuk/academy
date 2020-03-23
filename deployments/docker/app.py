@@ -41,12 +41,11 @@ logging.config.dictConfig(logging_config)
 logger = logging.getLogger()
 
 
-if os.environ.get('GIT_TOKEN'):
-    token = os.environ.get('GIT_TOKEN')
+if os.environ.get('GIT_TOKEN') and os.environ.get('GITHUB_CLIENT_ID') and os.environ.get('GITHUB_CLIENT_SECRET'):
+    token = os.environ.get('GIT_TOKEN') 
 else:
-    print('env <GIT_TOKEN> is not found')
-    exit()
-
+    logger.error('Some environment variables are not found: <GIT_TOKEN> <GITHUB_CLIENT_ID> <GITHUB_CLIENT_SECRET>')
+    exit(1)
 
 def find_team_id(team_name):
     teams_url= f"https://api.github.com/orgs/{organization}/teams"
@@ -480,7 +479,7 @@ def authorized(access_token):
 # Raiting of the user
 @app.route('/login-github')
 def login_github():
-    if session.get('user_id', None) is None:
+    if session.get('user_id', None) is None or session.get('user_id', None) == 1:
         return github.authorize()
     else:
         return redirect("dashboard")
