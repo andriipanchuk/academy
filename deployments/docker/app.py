@@ -544,8 +544,9 @@ def raiting():
 @app.route('/profile/<username>')
 @login_required
 def user_profile(username):
-    user_data = User.query.filter_by(username=username).first()
-    return render_template('profile.html', fname=current_user.firstname, lname=current_user.lastname, user_data=user_data)
+    github_user = github.get('/user')
+    user_data = AcademyUser.query.filter_by(username=github_user["login"]).first()
+    return render_template('profile.html', fname=user_data.firstname, lname=user_data.lastname, user_data=user_data)
 
 @app.route('/settings/<username>', methods=['GET', 'POST'])
 @login_required
@@ -553,7 +554,7 @@ def settings(username):
     form_profile  = EditProfile(prefix="EditProfile")
     form_password = ChangePassword(prefix="ChangePassword")
     form_pynote   = PyNoteDelete(prefix="DeletePyNote")
-    user_data    = User.query.filter_by(username=username).first()
+    user_data     = AcademyUser.query.filter_by(username=username).first()
     if request.method == 'POST' and current_user.username == user_data.username:
         form_name = request.form['settingsForm']
         if form_name == 'EditProfileSubmit':
@@ -592,7 +593,7 @@ def settings(username):
                 return render_template('settings.html', user_data=user_data, fname=current_user.firstname, lname=current_user.lastname, form_profile=form_profile, form_password=form_password, form_pynote=form_pynote, message=message)
 
 
-    return render_template('settings.html', user_data=user_data, fname=current_user.firstname, lname=current_user.lastname, form_profile=form_profile, form_password=form_password, form_pynote=form_pynote, message=None)
+    return render_template('settings.html', user_data=user_data, fname=user_data.firstname, lname=user_data.lastname, formProfile=form_profile, formPassword=form_password, formPynote=form_pynote, message=None)
 
 
 
