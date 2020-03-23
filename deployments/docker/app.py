@@ -103,6 +103,10 @@ if env == 'master':
 else:
     enviroment = env
 
+# Making sure that application testing enabled only on low lavel environments
+if enviroment.lower() == 'dev' or enviroment.lower() == 'qa':
+    app.testing = True
+
 with open('configuration/videos/config.yaml') as file:
     page_config = yaml.load(file, Loader=yaml.Loader)
 
@@ -499,7 +503,7 @@ def login():
         return redirect(url_for('dashboard'))
     form = LoginForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data).first()
+        user = AcademyUser.query.filter_by(username=form.username.data).first()
         if user:
             if user.status == "True":
                 if check_password_hash(user.password, form.password.data):
