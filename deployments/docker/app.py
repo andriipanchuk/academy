@@ -92,8 +92,8 @@ def app_set_up():
         print("Using main config.cfg")
         os.system('sh bash/bin/getServiceAccountConfig.sh')
 
-# app.config.from_pyfile('/Users/fsadykov/backup/databases/config.cfg')
-app_set_up()
+app.config.from_pyfile('/Users/fsadykov/backup/databases/config.cfg')
+# app_set_up()
 bootstrap = Bootstrap(app)
 db = SQLAlchemy(app)
 github = GitHub(app)
@@ -103,8 +103,12 @@ if env == 'master':
 else:
     enviroment = env
 
+def is_prod():
+    if enviroment.lower() == 'dev' or enviroment.lower() == 'qa':
+        return False
+    return True
 # Making sure that application testing enabled only on low lavel environments
-if enviroment.lower() == 'dev' or enviroment.lower() == 'qa':
+if not is_prod():
     app.testing = True
 
 with open('configuration/videos/config.yaml') as file:
@@ -129,7 +133,17 @@ pusher_client = pusher.Pusher(
 
 @login_manager.user_loader
 def load_user(user_id):
-    return User.query.get(int(user_id))
+    if AcademyUser.query.get(int(user_id)):
+        print("User found from Academy")
+        return AcademyUser.query.get(int(user_id))
+
+    elif User.query.get(int(user_id)):
+        print("User found from User class")
+        return User.query.get(int(user_id))
+
+    else:
+        return None
+
 
 class Message(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -424,21 +438,7 @@ def index():
 @login_required
 def dashboard():
 
-    github_user = github.get('/user')
-    user_data = AcademyUser.query.filter_by(username=github_user["login"]).first()
-    if request.form:
-        print(request.form)
-        user =  AcademyUser()
-        user.firstname = request.form.get('firstname')
-        user.lastname = request.form.get('lastname')
-        user.username = github_user["login"]
-        user.email = request.form.get('email')
-        user.role = 'Student'
-
-        db.session.add(user)
-        db.session.commit()
-        login_user(user, remember=True)
-        return redirect("dashboard")
+    user_data = AcademyUser.query.filter_by(username=current_user.username).first()
 
     if not user_data:
         return render_template("update-user-info.html")
@@ -452,7 +452,18 @@ def dashboard():
 def get_permissions():
     github_user = github.get('/user')
     if is_user_member(github_user["login"], "academy-students"):
-        return redirect("dashboard")
+        if request.form:
+            user =  AcademyUser()
+            user.firstname = request.form.get('firstname')
+            user.lastname = request.form.get('lastname')
+            user.username = github_user["login"]
+            user.email = request.form.get('email')
+            user.role = 'Student'
+            db.session.commit()
+            login_user(user, remember=True)
+            return redirect("dashboard")
+
+        return render_template("update-user-info.html")
     else:
         return render_template("disabled-user.html")
 
@@ -505,11 +516,13 @@ def login():
     if form.validate_on_submit():
         user = AcademyUser.query.filter_by(username=form.username.data).first()
         if user:
-            if user.status == "True":
+            if user.status == "enabled":
+                
                 if check_password_hash(user.password, form.password.data):
+                    print(user.username)
                     login_user(user, remember=form.remember.data)
                     return redirect(url_for('dashboard'))
-            elif user.status == "False":
+            elif user.status == "disabled":
                 return render_template('disabled-user.html')
         return render_template('login.html', message="Invalid username or password", form=form)
     return render_template('login.html', form=form)
@@ -626,7 +639,9 @@ def signup():
         if user and user.username == form.username.data:
             message = 'This user name is exist'
             return render_template('signup.html', message=message,  form=form)
-
+        
+        if not is_prod():
+            new_user.status = "enabled"
         db.session.add(new_user)
         db.session.commit()
         return redirect(url_for('login'))
