@@ -517,9 +517,7 @@ def login():
         user = AcademyUser.query.filter_by(username=form.username.data).first()
         if user:
             if user.status == "enabled":
-                
                 if check_password_hash(user.password, form.password.data):
-                    print(user.username)
                     login_user(user, remember=form.remember.data)
                     return redirect(url_for('dashboard'))
             elif user.status == "disabled":
@@ -634,17 +632,29 @@ def signup():
     form = RegisterForm()
     if form.validate_on_submit():
         user = AcademyUser.query.filter_by(username=form.username.data).first()
+        email = AcademyUser.query.filter_by(email=form.email.data).first()
         hashed_password = generate_password_hash(form.password.data, method='sha256')
         new_user = AcademyUser(username=form.username.data.lower(), firstname=form.firstname.data, lastname=form.lastname.data, email=form.email.data, password=hashed_password, status='False', role='student')
+
+        if email:
+            message = f'{email.email} is already taken!!'
+            return render_template('signup.html', message=message,  form=form)
+
         if user and user.username == form.username.data:
             message = 'This user name is exist'
             return render_template('signup.html', message=message,  form=form)
-        
+
         if not is_prod():
             new_user.status = "enabled"
         db.session.add(new_user)
         db.session.commit()
-        return redirect(url_for('login'))
+        
+        login_to = AcademyUser.query.filter_by(username=form.username.data).first()
+        if login_to:
+            if login_to.status == "enabled":
+                login_user(login_to, remember=True)
+                return redirect(url_for('dashboard'))
+
     return render_template('signup.html', form=form)
 
 
