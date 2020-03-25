@@ -649,10 +649,13 @@ def signup():
         db.session.add(new_user)
         db.session.commit()
         
+        time.sleep(2)
         login_to = AcademyUser.query.filter_by(username=form.username.data).first()
         
         if login_to:
+            logging.warning("User exist in ssystem")
             if login_to.status == "enabled":
+                logging.warning("User is enabled")
                 login_user(login_to, remember=True)
                 return redirect('login')
 
