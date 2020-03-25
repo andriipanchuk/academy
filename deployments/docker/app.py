@@ -564,8 +564,7 @@ def raiting():
 @app.route('/profile/<username>')
 @login_required
 def user_profile(username):
-    github_user = github.get('/user')
-    user_data = AcademyUser.query.filter_by(username=github_user["login"]).first()
+    user_data = AcademyUser.query.filter_by(username=current_user.username).first()
     return render_template('profile.html', fname=user_data.firstname, lname=user_data.lastname, user_data=user_data)
 
 @app.route('/settings/<username>', methods=['GET', 'POST'])
