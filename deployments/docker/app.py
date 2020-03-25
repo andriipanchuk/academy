@@ -157,7 +157,7 @@ class AcademyUser(UserMixin, db.Model):
     username = db.Column(db.String(30), unique=True)
     email = db.Column(db.String(50), unique=True)
     password = db.Column(db.String(80))
-    status = db.Column(db.String(5))
+    status = db.Column(db.String(10))
     role = db.Column(db.String(20))
     github_login = db.Column(db.String(255))
     github_id = db.Column(db.Integer)
@@ -649,6 +649,7 @@ def signup():
         db.session.add(new_user)
         db.session.commit()
         
+        time.sleep(2)
         login_to = AcademyUser.query.filter_by(username=form.username.data).first()
         
         if login_to:
