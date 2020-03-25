@@ -650,10 +650,11 @@ def signup():
         db.session.commit()
         
         login_to = AcademyUser.query.filter_by(username=form.username.data).first()
+        
         if login_to:
             if login_to.status == "enabled":
                 login_user(login_to, remember=True)
-                return redirect(url_for('dashboard'))
+                return redirect('dashboard')
 
     return render_template('signup.html', form=form)
 
