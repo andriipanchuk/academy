@@ -654,7 +654,7 @@ def signup():
         if login_to:
             if login_to.status == "enabled":
                 login_user(login_to, remember=True)
-                return redirect('dashboard')
+                return redirect('login')
 
     return render_template('signup.html', form=form)
 
