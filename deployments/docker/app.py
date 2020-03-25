@@ -157,7 +157,7 @@ class AcademyUser(UserMixin, db.Model):
     username = db.Column(db.String(30), unique=True)
     email = db.Column(db.String(50), unique=True)
     password = db.Column(db.String(80))
-    status = db.Column(db.String(5))
+    status = db.Column(db.String(10))
     role = db.Column(db.String(20))
     github_login = db.Column(db.String(255))
     github_id = db.Column(db.Integer)
@@ -653,9 +653,7 @@ def signup():
         login_to = AcademyUser.query.filter_by(username=form.username.data).first()
         
         if login_to:
-            logging.warning("User exist in ssystem")
             if login_to.status == "enabled":
-                logging.warning("User is enabled")
                 login_user(login_to, remember=True)
                 return redirect('login')
 
