@@ -135,11 +135,9 @@ pusher_client = pusher.Pusher(
 @login_manager.user_loader
 def load_user(user_id):
     if AcademyUser.query.get(int(user_id)):
-        print("User found from Academy")
         return AcademyUser.query.get(int(user_id))
 
     elif User.query.get(int(user_id)):
-        print("User found from User class")
         return User.query.get(int(user_id))
 
     else:
@@ -405,7 +403,7 @@ def pynote():
 @login_required
 def chat():
     messages = Message.query.all()
-    return render_template('chat.html', messages=messages, fname=current_user.firstname, lname=current_user.lastname)
+    return render_template('chat.html', messages=messages)
 
 @app.route('/message', methods=['POST'])
 def message():
