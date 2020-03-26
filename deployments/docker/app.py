@@ -82,8 +82,9 @@ def app_set_up():
     if args.debug:
 
         ## To testing I create my own config make sure you have configured ~/.kube/config
-        app.config.from_pyfile('/Users/fsadykov/backup/databases/config.cfg')
-        print('Using config: /Users/fsadykov/backup/databases/config.cfg')
+        current_folder = os.getcwd()
+        app.config.from_pyfile(f'{current_folder}/debug-config.cfg')
+        # print('Using config: /Users/fsadykov/backup/databases/config.cfg')
 
     else:
 
