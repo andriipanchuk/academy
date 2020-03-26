@@ -4,10 +4,9 @@ from wtforms import StringField, PasswordField, BooleanField, TextField, validat
 from flask import Flask, render_template, redirect, url_for, request, jsonify, json, session, g
 from wtforms.validators import InputRequired, Email, Length
 from flask_wtf import FlaskForm, RecaptchaField
-from flask_admin import Admin, AdminIndexView, BaseView, expose, helpers
+from flask_admin import Admin, AdminIndexView, BaseView, expose
 from flask_admin.helpers  import is_form_submitted
 from flask_admin.contrib.sqla import ModelView
-from flask_admin.form import SecureForm
 from kubernetes.client.apis import core_v1_api
 from flask_sqlalchemy  import SQLAlchemy
 from kubernetes  import client, config
@@ -104,6 +103,14 @@ if env == 'master':
 else:
     enviroment = env
 
+def is_prod():
+    if enviroment.lower() == 'dev' or enviroment.lower() == 'qa':
+        return False
+    return True
+# Making sure that application testing enabled only on low lavel environments
+if not is_prod():
+    app.testing = True
+
 with open('configuration/videos/config.yaml') as file:
     page_config = yaml.load(file, Loader=yaml.Loader)
 
@@ -126,7 +133,15 @@ pusher_client = pusher.Pusher(
 
 @login_manager.user_loader
 def load_user(user_id):
-    return User.query.get(int(user_id))
+    if AcademyUser.query.get(int(user_id)):
+        return AcademyUser.query.get(int(user_id))
+
+    elif User.query.get(int(user_id)):
+        return User.query.get(int(user_id))
+
+    else:
+        return None
+
 
 class Message(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -140,7 +155,7 @@ class AcademyUser(UserMixin, db.Model):
     username = db.Column(db.String(30), unique=True)
     email = db.Column(db.String(50), unique=True)
     password = db.Column(db.String(80))
-    status = db.Column(db.String(5))
+    status = db.Column(db.String(10))
     role = db.Column(db.String(20))
     github_login = db.Column(db.String(255))
     github_id = db.Column(db.Integer)
@@ -221,11 +236,16 @@ class LoginForm(FlaskForm):
     recaptcha   = RecaptchaField()
 
 class RegisterForm(FlaskForm):
-    firstname   = StringField('Firstname', validators=[InputRequired(), Length(min=4, max=15)])
-    lastname    = StringField('Lastname', validators=[InputRequired(), Length(min=4, max=15)])
-    email       = StringField('email', validators=[InputRequired(), Email(message='Invalid email'), Length(max=50)])
-    username    = StringField('username', validators=[InputRequired(), Length(min=4, max=30)])
-    password    = PasswordField('password', validators=[InputRequired(), Length(min=8, max=80)])
+    firstname   = StringField('First Name', validators=[InputRequired(), Length(min=4, max=15)])
+    lastname    = StringField('Last Name', validators=[InputRequired(), Length(min=4, max=15)])
+    email       = StringField('Your email', validators=[InputRequired(), Email(message='Invalid email'), Length(max=50)])
+    username    = StringField('Enter your username', validators=[InputRequired(), Length(min=4, max=30)])
+    password = PasswordField('Please enter password', validators=[
+        Length(min=8, max=80),
+        validators.DataRequired(),
+        validators.EqualTo('confirm', message='Passwords must match')
+    ])
+    confirm = PasswordField('Repeat Password')
 
 class QuestionForm(FlaskForm):
     first       = StringField('firstname', validators=[InputRequired(),  Length(max=15)])
@@ -382,7 +402,7 @@ def pynote():
 @login_required
 def chat():
     messages = Message.query.all()
-    return render_template('chat.html', messages=messages, fname=current_user.firstname, lname=current_user.lastname)
+    return render_template('chat.html', messages=messages)
 
 @app.route('/message', methods=['POST'])
 def message():
@@ -416,21 +436,7 @@ def index():
 @login_required
 def dashboard():
 
-    github_user = github.get('/user')
-    user_data = AcademyUser.query.filter_by(username=github_user["login"]).first()
-    if request.form:
-        print(request.form)
-        user =  AcademyUser()
-        user.firstname = request.form.get('firstname')
-        user.lastname = request.form.get('lastname')
-        user.username = github_user["login"]
-        user.email = request.form.get('email')
-        user.role = 'Student'
-
-        db.session.add(user)
-        db.session.commit()
-        login_user(user, remember=True)
-        return redirect("dashboard")
+    user_data = AcademyUser.query.filter_by(username=current_user.username).first()
 
     if not user_data:
         return render_template("update-user-info.html")
@@ -444,7 +450,18 @@ def dashboard():
 def get_permissions():
     github_user = github.get('/user')
     if is_user_member(github_user["login"], "academy-students"):
-        return redirect("dashboard")
+        if request.form:
+            user =  AcademyUser()
+            user.firstname = request.form.get('firstname')
+            user.lastname = request.form.get('lastname')
+            user.username = github_user["login"]
+            user.email = request.form.get('email')
+            user.role = 'Student'
+            db.session.commit()
+            login_user(user, remember=True)
+            return redirect("dashboard")
+
+        return render_template("update-user-info.html")
     else:
         return render_template("disabled-user.html")
 
@@ -495,13 +512,13 @@ def login():
         return redirect(url_for('dashboard'))
     form = LoginForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data).first()
+        user = AcademyUser.query.filter_by(username=form.username.data).first()
         if user:
-            if user.status == "True":
+            if user.status == "enabled":
                 if check_password_hash(user.password, form.password.data):
                     login_user(user, remember=form.remember.data)
                     return redirect(url_for('dashboard'))
-            elif user.status == "False":
+            elif user.status == "disabled":
                 return render_template('disabled-user.html')
         return render_template('login.html', message="Invalid username or password", form=form)
     return render_template('login.html', form=form)
@@ -545,8 +562,8 @@ def raiting():
 @app.route('/profile/<username>')
 @login_required
 def user_profile(username):
-    user_data = User.query.filter_by(username=username).first()
-    return render_template('profile.html', fname=current_user.firstname, lname=current_user.lastname, user_data=user_data)
+    user_data = AcademyUser.query.filter_by(username=current_user.username).first()
+    return render_template('profile.html', fname=user_data.firstname, lname=user_data.lastname, user_data=user_data)
 
 @app.route('/settings/<username>', methods=['GET', 'POST'])
 @login_required
@@ -554,7 +571,7 @@ def settings(username):
     form_profile  = EditProfile(prefix="EditProfile")
     form_password = ChangePassword(prefix="ChangePassword")
     form_pynote   = PyNoteDelete(prefix="DeletePyNote")
-    user_data    = User.query.filter_by(username=username).first()
+    user_data     = AcademyUser.query.filter_by(username=username).first()
     if request.method == 'POST' and current_user.username == user_data.username:
         form_name = request.form['settingsForm']
         if form_name == 'EditProfileSubmit':
@@ -593,7 +610,7 @@ def settings(username):
                 return render_template('settings.html', user_data=user_data, fname=current_user.firstname, lname=current_user.lastname, form_profile=form_profile, form_password=form_password, form_pynote=form_pynote, message=message)
 
 
-    return render_template('settings.html', user_data=user_data, fname=current_user.firstname, lname=current_user.lastname, form_profile=form_profile, form_password=form_password, form_pynote=form_pynote, message=None)
+    return render_template('settings.html', user_data=user_data, fname=user_data.firstname, lname=user_data.lastname, formProfile=form_profile, formPassword=form_password, formPynote=form_pynote, message=None)
 
 
 
@@ -612,15 +629,31 @@ def signup():
     form = RegisterForm()
     if form.validate_on_submit():
         user = AcademyUser.query.filter_by(username=form.username.data).first()
+        email = AcademyUser.query.filter_by(email=form.email.data).first()
         hashed_password = generate_password_hash(form.password.data, method='sha256')
         new_user = AcademyUser(username=form.username.data.lower(), firstname=form.firstname.data, lastname=form.lastname.data, email=form.email.data, password=hashed_password, status='False', role='student')
+
+        if email:
+            message = f'{email.email} is already taken!!'
+            return render_template('signup.html', message=message,  form=form)
+
         if user and user.username == form.username.data:
             message = 'This user name is exist'
             return render_template('signup.html', message=message,  form=form)
 
+        if not is_prod():
+            new_user.status = "enabled"
         db.session.add(new_user)
         db.session.commit()
-        return redirect(url_for('login'))
+        
+        time.sleep(2)
+        login_to = AcademyUser.query.filter_by(username=form.username.data).first()
+        
+        if login_to:
+            if login_to.status == "enabled":
+                login_user(login_to, remember=True)
+                return redirect('login')
+
     return render_template('signup.html', form=form)
 
 
