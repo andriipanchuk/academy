@@ -26,7 +26,17 @@ public class SignUp_page {
     public WebElement emailInputBox;
     @FindBy(xpath = "//input[@id='password']")
     public WebElement passwordInputBox;
+    @FindBy(xpath = "//input[@id='confirm']")
+    public WebElement passwordRepeatInputBox;
     @FindBy(xpath = "//button[@type='submit']")
     public WebElement signUpButton;
+
+
+    @FindBy(xpath = "//input[@id='username']")
+    public WebElement loginUsernameInput;
+
+    @FindBy(xpath = "//input[@id='password']")
+    public WebElement loginPasswordInputBox;
+
 
 }
