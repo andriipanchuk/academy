@@ -17,3 +17,4 @@ templates/test*
 *test*
 *.cache*
 *debug-config.cfg
+*academy.db
