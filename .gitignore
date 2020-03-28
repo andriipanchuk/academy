@@ -16,3 +16,8 @@ templates/test*
 *debug-config.cfg
 *academy.db
 *.idea*
+deployments/selenium/target/*
+deployments/selenium/.classpath
+deployments/selenium/.factorypath
+deployments/selenium/.project
+deployments/selenium/.settings/*
