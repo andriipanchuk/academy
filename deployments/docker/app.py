@@ -372,7 +372,7 @@ def delete_pynote(username):
 @app.route('/pynote', methods=['GET', 'POST'])
 @login_required
 def pynote():
-    github_user = github.get('/user')["login"].lower()
+    user_data = AcademyUser.query.filter_by(username=current_user.username).first()
 
     ## Loading the kubernetes objects
     config.load_kube_config()
@@ -387,8 +387,7 @@ def pynote():
             message = "Sorry you already requested a PyNote."
             return render_template('pynote.html', name=current_user.username, errorMessage=message, pynotes=pynotes, pynote=users_pynote)
 
-        print(f"Trying to create pynote for {github_user}")
-        pynote = create_pynote(github_user, password)
+        pynote = create_pynote(user_data.username, password)
         message =  "The pynote has been requested."
         new_pynote = Pynote(pynotelink=pynote['pynotelink'], password=password, server_name=server_name, username=current_user.username)
 
