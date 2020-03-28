@@ -69,13 +69,13 @@
     $(function() {
 
       let username;
-      username = '{{ fname }}';
-      $('#start_chat').on('click', function() {
+      username = '{{ current_user.firstname }} {{ current_user.lastname }}';
+      // $('#start_chat').on('click', function() {
 
-        username = $('#username_input').val();
-        $('.modal').removeClass('is-active');
+      //   username = $('#username_input').val();
+      //   $('.modal').removeClass('is-active');
 
-      });
+      // });
 
       $('#chat_btn').on('click', function() {
 
