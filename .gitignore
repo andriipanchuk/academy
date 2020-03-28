@@ -21,3 +21,4 @@ deployments/selenium/.classpath
 deployments/selenium/.factorypath
 deployments/selenium/.project
 deployments/selenium/.settings/*
+deployments/docker/webplatform.db
