@@ -20,6 +20,4 @@ deployments/selenium/target/*
 deployments/selenium/.classpath
 deployments/selenium/.factorypath
 deployments/selenium/.project
-deployments/selenium/.settings/org.eclipse.jdt.apt.core.prefs
-deployments/selenium/.settings/org.eclipse.jdt.core.prefs
-deployments/selenium/.settings/org.eclipse.m2e.core.prefs
+deployments/selenium/.settings/*
