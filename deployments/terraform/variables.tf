@@ -18,6 +18,7 @@ variable "dns_endpoint_academy" {
   type = "map"
 
   default = {
+    test  = "test.academy.fuchicorp.com"
     dev  = "dev.academy.fuchicorp.com"
     qa   = "qa.academy.fuchicorp.com"
     prod = "academy.fuchicorp.com"
@@ -42,6 +43,7 @@ variable "github_client_id" {
   type = "map"
 
   default = {
+    test  = "Please-change-this-value-to-correct-data"
     dev  = "Please-change-this-value-to-correct-data"
     qa   = "Please-change-this-value-to-correct-data"
     prod = "Please-change-this-value-to-correct-data"
@@ -53,6 +55,7 @@ variable "github_client_secret" {
   type = "map"
 
   default = {
+    test  = "Please-change-this-value-to-correct-data"
     dev  = "Please-change-this-value-to-correct-data"
     qa   = "Please-change-this-value-to-correct-data"
     prod = "Please-change-this-value-to-correct-data"
