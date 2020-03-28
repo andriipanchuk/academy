@@ -13,4 +13,6 @@
 templates/test*
 .vscode
 *.cache*
+*debug-config.cfg
+*academy.db
 *.idea*
