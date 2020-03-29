@@ -22,3 +22,4 @@ deployments/selenium/.factorypath
 deployments/selenium/.project
 deployments/selenium/.settings/*
 deployments/docker/webplatform.db
+deployments/selenium/selenium.iml
