@@ -1,17 +1,34 @@
- <title>FuchiCorp</title>
+{% import "bootstrap/wtf.html" as wtf %}
+<head>
+	<title>FuchiCorp</title>
+  <link rel="shortcut icon" href="https://www.evolvecyber.com/assets/images/favicon.ico" />
+  <link rel="stylesheet" href="/static/main/top.css" type="text/css">
+  <link rel="stylesheet" href="/static/signup/style.css" type="text/css">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <div class="topnav">
+	<a class="active" href="{{ url_for('login') }}">Login</a>
+	  <a href="{{ url_for('raiting') }}">Raiting</a>
+	  <a href="{{ url_for('pynote') }}">PyNote</a>
+	  <a class="green" id="signup-btn" href="{{ url_for('signup') }}">SignUp today</a>
+	  <a href="{{ url_for('index') }}">Home</a>
+	  </div>
+  </div>
+  </head>
+
+
+
 <link rel="stylesheet" href="/static/style.css" type="text/css">
 <!-- <link rel="stylesheet" href="/static/recaptcha.css" type="text/css"> -->
-{% import "bootstrap/wtf.html" as wtf %}
+
 {% block body %}
-{% if session['logged_in'] %}
-<p>You're logged in already!</p>
-{% else %}
+
 
 <style>
 body {
     font-family: Arial;
-    background-color: #141415;
-    padding: 50px;
+	background-color: #141415;
+	padding: 0;
 }
 .btn {
     border: 2px solid transparent;
@@ -63,5 +80,4 @@ body {
 	</div>
 </form>
 
-{% endif %}
 {% endblock %}

@@ -1,4 +1,22 @@
-<title>FuchiCorp</title>
+
+<head>
+  <title>FuchiCorp</title>
+<link rel="shortcut icon" href="https://www.evolvecyber.com/assets/images/favicon.ico" />
+<link rel="stylesheet" href="/static/main/top.css" type="text/css">
+<link rel="stylesheet" href="/static/signup/style.css">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<div class="topnav">
+  
+    <a class="active" href="{{ url_for('login') }}">Login</a>
+    <a href="{{ url_for('raiting') }}">Raiting</a>
+    <a href="{{ url_for('pynote') }}">PyNote</a>
+    <a class="green" id="signup-btn" href="{{ url_for('signup') }}">SignUp today</a>
+    <a href="{{ url_for('index') }}">Home</a>
+
+    </div>
+</div>
+</head>
 {% extends "bootstrap/base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 
@@ -15,7 +33,7 @@ Sign Up
 <div class="container">
 
   <form class="form-signin" method="POST" action="/signup">
-    <h2 class="form-signin-heading">Sign Up</h2>
+    <h2 class="form-signin-heading">Sign up today</h2>
     {{ form.hidden_tag() }}
     {{ wtf.form_field(form.firstname) }}
     {{ wtf.form_field(form.lastname) }}
@@ -23,7 +41,6 @@ Sign Up
     {{ wtf.form_field(form.email) }}
     {{ wtf.form_field(form.password) }}
     {{ wtf.form_field(form.confirm) }}
-
     <button class="btn btn-lg btn-primary btn-block" type="submit">Sign Up</button>
     <center> <h3 style="color: red;" > {{ message }}</h3></center>
   </form>
