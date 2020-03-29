@@ -210,7 +210,7 @@ class PythonDeleteView(BaseView):
 
 class MyModelView(ModelView):
     def is_accessible(self):
-        if current_user.role == "Admin":
+        if current_user.role.lower() == "admin":
             return True
         else:
             return False
@@ -219,7 +219,7 @@ class MyModelView(ModelView):
 
 class MyAdminIndex(AdminIndexView):
     def is_accessible(self):
-        if current_user.role == "Admin":
+        if current_user.role.lower() == "admin":
             return True
         else:
             return False
@@ -646,13 +646,17 @@ def signup():
         db.session.add(new_user)
         db.session.commit()
         
-        time.sleep(2)
+        time.sleep(3)
         login_to = AcademyUser.query.filter_by(username=form.username.data).first()
         
         if login_to:
             if login_to.status == "enabled":
                 login_user(login_to, remember=True)
                 return redirect('login')
+            else:
+                return render_template('disabled-user.html')
+        
+
 
     return render_template('signup.html', form=form)
 
@@ -689,6 +693,7 @@ def page_not_found(error):
 
 ### Api Block ends from here ####
 admin = Admin(app, index_view=MyAdminIndex())
+admin.add_view(MyModelView(AcademyUser, db.session))
 admin.add_view(MyModelView(User, db.session))
 admin.add_view(MyModelView(Pynote, db.session))
 admin.add_view(MyModelView(Message, db.session))
@@ -696,4 +701,16 @@ admin.add_view(PythonDeleteView(name='Delete Pynote', endpoint='pynote-delete'))
 
 if __name__ == '__main__':
     db.create_all()
+    if os.environ.get('ADMIN_USER') and os.environ.get('ADMIN_PASSWORD'):
+        if not AcademyUser.query.filter_by(username=os.environ.get('ADMIN_USER')).first():
+            hashed_password = generate_password_hash(os.environ.get('ADMIN_PASSWORD'), method='sha256')
+            admin_user = AcademyUser(username=os.environ.get('ADMIN_USER'), 
+            firstname='Admin', 
+            lastname='Adminov', 
+            email='admin@admin.com', 
+            password=hashed_password, 
+            status='enabled', role='admin')
+            db.session.add(admin_user)
+            db.session.commit()
+            logging.warning("Admin user has been created!!")
     app.run(port=5000, host='0.0.0.0')
