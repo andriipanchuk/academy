@@ -18,10 +18,29 @@ public class Video_page {
     @FindBy(xpath = "(//div[@id='mySidenav']//a)[4]")
     public WebElement videoButton;
 
-    @FindBy(xpath = "(//div[@class='vertical-menu'])")
-    public List<WebElement> videos;
+    @FindBy(xpath = "(//div[@class='vertical-menu'])[1]")
+    public WebElement classes1;
+    @FindBy(xpath = "(//div[@class='vertical-menu'])[1]")
+    public WebElement classes2;
+    @FindBy(xpath = "(//div[@class='vertical-menu'])[1]")
+    public WebElement classes3;
+    @FindBy(xpath = "(//div[@class='vertical-menu'])[1]")
+    public WebElement classes4;
+    @FindBy(xpath = "(//div[@class='vertical-menu'])[1]")
+    public WebElement classes5;
+    @FindBy(xpath = "(//div[@class='vertical-menu'])[1]")
+    public WebElement classes6;
 
-    @FindBy(xpath = "/html/body/div[3]/a")
-    public List<WebElement>  itemFromList;
+
+    @FindBy(xpath = "(//div[@class='vertical-menu'])[1]")
+    public WebElement videoOption1;
+    @FindBy(xpath = "(//div[@class='vertical-menu'])[2]")
+    public WebElement videoOption2;
+    @FindBy(xpath = "(//div[@class='vertical-menu'])[3]")
+    public WebElement videoOption3;
+    @FindBy(xpath = "(//div[@class='vertical-menu'])[4]")
+    public WebElement videoOption4;
+    @FindBy(xpath = "(//div[@class='vertical-menu'])[5]")
+    public WebElement videoOption5;
 
 }
