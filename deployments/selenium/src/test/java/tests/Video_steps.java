@@ -29,26 +29,32 @@ public class Video_steps {
 
     @Test
     public void videoTest() throws Exception {
-//        Thread.sleep(2000);
-//        video_page.menuButton.click();
-//        Thread.sleep(2000);
-//
-//        video_page.videoButton.click();
-//        int count = 0;
-//
-//
-//        for (WebElement video : video_page.videos) {
-//
-//
-//            Thread.sleep(2000);
-//            if (video.getText().equalsIgnoreCase("FuchiCorp Cluster Changes")) {
-//                video.click();
-//            }
-//        }
-       
+        Thread.sleep(2000);
+        video_page.menuButton.click();
+        Thread.sleep(2000);
 
+        video_page.videoButton.click();
+        int count = 0;
+        Thread.sleep(2000);
+        video_page.classes1.click();
+        Thread.sleep(2000);
+        video_page.videoOption1.click();
+        Driver.getDriver().navigate().back();
+        video_page.videoOption2.click();
+        Driver.getDriver().navigate().back();
+        video_page.videoOption3.click();
+        Driver.getDriver().navigate().back();
+        video_page.videoOption4.click();
+        Driver.getDriver().navigate().back();
+        Driver.getDriver().navigate().back();
+      //  Driver.getDriver().navigate().back();
+
+        video_page.classes2.click();
+        // I haven't finished all of them.
+        // We have to test all other video sub modules
 
     }
+
 
 }
 
