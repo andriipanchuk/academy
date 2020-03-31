@@ -99,6 +99,7 @@ bootstrap = Bootstrap(app)
 db = SQLAlchemy(app)
 github = GitHub(app)
 env = app.config.get('BRANCH_NAME')
+
 if env == 'master':
     enviroment = 'prod'
 else:
