@@ -105,7 +105,7 @@ else:
     enviroment = env
 
 def is_prod():
-    if enviroment.lower() == 'dev' or enviroment.lower() == 'qa':
+    if enviroment.lower() != 'master':
         return False
     return True
 # Making sure that application testing enabled only on low lavel environments
