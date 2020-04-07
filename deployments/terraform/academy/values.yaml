@@ -1,19 +1,15 @@
-# Default values for academy.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
-
 academy:
 
   replicaCount: 1
 
   image:
-    repository: docker.fuchicorp.com/academy-dev:0.3
+    repository: ${deployment_image}
     pullPolicy: IfNotPresent
 
+  serviceAccountName: ${service_account}
   service:
     type: ClusterIP
     port: 80
-
 
 mysql:
 
@@ -34,30 +30,46 @@ ingress:
   enabled: true
   annotations:
     kubernetes.io/ingress.class: nginx
-    cert-manager.io/cluster-issuer: letsencrypt-fuchicorp-prod
+    cert-manager.io/cluster-issuer: letsencrypt-prod
   path: /
   hosts:
-    - dev.academy.fuchicorp.com
+    - ${deployment_endpoint}
   tls:
    - secretName: academy-chart-tls
      hosts:
-       - dev.academy.fuchicorp.com
+       - ${deployment_endpoint}
 
 globalEnvironments:
   enabled: true
   environments:
 
   - name: MYSQL_USER
-    value: webplaformbbuser
+    value: ${mysql_user}
 
   - name: MYSQL_DATABASE
-    value: webplatformdb
+    value: ${mysql_database}
 
   - name: MYSQL_PASSWORD
-    value: lhMi4XrcnejG6mlcTglxt
+    value: ${mysql_password}
 
   - name: MYSQL_ROOT_PASSWORD
-    value: lhMi4XrcnejG6mlcTglxt
+    value: ${mysql_password}
+
+  - name: APPLICATION_ENDPOINT
+    value: ${application_url}
+
+  - name: GIT_TOKEN
+    value: ${github_token}
+
+  - name: GITHUB_CLIENT_ID
+    value: ${github_client_id}
+
+  - name: GITHUB_CLIENT_SECRET
+    value: ${github_client_secret}
+
+  - name: SECRET_KEY
+    value: ${application_secret}
+
 
 imageSecret:
   enabled: true
