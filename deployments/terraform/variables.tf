@@ -10,6 +10,14 @@ variable "mysql_password" {
   default = "ZXKXYP1QN25BBkUbLjJ5V"
 }
 
+variable "ADMIN_USER" {
+  default = "academyadmin"
+}
+
+variable "ADMIN_PASSWORD" {
+  default = "vKnqbgSh0qS7dpZy%S6"
+}
+
 variable "deployment_environment" {
   default = "dev"
 }

@@ -7,6 +7,8 @@ data "template_file" "academy_values" {
     deployment_image     = "${var.deployment_image}"
     mysql_password       = "${var.mysql_password}"
     mysql_user           = "${var.mysql_user}"
+    ADMIN_USER           = "${var.ADMIN_USER}"
+    ADMIN_PASSWORD       = "${var.ADMIN_PASSWORD}"
     mysql_database       = "${var.mysql_database}"
     service_account      = "${var.academy_service_account}"
     application_url      = "${lookup(var.dns_endpoint_academy, "${var.deployment_environment}")}"
