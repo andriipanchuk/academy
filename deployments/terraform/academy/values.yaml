@@ -1,0 +1,89 @@
+# Default values for academy.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+academy:
+
+    replicaCount: 1
+  
+    image:
+      repository: docker.fuchicorp.com/academy-dev:0.3
+      pullPolicy: IfNotPresent
+  
+    service:
+      type: ClusterIP
+      port: 80
+  
+  
+  mysql:
+  
+    image:
+      repository: fsadykov/centos_mysql
+      pullPolicy: IfNotPresent
+  
+    service:
+      type: ClusterIP
+      port: 3306
+      serviceName: academy-mysql-service
+  
+  nameOverride: ""
+  fullnameOverride: ""
+  
+  
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      cert-manager.io/cluster-issuer: letsencrypt-fuchicorp-prod
+    path: /
+    hosts:
+      - dev.academy.fuchicorp.com
+    tls:
+     - secretName: academy-chart-tls
+       hosts:
+         - dev.academy.fuchicorp.com
+  
+  globalEnvironments:
+    enabled: true
+    environments:
+  
+    - name: MYSQL_USER
+      value: webplaformbbuser
+  
+    - name: MYSQL_DATABASE
+      value: webplatformdb
+  
+    - name: MYSQL_PASSWORD
+      value: lhMi4XrcnejG6mlcTglxt
+  
+    - name: MYSQL_ROOT_PASSWORD
+      value: lhMi4XrcnejG6mlcTglxt
+  
+    - name: ADMIN_USER
+      value: academyadmin
+  
+    - name: ADMIN_PASSWORD
+      value: vKnqbgSh0qS7dpZy%S6
+  
+  imageSecret:
+    enabled: true
+    allSecrets:
+    - name: nexus-creds
+  
+  resources: {}
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    # limits:
+    #  cpu: 100m
+    #  memory: 128Mi
+    # requests:
+    #  cpu: 100m
+    #  memory: 128Mi
+  
+  nodeSelector: {}
+  
+  tolerations: []
+  
+  affinity: {}
