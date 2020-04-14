@@ -22,7 +22,7 @@ variable "deployment_environment" {
   default = "dev"
 }
 
-variable "dns_endpoint_academy" {
+variable "deployment_endpoint" {
   type = "map"
 
   default = {

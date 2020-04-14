@@ -59,7 +59,7 @@ globalEnvironments:
     value: ${ADMIN_PASSWORD}
 
   - name: MYSQL_ROOT_PASSWORD
-    value: ${mysql_password}
+    value: ${mysql_root_password}
 
   - name: APPLICATION_ENDPOINT
     value: ${application_url}

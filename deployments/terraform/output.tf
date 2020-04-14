@@ -7,7 +7,7 @@ output "selected_github_client_secret" {
 }
 
 output "application_deployed" {
-  value = "${lookup(var.dns_endpoint_academy, "${var.deployment_environment}")}"
+  value = "${lookup(var.deployment_endpoint, "${var.deployment_environment}")}"
 }
 
 output "ADMIN_USER" {
