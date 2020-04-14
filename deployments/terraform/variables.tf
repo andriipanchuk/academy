@@ -10,11 +10,15 @@ variable "mysql_password" {
   default = "ZXKXYP1QN25BBkUbLjJ5V"
 }
 
-variable "ADMIN_USER" {
+variable "mysql_root_password" {
+  default = "ZXKXYP1QN25BBkUbLjJ5V"
+}
+
+variable "admin_user" {
   default = "academyadmin"
 }
 
-variable "ADMIN_PASSWORD" {
+variable "admin_password" {
   default = "vKnqbgSh0qS7dpZy%S6"
 }
 
@@ -22,7 +26,7 @@ variable "deployment_environment" {
   default = "dev"
 }
 
-variable "dns_endpoint_academy" {
+variable "deployment_endpoint" {
   type = "map"
 
   default = {
