@@ -10,6 +10,10 @@ variable "mysql_password" {
   default = "ZXKXYP1QN25BBkUbLjJ5V"
 }
 
+variable "mysql_root_password" {
+  default = "ZXKXYP1QN25BBkUbLjJ5V"
+}
+
 variable "ADMIN_USER" {
   default = "academyadmin"
 }
