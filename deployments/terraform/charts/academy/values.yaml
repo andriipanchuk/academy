@@ -53,10 +53,10 @@ globalEnvironments:
     value: ${mysql_password}
 
   - name: ADMIN_USER
-    value: ${ADMIN_USER}
+    value: ${admin_user}
 
   - name: ADMIN_PASSWORD
-    value: ${ADMIN_PASSWORD}
+    value: ${admin_password}
 
   - name: MYSQL_ROOT_PASSWORD
     value: ${mysql_root_password}
