@@ -1,17 +1,13 @@
 variable "mysql_user" {
-  default = "webplaformbbuser"
+  default = "academyuser"
 }
 
 variable "mysql_database" {
-  default = "webplatformdb"
+  default = "academydb"
 }
 
 variable "mysql_password" {
-  default = "mysqlpassword"
-}
-
-variable "mysql_root_password" {
-  default = "mysqlrootpassword"
+  default = "ZXKXYP1QN25BBkUbLjJ5V"
 }
 
 variable "ADMIN_USER" {

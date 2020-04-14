@@ -12,6 +12,8 @@ module "academy-deploy" {
     mysql_user           = "${var.mysql_user}"
     mysql_database       = "${var.mysql_database}"
     deployment_image    = "${var.deployment_image}"
+    ADMIN_USER           = "${var.ADMIN_USER}"
+    ADMIN_PASSWORD       = "${var.ADMIN_PASSWORD}"
     service_account      = "${var.academy_service_account}"
     application_url      = "${lookup(var.dns_endpoint_academy, "${var.deployment_environment}")}"
     github_token         = "${var.github_token}"

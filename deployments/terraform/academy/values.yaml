@@ -52,6 +52,12 @@ globalEnvironments:
   - name: MYSQL_PASSWORD
     value: ${mysql_password}
 
+  - name: ADMIN_USER
+    value: ${ADMIN_USER}
+
+  - name: ADMIN_PASSWORD
+    value: ${ADMIN_PASSWORD}
+
   - name: MYSQL_ROOT_PASSWORD
     value: ${mysql_password}
 
@@ -69,12 +75,6 @@ globalEnvironments:
 
   - name: SECRET_KEY
     value: ${application_secret}
-
-  - name: ADMIN_USER
-    value: ${ADMIN_USER}
-
-  - name: ADMIN_PASSWORD
-    value: ${ADMIN_PASSWORD}
 
 
 imageSecret:
