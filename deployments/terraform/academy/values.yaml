@@ -59,6 +59,12 @@ globalEnvironments:
   - name: MYSQL_ROOT_PASSWORD
     value: lhMi4XrcnejG6mlcTglxt
 
+  - name: ADMIN_USER
+    value: academyadmin
+
+  - name: ADMIN_PASSWORD
+    value: vKnqbgSh0qS7dpZy%S6
+
 imageSecret:
   enabled: true
   allSecrets:
