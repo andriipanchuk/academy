@@ -4,7 +4,7 @@ module "academy-deploy" {
   deployment_name        = "academy-platform"
   deployment_environment = "${var.deployment_environment}"
   deployment_endpoint    = "${lookup(var.deployment_endpoint, "${var.deployment_environment}")}"
-  deployment_path        = "academy-platform"
+  deployment_path        = "academy"
 
   template_custom_vars  = {
     mysql_password       = "${var.mysql_password}"
