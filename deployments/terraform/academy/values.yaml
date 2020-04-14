@@ -70,6 +70,12 @@ globalEnvironments:
   - name: SECRET_KEY
     value: ${application_secret}
 
+  - name: ADMIN_USER
+    value: ${ADMIN_USER}
+
+  - name: ADMIN_PASSWORD
+    value: ${ADMIN_PASSWORD}
+
 
 imageSecret:
   enabled: true
