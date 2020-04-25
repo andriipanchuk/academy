@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+<head>
+    <title>FuchiCorp</title>
+    <link rel="shortcut icon" href="https://www.evolvecyber.com/assets/images/favicon.ico" />
+    <link rel="stylesheet" href="static/top.css" type="text/css">
+    <link rel="stylesheet" href="static/footler.css" type="text/css">
+    <link rel="stylesheet" href="static/menu.css" type="text/css">
+    <link rel="stylesheet" href="static/main/main-static.css" type="text/css">
+</head>
+
+<div class="topnav">
+    <a class="active" href="">Login</a>
+    <a href="">Raiting</a>
+    <a href="">PyNote</a>
+    <a class="green" id="signup-btn" href="">SignUp today</a>
+    <a href="">Home</a>
+    </div>
+</div>
+
+
+<body>
+  <div id="mySidenav" class="sidenav">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <a href="">Dashboard</a>
+    <a href="">Chating</a>
+    <a href="">Videos</a>
+    <a href="">Contact us</a>
+  </div>
+
+  <div class="body-container">
+    <div class="right-container one-line">
+      <div class="body-box">
+        <div class="tab">
+          <button class="tablinks" id="defaultOpen" onclick="openTab(event, 'PyNote')">PyNote</button>
+          <button class="tablinks" onclick="openTab(event, 'Users')">Users</button>
+        </div>
+
+        <div id="PyNote" class="tabcontent">
+          <h2>FuChiCorp Pynote</h2>
+          <p>PyNote is the an online learning platform. It's aimed at restless professionals chasing after success. Fuchicorp has made innovation very easy for those who are self driven. With PyNote you can learn, build, and deploy! Request a PyNote now as investment to your future!</p>
+        </div>
+
+        <div id="Users" class="tabcontent">
+          <h2>FuChiCorp Academy Members.</h2>
+          <p>To join the academy you should be part of github organization or you should signup</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</body>
+<script>
+function openNav() {
+    document.getElementById("mySidenav").style.width = "250px";
+    document.getElementById("main").style.marginLeft = "250px";
+}
+
+function closeNav() {
+    document.getElementById("mySidenav").style.width = "0";
+    document.getElementById("main").style.marginLeft= "0";
+}
+
+function openTab(evt, tabName) {
+  var i, tabcontent, tablinks;
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+  document.getElementById(tabName).style.display = "block";
+  evt.currentTarget.className += " active";
+}
+// Get the element with id="defaultOpen" and click on it
+document.getElementById("defaultOpen").click();
+</script>
+
+</script>
+</body>
+<div class="emtyspace">
+</div>
+
+
+<footer class="footer">
+  <p>&copy;  FuchiCorp 2020</p>
+</footer>
+
+</html>
