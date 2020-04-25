@@ -67,15 +67,14 @@ globalEnvironments:
   - name: GIT_TOKEN
     value: ${github_token}
 
-  - name: GITHUB_CLIENT_ID
+  - name: SOCIAL_AUTH_GITHUB_KEY
     value: ${github_client_id}
 
-  - name: GITHUB_CLIENT_SECRET
+  - name: SOCIAL_AUTH_GITHUB_SECRET
     value: ${github_client_secret}
 
   - name: SECRET_KEY
     value: ${application_secret}
-
 
 imageSecret:
   enabled: true
