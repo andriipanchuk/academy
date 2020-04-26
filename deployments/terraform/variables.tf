@@ -89,3 +89,12 @@ variable "lets_encrypt_email" {
 variable "academy_secret" {
   default = "WELCOME2019"
 }
+
+variable "vimeo_client_id" {
+}
+
+variable "vimeo_access_token" {
+}
+
+variable "vimeo_client_secret" {  
+}

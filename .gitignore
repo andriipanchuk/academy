@@ -24,3 +24,4 @@ deployments/selenium/.settings/*
 deployments/docker/webplatform.db
 deployments/selenium/selenium.iml
 example.txt
+*sqlite*

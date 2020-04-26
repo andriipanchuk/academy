@@ -75,6 +75,15 @@ globalEnvironments:
 
   - name: SECRET_KEY
     value: ${application_secret}
+  
+  - name: VIMEO_CLIENT_SECRET
+    value: ${vimeo_client_secret}
+
+  - name: VIMEO_ACCESS_TOKEN
+    value: ${vimeo_access_token}
+
+  - name: VIMEO_CLIENT_ID
+    value: ${vimeo_client_id}
 
 imageSecret:
   enabled: true
