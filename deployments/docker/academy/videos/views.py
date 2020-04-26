@@ -1,7 +1,9 @@
 from django.shortcuts import render
 from videos.vimeo import Vimeo
+from django.contrib.auth.decorators import login_required
 import json
 from django.http import HttpResponse
+from videos.models import Video
 
 
 # def index(request):
@@ -9,15 +11,7 @@ from django.http import HttpResponse
 #     folder = v.get_folder_videos('fuchicorp')
 #     return HttpResponse(json.dumps(folder), content_type="application/json")
 
+@login_required
 def index(request):
-    v = Vimeo()
-    videos = v.get_folder_videos('fuchicorp')
-    result = []
-    for video in videos:
-        result.append({
-            "name": video['name'],
-            "description": video["description"],
-            "duration": video["duration"],
-            "link": f"https://player.vimeo.com{video['uri'].replace('videos', 'video')}"
-        })
+    result = Video.objects.all()
     return render(request, 'videos.html', {'videos': result})
