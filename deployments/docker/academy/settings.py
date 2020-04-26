@@ -90,23 +90,26 @@ WSGI_APPLICATION = 'wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.environ.get('MYSQL_USER'),
-        'USER': os.environ.get('MYSQL_DATABASE'),
-        'PASSWORD': os.environ.get('MYSQL_PASSWORD'),
-        'HOST': os.environ.get('MYSQL_HOST'),
-        'PORT': '3306',
+if os.environ.get("ENVIRONMENT") == 'localhost':
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': os.environ.get('MYSQL_USER'),
+            'USER': os.environ.get('MYSQL_DATABASE'),
+            'PASSWORD': os.environ.get('MYSQL_PASSWORD'),
+            'HOST': os.environ.get('MYSQL_HOST'),
+            'PORT': '3306',
+        }
+    }
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
-# }
+
 
 
 # Password validation
@@ -164,3 +167,4 @@ SESSION_COOKIE_SECURE=False
 VIMEO_ACCESS_TOKEN = os.environ.get('VIMEO_ACCESS_TOKEN')
 VIMEO_CLIENT_ID = os.environ.get('VIMEO_CLIENT_ID')
 VIMEO_CLIENT_SECRET = os.environ.get('VIMEO_CLIENT_SECRET')
+APPEND_SLASH = True
