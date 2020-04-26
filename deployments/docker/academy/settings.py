@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'social_django',
     'main',
+    'videos'
 ]
 
 MIDDLEWARE = [
@@ -60,7 +61,7 @@ ROOT_URLCONF = 'urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['common_templates'],
+        'DIRS': ['common_templates', os.path.join(BASE_DIR, "templates")],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -133,11 +134,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
-STATIC_URL = '/static/'
+
 # STATIC_ROOT = 'common_statics/'
 STATICFILES_DIRS = [
-    'common_statics/'
+    'common_statics'
 ]
+STATIC_URL = '/static/'
 
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
@@ -146,3 +148,8 @@ LOGIN_REDIRECT_URL = 'home'
 SOCIAL_AUTH_GITHUB_KEY = os.environ.get('SOCIAL_AUTH_GITHUB_KEY') 
 SOCIAL_AUTH_GITHUB_SECRET = os.environ.get('SOCIAL_AUTH_GITHUB_SECRET')
 SESSION_COOKIE_SECURE=False
+
+# Vimeo access
+VIMEO_ACCESS_TOKEN = os.environ.get('VIMEO_ACCESS_TOKEN')
+VIMEO_CLIENT_ID = os.environ.get('VIMEO_CLIENT_ID')
+VIMEO_CLIENT_SECRET = os.environ.get('VIMEO_CLIENT_SECRET')

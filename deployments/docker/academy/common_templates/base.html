@@ -1,0 +1,27 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="https://www.evolvecyber.com/assets/images/favicon.ico" />
+    <link rel="stylesheet" href="/static/top.css" type="text/css">
+    <link rel="stylesheet" href="/static/footer.css" type="text/css">
+    <link rel="stylesheet" href="/static/fonts.css" type="text/css">
+    <link rel="stylesheet" href="/static/dashboard.css" type="text/css">
+    <title>Academy</title>
+</head>
+<body>
+<div class="topnav">
+    <a class="active" href="">Login</a>
+    <a href="">Raiting</a>
+    <a href="">PyNote</a>
+    <a class="green" id="signup-btn" href="">SignUp today</a>
+    <a href="">Home</a>
+</div>
+{% block content %}
+<!-- Everything goes here on each page -->
+{% endblock  %}
+</body>
+
+</html>

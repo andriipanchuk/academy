@@ -1,50 +1,11 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="shortcut icon" href="https://www.evolvecyber.com/assets/images/favicon.ico" />
-  <link rel="stylesheet" href="static/top.css" type="text/css">
-  <link rel="stylesheet" href="static/footler.css" type="text/css">
-  <link rel="stylesheet" href="static/menu.css" type="text/css">
-  <link rel="stylesheet" href="static/dashboard/dashboard.css" type="text/css">
-  <title>FuchiCorp</title>
-</head/>
 
-<div class="topnav">
-  <a class="active" href="/logout">logout</a>
-    <a href="">Raiting</a>
-    <a href="">PyNote</a>
-    <a href="">Admin</a>
-    <div id="main">
-      <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; Menu</span>
-    </div>
-</div>
-
+{% extends "base.html" %}
+{% block content  %}
 <body>
-  <div id="mySidenav" class="sidenav">
-    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-    <a href="">Dashboard</a>
-    <a href="">Chating</a>
-    <a href="">Videos</a>
-    <a href="">Contact us</a>
-  </div>
 
-  <div class="body-container">
-    <div class="left-container one-line">
-        <div class="left-side">
-          <div class="user-info">
-            <a  href="/profile"> <img src="/static/images/user-icon.png"></img></a>
-            <h2>{{ fname }} {{ lname }}</h2>
-          </div>
-          <ul id="user-options">
-            <li><a href="/home">My Dashboard</a></li>
-            <li><a href="/profile">My Profile</a></li>
-            <li><a href="/settings">Settings</a></li>
-            <li><a href="/coming-soon">My Questions</a></li>
-            <li><a href="/coming-soon">FAQ</a></li>
-          </ul>
-        </div>
-    </div>
+  <!-- Inclouded left bar which is contians dashboard and some profile links -->
+  {% include "leftbar.html" %}
+
     <div class="right-container one-line">
       <div class="right-side">
         <div class="tab">
@@ -101,10 +62,8 @@
           <h3>Jenkins</h3>
           <p>Jenkins is one of the popular CI/CD tools.</p>
         </div>
-
       </div>
     </div>
-  </div>
 
 </body>
 <script>
@@ -137,12 +96,8 @@ document.getElementById("defaultOpen").click();
 
 </script>
 </body>
-<div class="emtyspace">
+  <div class="emtyspace">
 </div>
-
-
-<footer class="footer">
-  <p>&copy;  FuchiCorp 2019</p>
-</footer>
-
+{% include "footer.html" %}
 </html>
+{% endblock %}
