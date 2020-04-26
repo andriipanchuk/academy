@@ -5,7 +5,7 @@ PORT=$(echo "$2" | grep -oE "[0-9][0-9][0-9][0-9]")
 
 
 if [[ "$HOST" && "$PORT" ]]; then
-  python manage.py makemigrations || echo "No changes detected!!"
+  # python manage.py makemigrations || echo "No changes detected!!"
   python manage.py migrate
   python manage.py runserver "$HOST:$PORT" --insecure
 else

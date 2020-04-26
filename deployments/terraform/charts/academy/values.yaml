@@ -44,46 +44,46 @@ globalEnvironments:
   environments:
 
   - name: MYSQL_USER
-    value: ${mysql_user}
+    value: '${mysql_user}'
 
   - name: MYSQL_DATABASE
-    value: ${mysql_database}
+    value: '${mysql_database}'
 
   - name: MYSQL_PASSWORD
-    value: ${mysql_password}
+    value: '${mysql_password}'
 
   - name: ADMIN_USER
-    value: ${admin_user}
+    value: '${admin_user}'
 
   - name: ADMIN_PASSWORD
-    value: ${admin_password}
+    value: '${admin_password}'
 
   - name: MYSQL_ROOT_PASSWORD
-    value: ${mysql_root_password}
+    value: '${mysql_root_password}'
 
   - name: APPLICATION_ENDPOINT
     value: ${application_url}
 
   - name: GIT_TOKEN
-    value: ${github_token}
+    value: '${github_token}'
 
   - name: SOCIAL_AUTH_GITHUB_KEY
-    value: ${github_client_id}
+    value: '${github_client_id}'
 
   - name: SOCIAL_AUTH_GITHUB_SECRET
-    value: ${github_client_secret}
+    value: '${github_client_secret}'
 
   - name: SECRET_KEY
-    value: ${application_secret}
+    value: '${application_secret}'
   
   - name: VIMEO_CLIENT_SECRET
-    value: ${vimeo_client_secret}
+    value: '${vimeo_client_secret}'
 
   - name: VIMEO_ACCESS_TOKEN
-    value: ${vimeo_access_token}
+    value: '${vimeo_access_token}'
 
   - name: VIMEO_CLIENT_ID
-    value: ${vimeo_client_id}
+    value: '${vimeo_client_id}'
 
 imageSecret:
   enabled: true
