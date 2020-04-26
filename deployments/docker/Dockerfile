@@ -10,9 +10,6 @@ WORKDIR /website
 ## Installing all libraries 
 RUN pip install -r requirements.txt
 
-## Migrating the database
-RUN python manage.py migrate
-
 ## Expose the port for the webapp
 EXPOSE 5000
 
