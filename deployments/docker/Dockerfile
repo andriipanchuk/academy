@@ -13,5 +13,7 @@ RUN pip install -r requirements.txt
 ## Expose the port for the webapp
 EXPOSE 5000
 
+RUN chmod +x ./runserver.sh
+
 ## Making sure that application will run on first start 
-CMD [ "sh", "runserver.sh", "0.0.0.0", "5000"]
+CMD [ "/bin/sh", "-c", "./runserver.sh 0.0.0.0 5000"]
