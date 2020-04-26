@@ -1,33 +1,8 @@
-<!DOCTYPE html>
-<html>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-<head>
-    <title>FuchiCorp</title>
-    <link rel="shortcut icon" href="https://www.evolvecyber.com/assets/images/favicon.ico" />
-    <link rel="stylesheet" href="/static/top.css" type="text/css">
-    <link rel="stylesheet" href="/static/footer.css" type="text/css">
-    <link rel="stylesheet" href="/static/menu.css" type="text/css">
-    <link rel="stylesheet" href="/static/main/main-static.css" type="text/css">
-</head>
-
-<div class="topnav">
-    <a class="active" href="/login">Login</a>
-    <a href="">Raiting</a>
-    <a href="">PyNote</a>
-    <a class="green" id="signup-btn" href="">SignUp today</a>
-    <a href="">Home</a>
-    </div>
-</div>
-
+{% extends "base.html" %}
+{% block content  %}
+<link rel="stylesheet" href="/static/main/main-static.css" type="text/css">
 
 <body>
-  <div id="mySidenav" class="sidenav">
-    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-    <a href="">Dashboard</a>
-    <a href="">Chating</a>
-    <a href="">Videos</a>
-    <a href="">Contact us</a>
-  </div>
 
   <div class="body-container">
     <div class="right-container one-line">
@@ -53,15 +28,6 @@
 
 </body>
 <script>
-function openNav() {
-    document.getElementById("mySidenav").style.width = "250px";
-    document.getElementById("main").style.marginLeft = "250px";
-}
-
-function closeNav() {
-    document.getElementById("mySidenav").style.width = "0";
-    document.getElementById("main").style.marginLeft= "0";
-}
 
 function openTab(evt, tabName) {
   var i, tabcontent, tablinks;
@@ -80,10 +46,4 @@ function openTab(evt, tabName) {
 document.getElementById("defaultOpen").click();
 </script>
 
-</script>
-</body>
-<div class="emtyspace">
-</div>
-
-
-</html>
+{% endblock content  %}

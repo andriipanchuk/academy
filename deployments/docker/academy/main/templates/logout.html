@@ -1,29 +1,14 @@
-<link rel="stylesheet" href="/static/style.css" type="text/css">
-<head>
-  <title>FuchiCorp</title>
-  <link rel="stylesheet" href="/static/top.css" type="text/css">
-  <link rel="stylesheet" href="/static/footer.css" type="text/css">
-  <link rel="stylesheet" href="/static/menu.css" type="text/css">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-</head>
-
-
-<body>
-  <div class="topnav">
-      <a class="active" href="/logout">logout</a>
-      <a class="active" href="{% url 'social:begin' 'github' %}">GitHub Login</a>
-      <a href="">Raiting</a>
-      <a href="">PyNote</a>
-      <a href="">Admin</a>
-      <div id="main">
-      <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; Menu</span>
-      </div>
-  </div>
-
-
+{% extends "base.html" %}
+  {% block content %}
+  <!-- Everything goes here on each page -->
 <style>
+.app-title {
+  margin: auto;
+  text-align: center;
+  padding: 10px;
+  color: white;
+}
 body {
-    font-family: Arial;
 	background-color: #141415;
 	padding: 0;
 }
@@ -57,4 +42,5 @@ body {
 		</div>
 	</div>
 
-</body>
+
+{% endblock  %}
