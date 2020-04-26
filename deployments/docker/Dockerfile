@@ -17,4 +17,4 @@ RUN python manage.py migrate
 EXPOSE 5000
 
 ## Making sure that application will run on first start 
-CMD [ "python", "manage.py", "runserver", "0.0.0.0:5000" , "--insecure"]
+CMD [ "sh", "runserver.sh", "0.0.0.0", "5000"]
