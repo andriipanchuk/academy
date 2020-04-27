@@ -26,6 +26,9 @@ SECRET_KEY = '^oasvepw0s)@e!950p%$byfn$&dayut062i)i-a+_nm6-19#zz'
 DEBUG = True
 
 ALLOWED_HOSTS = [
+    'academy.fuchicorp.com',
+    'qa.academy.fuchicorp.com',
+    'dev.academy.fuchicorp.com',
     '0.0.0.0',
     'localhost:5000',
     '127.0.0.1',
@@ -90,23 +93,15 @@ WSGI_APPLICATION = 'wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-if os.environ.get("ENVIRONMENT") == 'localhost':
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': os.environ.get('MYSQL_DATABASE'),
+        'USER': os.environ.get('MYSQL_USER'),
+        'PASSWORD': os.environ.get('MYSQL_PASSWORD'),
+        'HOST': os.environ.get('MYSQL_HOST'),
     }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': os.environ.get('MYSQL_DATABASE'),
-            'USER': os.environ.get('MYSQL_USER'),
-            'PASSWORD': os.environ.get('MYSQL_PASSWORD'),
-            'HOST': os.environ.get('MYSQL_HOST'),
-        }
-    }
+}
 
 
 
