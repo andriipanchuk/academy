@@ -6,18 +6,18 @@ metadata:
     app.kubernetes.io/name: {{ include "academy.name" . }}-mysql
     helm.sh/chart: {{ include "academy.chart" . }}-mysql
     app.kubernetes.io/instance: {{ .Release.Name }}-mysql
-    app.kubernetes.io/managed-by: {{ .Release.Service }}-mysql
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
   replicas: {{ .Values.mysql.replicaCount }}
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ include "academy.name" . }}
-      app.kubernetes.io/instance: {{ .Release.Name }}
+      app.kubernetes.io/name: {{ include "academy.name" . }}-mysql
+      app.kubernetes.io/instance: {{ .Release.Name }}-mysql
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: {{ include "academy.name" . }}
-        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/name: {{ include "academy.name" . }}-mysql
+        app.kubernetes.io/instance: {{ .Release.Name }}-mysql
     spec:
       containers:
       - name: {{ .Chart.Name }}

@@ -13,6 +13,8 @@ academy:
 
 mysql:
 
+  replicaCount: 1
+
   image:
     repository: fsadykov/centos_mysql
     pullPolicy: IfNotPresent
