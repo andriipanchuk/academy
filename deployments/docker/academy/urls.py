@@ -24,7 +24,7 @@ urlpatterns = [
     path('videos', include('videos.urls')),
     path('login', LoginView.as_view(template_name='login.html'), name='login'),
     path('logout', LogoutView.as_view(template_name='logout.html'), name='logout'),
-    path('oauth', include('social_django.urls', namespace='social')),
+    path('oauth/', include('social_django.urls', namespace='social')),
 ]
 
 init_script()
