@@ -3,10 +3,10 @@ kind: Deployment
 metadata:
   name: {{ include "academy.name" . }}-mysql
   labels:
-    app.kubernetes.io/name: {{ include "academy.name" . }}
-    helm.sh/chart: {{ include "academy.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/name: {{ include "academy.name" . }}-mysql
+    helm.sh/chart: {{ include "academy.chart" . }}-mysql
+    app.kubernetes.io/instance: {{ .Release.Name }}-mysql
+    app.kubernetes.io/managed-by: {{ .Release.Service }}-mysql
 spec:
   replicas: {{ .Values.mysql.replicaCount }}
   selector:

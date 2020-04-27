@@ -15,5 +15,5 @@ spec:
       protocol: TCP
       name: http
   selector:
-    app.kubernetes.io/name: {{ include "academy.name" . }}-mysql
-    app.kubernetes.io/instance: {{ .Release.Name }}-mysql
+    app.kubernetes.io/name: {{ include "academy.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
