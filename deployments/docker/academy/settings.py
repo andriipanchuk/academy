@@ -29,10 +29,7 @@ ALLOWED_HOSTS = [
     'academy.fuchicorp.com',
     'qa.academy.fuchicorp.com',
     'dev.academy.fuchicorp.com',
-    '0.0.0.0',
-    'localhost:5000',
     '127.0.0.1',
-    '*'
 ]
 
 
@@ -149,16 +146,19 @@ STATICFILES_DIRS = [
 ]
 STATIC_URL = '/static/'
 
-LOGIN_URL = 'login'
-LOGOUT_URL = 'logout'
-LOGIN_REDIRECT_URL = 'home'
+LOGIN_URL = '/login'
+LOGOUT_URL = '/logout'
+LOGIN_REDIRECT_URL = '/home'
 
 SOCIAL_AUTH_GITHUB_KEY = os.environ.get('SOCIAL_AUTH_GITHUB_KEY') 
 SOCIAL_AUTH_GITHUB_SECRET = os.environ.get('SOCIAL_AUTH_GITHUB_SECRET')
 SESSION_COOKIE_SECURE=False
 
+# SOCIAL_AUTH_LOGIN_REDIRECT_URL='dev.academy.fuchicorp.com'
 # Vimeo access
 VIMEO_ACCESS_TOKEN = os.environ.get('VIMEO_ACCESS_TOKEN')
 VIMEO_CLIENT_ID = os.environ.get('VIMEO_CLIENT_ID')
 VIMEO_CLIENT_SECRET = os.environ.get('VIMEO_CLIENT_SECRET')
 APPEND_SLASH = True
+
+HOSTMAME='dev.academy.fuchicorp.com'
