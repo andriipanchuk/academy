@@ -9,9 +9,9 @@ services:
        - db_data:/var/lib/mysql
      restart: always
      environment:
-       MYSQL_ROOT_PASSWORD: Redhat2018
+       MYSQL_ROOT_PASSWORD: LocalPass
        MYSQL_DATABASE: academy
        MYSQL_USER: academy
-       MYSQL_PASSWORD: Redhat2018
+       MYSQL_PASSWORD: LocalPass
 volumes:
     db_data: {}
