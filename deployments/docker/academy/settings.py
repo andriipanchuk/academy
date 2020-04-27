@@ -101,8 +101,6 @@ DATABASES = {
 }
 
 
-
-
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
 
@@ -161,4 +159,4 @@ VIMEO_CLIENT_ID = os.environ.get('VIMEO_CLIENT_ID')
 VIMEO_CLIENT_SECRET = os.environ.get('VIMEO_CLIENT_SECRET')
 APPEND_SLASH = True
 
-HOSTMAME='dev.academy.fuchicorp.com'
+ACCOUNT_DEFAULT_HTTP_PROTOCOL='https'
