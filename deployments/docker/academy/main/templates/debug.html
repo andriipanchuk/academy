@@ -1,0 +1,41 @@
+{% extends "debug.html" %}
+
+{% block content  %}
+<link rel="stylesheet" href="/static/login.css" type="text/css">
+<!-- <link rel="stylesheet" href="/static/signup/signup.css" type="text/css"> -->
+<style>
+  
+body {
+	background-color: #141415;
+	padding: 0;
+}
+</style>
+
+{% include "leftbar.html" %}
+
+
+<div class="body-container">
+    <div class="right-container one-line">
+      <div class="body-box">
+        <div class="tab">
+          <button class="tablinks" id="defaultOpen" onclick="openTab(event, 'PyNote')">PyNote</button>
+          <button class="tablinks" onclick="openTab(event, 'Users')">Users</button>
+        </div>
+
+        <div id="PyNote" class="tabcontent">
+          <h2>FuChiCorp Pynote</h2>
+          <p>PyNote is the an online learning platform. It's aimed at restless professionals chasing after success. Fuchicorp has made innovation very easy for those who are self driven. With PyNote you can learn, build, and deploy! Request a PyNote now as investment to your future!</p>
+        </div>
+
+        <div id="Users" class="tabcontent">
+          <h2>FuChiCorp Academy Members.</h2>
+          <p>To join the academy you should be part of github organization or you should signup</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+</body>
+{% endblock %}

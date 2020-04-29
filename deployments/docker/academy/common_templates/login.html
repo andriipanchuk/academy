@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block content  %}
+<link rel="stylesheet" href="/static/login.css" type="text/css">
+<!-- <link rel="stylesheet" href="/static/signup/signup.css" type="text/css"> -->
+<style>
+  
+body {
+	background-color: #141415;
+	padding: 0;
+}
+.btn {
+    border: 2px solid transparent;
+    background: #28a745;
+    color: #ffffff;
+    font-size: 16px;
+    line-height: 25px;
+    padding: 10px 0;
+    text-decoration: none;
+    text-shadow: none;
+    border-radius: 3px;
+    box-shadow: none;
+    transition: 0.25s;
+    display: block;
+    width: 250px;
+    margin: 0 auto;
+}
+</style>
+
+{% if not user.is_authenticated and form %}
+    <div id="id01" class="login-modal" style="display: block;">
+        <form class="modal-content animate" action="/login" method="post">
+            <div class="imgcontainer">
+                <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
+                <img src="/static/images/user-icon.png" alt="Avatar" class="avatar">
+            </div>
+
+            {% csrf_token %}
+
+            <div class="container">
+            {% for field in form %}
+                {{ field.label }}
+                {{ field }}
+                {% if field.help_text %}
+                    <small style="color: grey">{{ field.help_text }}</small>
+                {% endif %}
+                {% for error in field.errors %}
+                    <p style="color: red">{{ error }}</p>
+                {% endfor %}
+            {% endfor %}
+                    
+                <button type="submit">Login</button>
+                <label>
+                    <input type="checkbox" checked="checked" name="remember"> Remember me
+                </label>
+            </div>
+
+            <div class="container" style="background-color:#f1f1f1">
+                <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
+                <span class="psw">Forgot <a href="#">password?</a></span>
+            </div>
+        </form>
+    </div>
+
+{% endif %}
+
+{% endblock %}

@@ -1,4 +1,3 @@
-
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -10,20 +9,77 @@
     <link rel="stylesheet" href="/static/footer.css" type="text/css">
     <link rel="stylesheet" href="/static/fonts.css" type="text/css">
     <link rel="stylesheet" href="/static/dashboard.css" type="text/css">
+    <link rel="stylesheet" href="/static/login.css" type="text/css">
+    <link rel="stylesheet" href="/static/body.css" type="text/css">
     <title>Academy</title>
 </head>
 <body>
 <div class="topnav">
-    <a class="active" href="/logout">Logout</a>
+
+    {% if not user.is_authenticated and login_form %}
+        <a class="active" onclick="document.getElementById('id01').style.display='block'" >Login</a>
+       
+    {% else %}
+        <a class="active" href="/logout">Logout</a>
+    {% endif %}
     <a href="">Raiting</a>
     <a href="">PyNote</a>
     <a href="/home">Home</a>
     <a href="{% url 'social:begin' 'github' %}">GitHub Login</a>
     <a class="green" id="signup-btn" href="/signup">SignUp today</a>
 </div>
+
+{% if not user.is_authenticated and login_form %}
+    <div id="id01" class="login-modal">
+        <form class="modal-content animate" action="/login" method="post">
+            <div class="imgcontainer">
+                <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
+                <img src="/static/images/user-icon.png" alt="Avatar" class="avatar">
+            </div>
+
+            {% csrf_token %}
+
+            <div class="container">
+            {% for field in login_form %}
+                {{ field.label }}
+                {{ field }}
+                {% if field.help_text %}
+                    <small style="color: grey">{{ field.help_text }}</small>
+                {% endif %}
+                {% for error in field.errors %}
+                    <p style="color: red">{{ error }}</p>
+                {% endfor %}
+            {% endfor %}
+                    
+                <button type="submit">Login</button>
+                <label>
+                    <input type="checkbox" checked="checked" name="remember"> Remember me
+                </label>
+            </div>
+
+            <div class="container" style="background-color:#f1f1f1">
+                <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
+                <span class="psw">Forgot <a href="#">password?</a></span>
+            </div>
+        </form>
+    </div>
+
+{% endif %}
+
+
+<script>
+// Get the modal
+var modal = document.getElementById('id01');
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+</script>
 {% block content %}
 <!-- Everything goes here on each page -->
 {% endblock  %}
-</body>
 
 </html>

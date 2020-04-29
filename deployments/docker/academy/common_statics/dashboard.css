@@ -46,7 +46,6 @@
   
   .right-side {
     -ms-flex: 30%;
-    background-color: #d6d6d6;
     padding: 20px;
     height: 100%;
   }
@@ -88,6 +87,7 @@
     padding: 6px 12px;
     border: 1px solid #ccc;
     border-top: none;
+    background-color: #ececec;
   }
   
   table {

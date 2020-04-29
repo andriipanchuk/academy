@@ -1,5 +1,6 @@
 {% extends "base.html" %}
-  {% block content %}
+
+{% block content %}
   <!-- Everything goes here on each page -->
 <style>
 .app-title {
@@ -30,6 +31,9 @@ body {
 }
 </style>
 
+  {% if not user.is_authenticated %}
+    <h1 style="text-align: center; color: #ffffff; padding: 10px;">Currenly you are not authenticated</h1>
+  {% endif %}
 	<div class="login">
 		<div class="login-screen">
 			<div class="app-title">
@@ -40,7 +44,8 @@ body {
         <a href="/login"><input type="submit" value="Log in" class="btn btn-primary btn-large btn-block" ></a>
       </div>
 		</div>
-	</div>
+  </div>
+  
 
 
 {% endblock  %}

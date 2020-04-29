@@ -30,6 +30,7 @@ ALLOWED_HOSTS = [
     'qa.academy.fuchicorp.com',
     'dev.academy.fuchicorp.com',
     '127.0.0.1',
+    'localhost',
 ]
 
 
@@ -42,7 +43,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'social_django',
     'main',
-    'videos'
+    'videos',
+    'info'
 ]
 
 MIDDLEWARE = [
@@ -152,11 +154,15 @@ SOCIAL_AUTH_GITHUB_KEY = os.environ.get('SOCIAL_AUTH_GITHUB_KEY')
 SOCIAL_AUTH_GITHUB_SECRET = os.environ.get('SOCIAL_AUTH_GITHUB_SECRET')
 SESSION_COOKIE_SECURE=False
 
-# SOCIAL_AUTH_LOGIN_REDIRECT_URL='dev.academy.fuchicorp.com'
-# Vimeo access
+
 VIMEO_ACCESS_TOKEN = os.environ.get('VIMEO_ACCESS_TOKEN')
 VIMEO_CLIENT_ID = os.environ.get('VIMEO_CLIENT_ID')
 VIMEO_CLIENT_SECRET = os.environ.get('VIMEO_CLIENT_SECRET')
 APPEND_SLASH = True
 
-ACCOUNT_DEFAULT_HTTP_PROTOCOL='https'
+
+#INFO page containt
+INSTANCE = os.environ.get('INSTANCE')
+RELEASE = os.environ.get('RELEASE')
+ENVIRONMENT = os.environ.get('ENVIRONMENT')
+SOCIAL_AUTH_GITHUB_ORG_NAME= 'fuchicorp'

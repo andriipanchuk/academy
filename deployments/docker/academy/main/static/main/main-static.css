@@ -34,7 +34,7 @@
 }
 
 .body-box {
-  background-color: #d6d6d6;
+  /* background-color: #d6d6d6; */
   padding: 20px;
   height: 100%;
   width: 100vw;
@@ -64,18 +64,7 @@
   background-color: #ddd;
 }
 
-/* Create an active/current tablink class */
-.tab button.active {
-  background-color: #ccc;
-}
 
-/* Style the tab content */
-.tabcontent {
-  display: none;
-  padding: 6px 12px;
-  border: 1px solid #ccc;
-  border-top: none;
-}
 
 table {
   border-spacing: 0;

@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% block content  %}
+<link rel="stylesheet" href="/static/settings/settings.css" type="text/css">
+<body>
+
+  <!-- Inclouded left bar which is contians dashboard and some profile links -->
+  {% include "leftbar.html" %}
+    <div class="right-container one-line">
+      <div class="right-side">
+        <div class="settings-form">
+          <h1>Edit My profile</h1>
+          <form  method="POST">
+          
+            <input type="hidden" name="settingsForm" value="EditProfileSubmit" >
+            {% csrf_token %}
+            {{ form }}
+            <input type="submit">
+            <!-- <input onclick="messagePopUp(this)" type="submit" name="EditProfileSubmit" value="Submit"> -->
+          </form>
+        </div>
+
+
+
+                  <!-- The Modal -->
+          <div id="myModal" class="modal">
+
+            <!-- Modal content -->
+            <div class="modal-content">
+              <div id="message-box" class="modal-header">
+                <span class="close">&times;</span>
+                <h2>Message</h2>
+              </div>
+              <div class="modal-body">
+                <h3 id="messageBox"></h3>
+              </div>
+            </div>
+
+          </div>
+      </div>
+    </div>
+
+</body>
+<script>
+
+function openNav() {
+    document.getElementById("mySidenav").style.width = "250px";
+    document.getElementById("main").style.marginLeft = "250px";
+}
+
+function closeNav() {
+    document.getElementById("mySidenav").style.width = "0";
+    document.getElementById("main").style.marginLeft= "0";
+}
+
+// Get the <span> element that closes the modal
+var modal            = document.getElementById("myModal");
+var span             = document.getElementsByClassName("close");
+var messageBox       = document.getElementById("messageBox");
+var backendResponse  = JSON.parse('');
+var messageBoxHeader = document.getElementById("message-box");
+
+if (backendResponse.status == 'error') {
+  messageBoxHeader.style.backgroundColor = "red";
+  modal.style.display = "block";
+  messageBox.innerHTML = backendResponse.message
+}
+
+if (backendResponse.status == 'success') {
+  modal.style.display = "block";
+  messageBox.innerHTML = backendResponse.message
+}
+
+
+span.onclick = function() {
+  modal.style.display = "none";
+}
+
+
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+</script>
+
+</script>
+</body>
+<div class="emtyspace">
+</div>
+{% include "footer.html" %}
+
+</html>
+{% endblock %}

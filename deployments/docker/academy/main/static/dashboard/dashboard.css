@@ -46,7 +46,7 @@
   
   .right-side {
     -ms-flex: 30%;
-    background-color: #d6d6d6;
+    /* background-color: #d6d6d6; */
     padding: 20px;
     height: 100%;
   }
@@ -77,10 +77,6 @@
     background-color: #ddd;
   }
   
-  /* Create an active/current tablink class */
-  .tab button.active {
-    background-color: #ccc;
-  }
   
   /* Style the tab content */
   .tabcontent {

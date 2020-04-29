@@ -9,5 +9,6 @@ urlpatterns = [
     path('settings', views.settings, name='settings'),
     path('signup', views.signup, name='signup'),
     path('disabled', views.signup, name='signup'),
-    
+    path('update-info', views.update_info, name='update_info'),  
+    path('debug', views.debug, name='debug'),     
 ]

@@ -21,6 +21,7 @@ from init import init_script
 urlpatterns = [
     path('admin', admin.site.urls),
     path('', include('main.urls')),
+    path('info', include('info.urls')),
     path('videos', include('videos.urls')),
     path('login', LoginView.as_view(template_name='login.html'), name='login'),
     path('logout', LogoutView.as_view(template_name='logout.html'), name='logout'),
