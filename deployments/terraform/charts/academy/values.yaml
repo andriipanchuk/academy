@@ -1,6 +1,6 @@
 academy:
 
-  replicaCount: 1
+  replicaCount: 5
 
   image:
     repository: ${deployment_image}
