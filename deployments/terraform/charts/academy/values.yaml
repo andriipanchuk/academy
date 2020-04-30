@@ -1,6 +1,6 @@
 academy:
 
-  replicaCount: 5
+  replicaCount: 1
 
   image:
     repository: ${deployment_image}
@@ -12,8 +12,6 @@ academy:
     port: 80
 
 mysql:
-
-  replicaCount: 1
 
   image:
     repository: fsadykov/centos_mysql
@@ -46,46 +44,69 @@ globalEnvironments:
   environments:
 
   - name: MYSQL_USER
-    value: '${mysql_user}'
-
+    valueFrom:
+      secretKeyRef:
+        name: ${academy_credentials}
+        key: mysql_user
+    
   - name: MYSQL_DATABASE
-    value: '${mysql_database}'
-
+    valueFrom:
+      secretKeyRef:
+        name: ${academy_credentials}
+        key: mysql_database
+      
   - name: MYSQL_PASSWORD
-    value: '${mysql_password}'
-
+    valueFrom:
+      secretKeyRef:
+        name: ${academy_credentials}
+        key: mysql_password
+   
   - name: ADMIN_USER
-    value: '${admin_user}'
+    valueFrom:
+      secretKeyRef:
+        name: ${academy_credentials}
+        key: admin_user
+    
 
   - name: ADMIN_PASSWORD
-    value: '${admin_password}'
-
+    valueFrom:
+      secretKeyRef:
+        name: ${academy_credentials}
+        key: admin_password
+    
   - name: MYSQL_ROOT_PASSWORD
-    value: '${mysql_root_password}'
+    valueFrom:
+      secretKeyRef:
+        name: ${academy_credentials}
+        key: mysql_root_password
+    
 
   - name: APPLICATION_ENDPOINT
-    value: ${application_url}
+    value: ${deployment_endpoint}
 
   - name: GIT_TOKEN
-    value: '${github_token}'
-
-  - name: SOCIAL_AUTH_GITHUB_KEY
-    value: '${github_client_id}'
-
-  - name: SOCIAL_AUTH_GITHUB_SECRET
-    value: '${github_client_secret}'
-
-  - name: SECRET_KEY
-    value: '${application_secret}'
+    valueFrom:
+      secretKeyRef:
+        name: ${academy_credentials}
+        key: github_token
+    
+  - name: GITHUB_CLIENT_ID
+    valueFrom:
+      secretKeyRef:
+        name: ${academy_credentials}
+        key: github_client_id
+    
+  - name: GITHUB_CLIENT_SECRET
+    valueFrom:
+      secretKeyRef:
+        name: ${academy_credentials}
+        key: github_client_secret
   
-  - name: VIMEO_CLIENT_SECRET
-    value: '${vimeo_client_secret}'
-
-  - name: VIMEO_ACCESS_TOKEN
-    value: '${vimeo_access_token}'
-
-  - name: VIMEO_CLIENT_ID
-    value: '${vimeo_client_id}'
+  - name: SECRET_KEY
+    valueFrom:
+      secretKeyRef:
+        name: ${academy_credentials}
+        key: application_secret
 
 imageSecret:
   enabled: true
