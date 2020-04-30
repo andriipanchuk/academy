@@ -38,8 +38,8 @@ resource "kubernetes_secret" "academy_credentials" {
        vimeo_client_secret = "${var.vimeo_client_secret}"
 
        vimeo_access_token = "${var.vimeo_access_token}"
-       
-       vimeo_client_secret = "${var.vimeo_client_secret}"
+
+       vimeo_client_id = "${var.vimeo_client_id}"
 
 
          
