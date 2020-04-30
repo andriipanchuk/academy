@@ -34,6 +34,14 @@ resource "kubernetes_secret" "academy_credentials" {
 
        
        application_secret = "${var.application_secret}"
+
+       vimeo_client_secret = "${var.vimeo_client_secret}"
+
+       vimeo_access_token = "${var.vimeo_access_token}"
+       
+       vimeo_client_secret = "${var.vimeo_client_secret}"
+
+
          
    }
 }

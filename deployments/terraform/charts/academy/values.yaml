@@ -90,13 +90,19 @@ globalEnvironments:
         name: ${academy_credentials}
         key: github_token
     
-  - name: GITHUB_CLIENT_ID
+  - name: SOCIAL_AUTH_GITHUB_KEY
     valueFrom:
       secretKeyRef:
         name: ${academy_credentials}
         key: github_client_id
     
-  - name: GITHUB_CLIENT_SECRET
+  - name: SOCIAL_AUTH_GITHUB_SECRET
+    valueFrom:
+      secretKeyRef:
+        name: ${academy_credentials}
+        key: github_client_secret
+
+  - name: SOCIAL_AUTH_GITHUB_SECRET
     valueFrom:
       secretKeyRef:
         name: ${academy_credentials}
@@ -107,6 +113,26 @@ globalEnvironments:
       secretKeyRef:
         name: ${academy_credentials}
         key: application_secret
+
+
+  - name: VIMEO_ACCESS_TOKEN
+    valueFrom:
+      secretKeyRef:
+        name: ${academy_credentials}
+        key: vimeo_access_token
+
+  - name: VIMEO_CLIENT_ID
+    valueFrom:
+      secretKeyRef:
+        name: ${academy_credentials}
+        key: vimeo_client_id
+  
+  - name: VIMEO_CLIENT_SECRET
+    valueFrom:
+      secretKeyRef:
+        name: ${academy_credentials}
+        key: vimeo_client_secret
+
 
 imageSecret:
   enabled: true
