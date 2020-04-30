@@ -1,6 +1,7 @@
 resource "kubernetes_secret" "academy_credentials" {
    "metadata" {
        name = "academy-credentials"
+       namespace = "${var.deployment_environment}"
    }
 
    data {
