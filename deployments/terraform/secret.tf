@@ -27,10 +27,10 @@ resource "kubernetes_secret" "academy_credentials" {
        github_token = "${var.github_token}"
 
        
-       github_client_id = "${var.github_client_id}"
+       github_client_id = "${lookup(var.github_client_id, "${var.deployment_environment}")}"
 
-       
-       github_client_secret = "${var.github_client_secret}"
+
+       github_client_secret = "${lookup(var.github_client_secret, "${var.deployment_environment}")}"
 
        
        application_secret = "${var.application_secret}"
