@@ -1,5 +1,5 @@
 from django.contrib import admin
-from videos.models import Video
+from videos.models import Video, VideoTopic
 from django.contrib.contenttypes.models import ContentType
 from django.http import HttpResponseRedirect
 from videos.vimeo import Vimeo
@@ -22,7 +22,7 @@ class VideoAdmin(admin.ModelAdmin):
 
     def sync_vimeo_videos(self, request):
         v = Vimeo()
-        videos = v.get_folder_videos('fuchicorp')
+        videos = v.get_folder_videos('fuchicorp-meetings')
 
         for video in videos:
 
@@ -44,5 +44,35 @@ class VideoAdmin(admin.ModelAdmin):
         return HttpResponseRedirect("../")
             
 
+class VideoTopicAdmin(admin.ModelAdmin):
+
+    # list_display = ('name')
+    # list_filter = ('name')
+    change_list_template = 'admin/videos/sync-topic.html'
+
+    def get_urls(self):
+        urls = super().get_urls()
+        custom_urls = [
+            path('sync-topic/', self.sync_topics)
+        ]
+        return custom_urls + urls
+    
+    def sync_topics(self, request):
+        v = Vimeo()
+        topics = v.get_folders()
+
+        for topic in topics:
+            if not topic['name']:
+                topic['name'] = 'folder does not have name'
+            
+            if not VideoTopic.objects.filter(name=topic['name']).exists():
+                topic = VideoTopic(
+                    name=topic['name']
+                )
+                topic.save()
+        self.message_user = 'Videos are synced'
+        return HttpResponseRedirect("../")
+        
 
 admin.site.register(Video, VideoAdmin)
+admin.site.register(VideoTopic, VideoTopicAdmin)

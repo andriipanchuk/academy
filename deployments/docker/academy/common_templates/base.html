@@ -25,7 +25,9 @@
     <a href="">Raiting</a>
     <a href="">PyNote</a>
     <a href="/home">Home</a>
-    <a href="{% url 'social:begin' 'github' %}">GitHub Login</a>
+    {% if not user.is_authenticated %}
+        <a href="{% url 'social:begin' 'github' %}">GitHub Login</a>
+    {% endif %}
     <a class="green" id="signup-btn" href="/signup">SignUp today</a>
 </div>
 
@@ -41,11 +43,14 @@
 
             <div class="container">
             {% for field in login_form %}
+            
                 {{ field.label }}
                 {{ field }}
+
                 {% if field.help_text %}
                     <small style="color: grey">{{ field.help_text }}</small>
                 {% endif %}
+
                 {% for error in field.errors %}
                     <p style="color: red">{{ error }}</p>
                 {% endfor %}

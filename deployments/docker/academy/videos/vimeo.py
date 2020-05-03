@@ -31,3 +31,22 @@ class Vimeo():
             return video_resononse['data']
         else:
             return {'message': 'function can not find link'}
+    
+    def get_folders(self):
+        ## Function is resposible to find all videos from the folder 
+        response_data = self.vimeo.get('/me/folders').json()
+        return response_data['data']
+
+
+
+"""
+
+from videos.vimeo import Vimeo
+v = Vimeo()
+v.get_folders()
+
+
+with open('topics.json', 'w') as file: 
+    json.dump(data, file, indent=2) 
+
+"""
