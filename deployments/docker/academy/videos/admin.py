@@ -45,9 +45,9 @@ class VideoAdmin(admin.ModelAdmin):
                             name=vimeo_folder['name']
                         )
                     db_topic.save()
-                ## Storing db instances to loop it later
-                db_topics.append(db_topic)
-            
+                    ## Storing db instances to loop it later
+                    db_topics.append(db_topic)
+                
         
         ## looping topics only 
         for topic in db_topics:
