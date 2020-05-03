@@ -22,7 +22,8 @@ def home(request):
     user = User.objects.get(username=request.user.username)
     if not user.first_name or not user.last_name:
         return redirect('update_info')
-    return render(request, 'home.html', {'login_form': login_form})
+    users = User.objects.all()
+    return render(request, 'home.html', {'login_form': login_form, 'users': users})
 
 @login_required
 def update_info(request):
