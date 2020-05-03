@@ -21,58 +21,62 @@ class VideoAdmin(admin.ModelAdmin):
         return custom_urls + urls
 
     def sync_vimeo_videos(self, request):
-        v = Vimeo()
-        videos = v.get_folder_videos('fuchicorp-meetings')
+        """
+        Function to sync all videos from vimeo to database
+        """
 
-        for video in videos:
+        ## Getting vimeo client 
+        vimeo_cleint = Vimeo()  
 
-            if not video['name']:
-                video['name'] = 'video does not have name'
+        ## Getting all folders from vimeo 
+        vimeo_folders = vimeo_cleint.get_folders()
 
-            if not video["description"]:
-                video["description"] = 'No description'
+        ## list to store all topics which is already in database 
+        db_topics = []
+
+        ## Looping all folders in vimeo 
+        for vimeo_folder in vimeo_folders:
+            ## Getting only fuchicorp folders
+            if 'fuchicorp' in vimeo_folder['name']:
+                ## If folder does not exist in database as topic
+                if not VideoTopic.objects.filter(name=vimeo_folder['name']).exists():
+                    ## Creating topic in database and saving to database 
+                    db_topic = VideoTopic(
+                            name=vimeo_folder['name']
+                        )
+                    db_topic.save()
+                ## Storing db instances to loop it later
+                db_topics.append(db_topic)
             
-            if not Video.objects.filter(name=video['name']).exists():
-                video = Video(
-                    name=video['name'],
-                    description=video["description"],
-                    duration=video["duration"],
-                    link=f"https://player.vimeo.com{video['uri'].replace('videos', 'video')}"
-                )
-                video.save()
-        self.message_user = 'Videos are synced'
-        return HttpResponseRedirect("../")
-            
-
-class VideoTopicAdmin(admin.ModelAdmin):
-
-    # list_display = ('name')
-    # list_filter = ('name')
-    change_list_template = 'admin/videos/sync-topic.html'
-
-    def get_urls(self):
-        urls = super().get_urls()
-        custom_urls = [
-            path('sync-topic/', self.sync_topics)
-        ]
-        return custom_urls + urls
-    
-    def sync_topics(self, request):
-        v = Vimeo()
-        topics = v.get_folders()
-
-        for topic in topics:
-            if not topic['name']:
-                topic['name'] = 'folder does not have name'
-            
-            if not VideoTopic.objects.filter(name=topic['name']).exists():
-                topic = VideoTopic(
-                    name=topic['name']
-                )
-                topic.save()
-        self.message_user = 'Videos are synced'
-        return HttpResponseRedirect("../")
         
+        ## looping topics only 
+        for topic in db_topics:
+            ## Getting all videos based on topics
+            videos = vimeo_cleint.get_folder_videos(topic.name)
+            ## looping each videos
+            for video in videos:
+                ## if video does not have name will add 
+                if not video['name']:
+                    video['name'] = 'video does not have name'
+                ## if video does not have description will add 
+                if not video["description"]:
+                    video["description"] = 'No description'
+
+                ## if video does not exist in database 
+                if not Video.objects.filter(name=video['name']).exists():
+                    ## Create instance of the video and store in database with proper topic
+                    video = Video(
+                        name=video['name'],
+                        description=video["description"],
+                        duration=video["duration"],
+                        link=f"https://player.vimeo.com{video['uri'].replace('videos', 'video')}",
+                        topic=topic
+                    )
+                    video.save()
+
+        self.message_user = 'Videos are synced'
+        return HttpResponseRedirect("../")
+            
 
 admin.site.register(Video, VideoAdmin)
-admin.site.register(VideoTopic, VideoTopicAdmin)
+admin.site.register(VideoTopic)
