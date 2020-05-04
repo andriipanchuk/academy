@@ -161,13 +161,6 @@ input[type=submit]:hover {
   cursor: pointer;
 }
 
-/* Footer */
-.footer {
-  position: fixed;
-  bottom:0;
-  color: black;
-}
-
 
 /* The Modal (background) */
 .modal {

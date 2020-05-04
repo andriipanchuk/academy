@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, HttpResponse
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate
@@ -49,6 +49,10 @@ def profile(request):
     login_form = AuthenticationForm()
     user = User.objects.get(username=request.user.username)
     return render(request, 'profile.html', {'login_form': login_form})
+
+
+def commin_soon(request):
+    return render(request, 'commin-soon.html', {})
 
 
 def debug(request):

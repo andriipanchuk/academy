@@ -1,15 +1,14 @@
 {% extends "base.html" %}
+{% load bootstrap4 %}
 {% block content  %}
 <link rel="stylesheet" href="/static/main/main-static.css" type="text/css">
 
 <body>
-
   <div class="body-container">
-    <div class="right-container one-line">
       <div class="body-box">
         <div class="tab">
           <button class="tablinks" id="defaultOpen" onclick="openTab(event, 'PyNote')">PyNote</button>
-          <button class="tablinks" onclick="openTab(event, 'Users')">Users</button>
+          <button class="tablinks" onclick="openTab(event, 'Users')">Members</button>
         </div>
 
         <div id="PyNote" class="tabcontent">
@@ -22,10 +21,70 @@
           <p>To join the academy you should be part of github organization or you should signup</p>
         </div>
 
-      </div>
-    </div>
-  </div>
 
+        <!-- Plan subscription  -->
+        <div  class="pricing-container">
+          <div class="columns">
+            <ul class="price">
+              <li class="header-basic">Basic</li>
+              <li class="grey">Free/Free</li>
+              <li>Access to Academy</li>
+              <li>Free Meetings</li>
+              <li>1 Pynote </li>
+              <li>5 hourse services</li>
+              <li class="grey"><a href="/signup" class="button">Sign Up</a></li>
+            </ul>
+          </div>
+
+          <div class="columns">
+            <ul class="price">
+              <li class="header" style="background-color:#4CAF50">Pro</li>
+              <li class="grey">$ 24.99 / year</li>
+              <li>Acccess to Academy</li>
+              <li>Access to FuchiCorp Meetings</li>
+              <li>5 Pynote</li>
+              <li>Unlimuted Service</li>
+              <li class="grey"><a href="/signup" class="button">Sign Up</a></li>
+            </ul>
+          </div>
+
+          <div class="columns">
+            <ul class="price">
+              <li class="header">Premium</li>
+              <li class="grey">$ 49.99 / year</li>
+              <li>Access to Academy</li>
+              <li>Access to all Videos</li>
+              <li>Unlimited Pynote</li>
+              <li>Custom domain name</li>
+              <li class="grey"><a href="/signup" class="button">Sign Up</a></li>
+            </ul>
+          </div>
+        </div>
+        <!-- Plan subscription  -->
+
+
+        <!-- Companies logoes -->
+        <div  class="sections-wrp">
+          <div class="hc-title section-title-medium">Our graduates have been hired by top tech companies</div>
+          <div class="hc-logo-container">
+              <div  class="hc-logo">
+                    <picture>
+                       <img src="/static/images/sp-sec-company-logo-sprite.webp" alt="company-logos" class="">
+                    </picture>
+              </div>
+          </div>
+        </div>
+        <!-- end companies -->
+
+
+      </div>
+
+      
+
+
+
+  </div>
+  {% include "footer.html" %}
 </body>
 <script>
 
